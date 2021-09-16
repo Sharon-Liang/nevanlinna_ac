@@ -59,6 +59,10 @@ function Masubara_GF(n::Int64, A::Function, β::Real, type::Symbol;
     return Gn/(2π)
 end
 
+function NG(reg::Vector{Float64}, img::Vector{Float64})
+    #input: gval: values of masubara GF
+end
+
 function ispossemidef(A::Matrix)
     evals = eigvals(A)
     return all(evals .>= 0.) 
@@ -72,9 +76,7 @@ function invMobiusTransform(z::ComplexF32)
     return 1.0im*(1 + z)/(1 - z)
 end
 
-function NG(gval::Vector)
-    #input: gval: values of masubara GF
-end
+
 
 
 function pick_matrix(freq::Vector, gval::Vector)
