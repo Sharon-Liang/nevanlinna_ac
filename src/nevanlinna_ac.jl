@@ -1,5 +1,7 @@
 module nevanlinna_ac
+__precompile__()
 
-# Write your package code here.
+using LinearAlgebra
+using Random; Random.seed!()
 
 end
