@@ -1,12 +1,14 @@
-function pauli(symbol::Symbol)
-    if symbol==:x return [0. 1.; 1. 0.]
-    elseif symbol==:y return [0. -1im; 1im 0.]
-    elseif symbol==:z return [1. 0.; 0. -1.]
-    elseif symbol==:+ return [0. 1.; 0. 0.]
-    elseif symbol==:- return [0. 0.; 1. 0.]
-    else
-        error("The input should be :x,:y,:z,:+,:-.")
-    end
+function eye(n::Int64)
+    res = zeros(n,n)
+    for i = 1:n res[i,i] = 1.0 end
+    return res
+end
+
+function eye(dtype::DataType, n::Int64)
+    res = zeros(dtype, n, n)
+    I = 1.0 |> dtype
+    for i = 1:n res[i,i] = I end
+    return res	
 end
 
 function delta(x::Real; c::Real = 0., η::Real = 0.05)
@@ -59,27 +61,24 @@ function Masubara_GF(n::Int64, A::Function, β::Real;
     return Gn/(2π)
 end
 
-function MobiusTransform(z::Complex)
+function h(z::Number)
+    #Conformal mapping(Mobius transform) 
+    #\bar{C+} -> \bar{D}        
     return (z - 1.0im)/(z + 1.0im)
 end
 
-function invMobiusTransform(z::Complex)
+function invh(z::Number)
     return 1.0im*(1 + z)/(1 - z)
 end
 
-function pick_matrix(freq::Vector, gval::Vector)
-    # input :freq: Masubara frenquencies; val: G
-    dim = length(freq)
-    if length(gval) != dim
-        @error DimensionMismatch("dimension of val must match freq")
-    end
-    pmat = zeros(ComplexF32, dim, dim)
-    for i = 1:dim, j = 1:dim
-        num = 1 - MobiusTransform(-gval[i])*MobiusTransform(-gval[j])'
-        den = 1 - MobiusTransform(freq[i])*MobiusTransform(freq[j])'
-        pmat[i,j] = num/den
-    end
-    return pmat
+function h1(z::Number, Y::Number)
+    #Conformal mapping(Mobius transform) 
+    #C+ -> D
+    return (z - Y)/(z - Y')
+end
+
+function invh1(z::Complex, Y::Number)
+    return (z*Y'-Y)/(z-1)
 end
 
 function ispossemidef(A::Matrix)
@@ -87,13 +86,3 @@ function ispossemidef(A::Matrix)
     return all(evals .>= 0)
 end
 
-function isNevanlinnasolvable(freq::Vector, gval::Vector; 
-    err::Float64 = 1.e-6)
-    # check if the pick_matrix is semi positive semidefinite
-    pmat = pick_matrix(freq, gval)
-    evals = eigvals(pmat) 
-    return all((evals .+ err) .>= 0), minimum(evals)
-end
-
-function abcds()
-end
