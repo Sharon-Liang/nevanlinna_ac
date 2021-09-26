@@ -2,6 +2,6 @@
 *.jl.cov
 *.jl.mem
 
-References/*.txt
-References/*.h
-References/*.cpp
+References/run/*.txt
+References/run/*.h
+References/run/*.cpp
