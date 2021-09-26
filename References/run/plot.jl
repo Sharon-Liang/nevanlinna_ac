@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.0
+# v0.16.1
 
 using Markdown
 using InteractiveUtils
@@ -13,8 +13,14 @@ end
 
 # ╔═╡ f845342e-5fe7-4906-a351-5376331d325e
 begin
-	adelta = readdlm("./odelta.txt")
+	adelta = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/odelta.txt")
 	"./odelta.txt"
+end
+
+# ╔═╡ 05a0bcd3-f04f-4919-a3b1-d7260134a54f
+begin
+	adelta_julia = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/odelta_julia.txt")
+	"./odelta_julia.txt"
 end
 
 # ╔═╡ 0a4fd4b8-e0c0-4ecc-92e0-68e78b0aa6ab
@@ -28,55 +34,130 @@ end
 ω = [i for i in range(-10,10,length=6000)]
 
 # ╔═╡ 5ed56322-ecb5-41dd-bd1a-58a2a1652ba6
-d = [delta(i,c=1,η=0.001) for i in ω]
+d = [delta(i,c=1,η=0.001)*2π for i in ω]
 
 # ╔═╡ 21f97a30-4645-4b4e-bdc3-b6c261545d16
 begin
-	plot(ω[1:10:end],d[1:10:end],lw=2,label="exact")
+	plot(ω[1:10:end],d[1:10:end],line=(:black,2),label="exact")
 	plot!(adelta[1:10:end,1],adelta[1:10:end,2],line=(:dash,2),label="c++")
+	plot!(adelta_julia[1:end,1],adelta_julia[1:end,2],line=(:dash,2),label="julia")
 	plot!(xlabel="ω", ylabel="A(ω)",xlim=(-3,3))
 end
 
 # ╔═╡ e126d33a-f29f-41b2-9c57-6f7463075a99
 begin
-	a1 = readdlm("./og1.txt")
+	a1 = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/og1.txt")
 	"./og1.txt"
+end
+
+# ╔═╡ 622b0780-d02d-4461-8b33-781b4bb7454d
+begin
+	a1_julia = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/og1_julia.txt")
+	"./og1_julia.txt"
 end
 
 # ╔═╡ 45934fd8-01fb-426c-bc7c-2bd5f379f548
 begin
-	a1t = readdlm("./ag1.txt")
+	a1t = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/ag1.txt")
 	"./ag1.txt"
 end
 
 # ╔═╡ 07490716-5656-4d8c-af03-860d705aaa78
 begin
-	plot(a1[:,1],a1[:,2].*2π,lw=2,label="c++")
-	plot!(a1t[:,1],a1t[:,2],lw=2,label="exact")
+	plot(a1t[:,1],a1t[:,2],line=(:black,1.5),label="exact")
+	plot!(a1[1:10:end,1],a1[1:10:end,2],line=(1.5),label="c++")
+	plot!(a1_julia[1:10:end,1],a1_julia[1:10:end,2],line=(1.5),label="julia")
 	plot!(xlabel="ω", ylabel="A(ω)",xlim=(-5,5))
 end
 
 # ╔═╡ 9515edd6-55e9-457e-8a0b-7bb672b91768
 begin
-	a3 = readdlm("./og3.txt")
+	a3 = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/og3.txt")
 	"./og3.txt"
+end
+
+# ╔═╡ 0028c934-bb56-49ea-947e-48cea9c9f556
+begin
+	a3_2 = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/og3_2.txt")
+	"./og3_2.txt"
+end
+
+# ╔═╡ 0b4b417c-c46b-4e91-b79d-6c209458aac9
+begin
+	a3_julia = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/og3_julia.txt")
+	"./og3_julia.txt"
+end
+
+# ╔═╡ 428b1451-d999-4b56-8add-1c2217933e3b
+begin
+	a3_julia2 = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/og3_julia2.txt")
+	"./og3_julia2.txt"
 end
 
 # ╔═╡ 7f31d933-45da-4ad5-acbd-439919e0a7c6
 begin
-	a3t = readdlm("./ag3.txt")
+	a3t = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/ag3.txt")
 	"./ag3.txt"
 end
 
 # ╔═╡ fd5f33aa-5c0e-4520-9001-8e275c21ccd2
 begin
-	plot(a3[:,1],a3[:,2].* 2π,lw=2,label="c++")
-	plot!(a3t[:,1],a3t[:,2],lw=2,label="exact")
+	plot(a3t[:,1],a3t[:,2],line=(:black, 1.5),label="exact")
+	plot!(a3[1:10:end,1],a3[1:10:end,2],line=(:orange,1.5),label="c++ prec=128")
+	plot!(a3_2[1:10:end,1],a3_2[1:10:end,2],line=(:purple,:dash, 1.5), label="c++")
+	plot!(a3_julia2[1:10:end,1],a3_julia2[1:10:end,2] .*2π,line=(:blue, :dash, 1.5), label="julia prec=128")
+	plot!(a3_julia[1:10:end,1],a3_julia[1:10:end,2],line=(:green, :dash, 1.5),label="julia")
+	
 	plot!(xlabel="ω", ylabel="A(ω)",xlim=(-5,5))
+end
+
+# ╔═╡ e4a6702a-b18c-4f34-9634-cf08b94e4505
+begin
+	phi = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/phis.txt")
+	"./phis.txt"
+end
+
+# ╔═╡ bdf3ed4f-561e-4192-8d5a-f4f67c2e9a3f
+begin
+	phi2 = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/phis2.txt")
+	"./phis2.txt"
+end
+
+# ╔═╡ 5338fe59-1c0c-4ed0-aeba-4a19bb0fd26a
+begin
+	ϕ = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/phi_julia.txt")
+	"./phi_julia.txt"
+end
+
+# ╔═╡ a1347493-3124-4bf2-87d5-8efd940f2272
+begin
+	ϕ2 = readdlm("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/data/phi_julia2.txt")
+	"./phi_julia2.txt"
+end
+
+# ╔═╡ 9f0df7cb-70f6-4933-aff1-ada97fbd7a4c
+begin
+	scatter(phi[:,1], phi[:,2],marker=(:hex,4,stroke(0)),label="c++ real prec=128")
+	scatter!(phi2[:,1], phi2[:,2],marker=(:circle,3,stroke(0)),label="c++ real")
+	scatter!(ϕ[:,1], ϕ[:,2],marker=(:star,4,stroke(0.1)),label="julia")
+	scatter!(ϕ2[:,1], ϕ2[:,2],marker=(:star,4,stroke(0)),label="julia perc=128")
+	plot!(xlabel="index of ωn",ylabel="real part of λ_i",legend=:bottomleft)
+end
+
+# ╔═╡ 79b68211-23c2-4356-8a0f-0a3712ae0a76
+begin
+	scatter(phi[:,1], phi[:,3],marker=(:hex,4,stroke(0)),label="c++ imag prec=128")
+	scatter!(phi2[:,1], phi2[:,2],marker=(:circle,3,stroke(0)),label="c++ imag")
+	scatter!(ϕ[:,1], ϕ[:,3],marker=(:star,4,stroke(0.1)),label="julia")
+	scatter!(ϕ2[:,1], ϕ2[:,3],marker=(:star,4,stroke(0)),label="julia perc=128")
+	plot!(xlabel="index of ωn",ylabel="real part of λ_i")
 end
 
 # ╔═╡ ac2cddc3-a62e-47a6-b8a6-b4b17c96d886
 cd("/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/References/run")
+
+# ╔═╡ 091218ad-e027-4140-8b68-d541f6a47aa3
+pwd()
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -898,17 +979,29 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╟─f845342e-5fe7-4906-a351-5376331d325e
+# ╟─05a0bcd3-f04f-4919-a3b1-d7260134a54f
 # ╟─0a4fd4b8-e0c0-4ecc-92e0-68e78b0aa6ab
 # ╟─32531598-f552-43d4-8050-c04eacd0bfbf
 # ╟─5ed56322-ecb5-41dd-bd1a-58a2a1652ba6
 # ╟─21f97a30-4645-4b4e-bdc3-b6c261545d16
 # ╟─e126d33a-f29f-41b2-9c57-6f7463075a99
+# ╟─622b0780-d02d-4461-8b33-781b4bb7454d
 # ╟─45934fd8-01fb-426c-bc7c-2bd5f379f548
-# ╟─07490716-5656-4d8c-af03-860d705aaa78
+# ╠═07490716-5656-4d8c-af03-860d705aaa78
 # ╟─9515edd6-55e9-457e-8a0b-7bb672b91768
+# ╟─0028c934-bb56-49ea-947e-48cea9c9f556
+# ╟─0b4b417c-c46b-4e91-b79d-6c209458aac9
+# ╟─428b1451-d999-4b56-8add-1c2217933e3b
 # ╟─7f31d933-45da-4ad5-acbd-439919e0a7c6
 # ╟─fd5f33aa-5c0e-4520-9001-8e275c21ccd2
+# ╟─e4a6702a-b18c-4f34-9634-cf08b94e4505
+# ╟─bdf3ed4f-561e-4192-8d5a-f4f67c2e9a3f
+# ╟─5338fe59-1c0c-4ed0-aeba-4a19bb0fd26a
+# ╟─a1347493-3124-4bf2-87d5-8efd940f2272
+# ╟─9f0df7cb-70f6-4933-aff1-ada97fbd7a4c
+# ╟─79b68211-23c2-4356-8a0f-0a3712ae0a76
 # ╟─ac2cddc3-a62e-47a6-b8a6-b4b17c96d886
 # ╟─c7c84eb8-16be-11ec-1f65-a79c490c3ac4
+# ╟─091218ad-e027-4140-8b68-d541f6a47aa3
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
