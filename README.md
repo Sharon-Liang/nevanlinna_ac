@@ -1,3 +1,3 @@
 # nevanlinna_ac
 
-[![Build Status](https://travis-ci.com/Sharon-Liang/nevanlinna_ac.svg?branch=main)](https://travis-ci.com/github/Sharon-Liang/nevanlinna_ac)
+[![Build Status](https://app.travis-ci.com/Sharon-Liang/nevanlinna_ac.svg?token=sQNKTHky24h76qswHKPE&branch=main)](https://app.travis-ci.com/Sharon-Liang/nevanlinna_ac)
