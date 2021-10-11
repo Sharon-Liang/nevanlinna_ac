@@ -3,6 +3,7 @@ function eye(n::Int64)
     for i = 1:n res[i,i] = 1.0 end
     return res
 end
+#Pkg FillArrays (Eye) ?
 
 function eye(dtype::DataType, n::Int64)
     res = zeros(dtype, n, n)
@@ -52,10 +53,10 @@ function Masubara_GF(n::Int64, A::Function, β::Real;
     type::Symbol = :f, Λ::Float64=100., L::Int64=1000000)
     # G(iωn) = 1/2π ∫dΩ A(Ω)/(iωn - Ω)
     ωn = Masubara_freq(n, β, type=type)
-    dL = 2*Λ/L
+    dL = 2*Λ/L; lowlim = -Λ
     Gn = 0.
     for n = 0:L
-        ω = -Λ + dL*n
+        ω = lowlim + dL*n
         Gn += A(ω)/(1.0im*ωn-ω) * dL
     end
     return Gn/(2π)
