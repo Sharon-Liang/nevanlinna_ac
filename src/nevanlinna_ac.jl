@@ -1,6 +1,9 @@
 module nevanlinna_ac
 __precompile__()
 
+#setprecision(BigFloat, 128)
+#BigFloat defalt precision 256
+
 using LinearAlgebra
 using Random; Random.seed!()
 using DelimitedFiles

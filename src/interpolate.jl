@@ -5,22 +5,21 @@ end
 
 struct MasubaraGF
     number::Int64
-    type::Symbol
     GF::Vector{Giωn}
 end
 
-function make_input(path::String, num::Int64; type::Symbol = :f)
+function make_input(path::String, num::Int64)
     data = readdlm(path)
     fnum = min(num, length(data[:,1])) # number of frenquencies used
     res = [Giωn(data[i,1],data[i,2]+1.0im*data[i,3]) for i = 1:fnum]
-    return MasubaraGF(fnum, type, res |> reverse)
+    return MasubaraGF(fnum, res |> reverse)
 end
 
-function make_input(path::String; type::Symbol = :f)
+function make_input(path::String)
     data = readdlm(path)
     fnum = length(data[:,1]) # number of frenquencies used
     res = [Giωn(data[i,1],data[i,2]+1.0im*data[i,3]) for i = 1:fnum]
-    return MasubaraGF(fnum, type, res |> reverse)
+    return MasubaraGF(fnum, res |> reverse)
 end
 
 function pick_matrix(G::MasubaraGF)
@@ -53,8 +52,8 @@ function θk(fac::Matrix, θp::Number)
     return up/down
 end
 
-function core(G::MasubaraGF)
-    dtype = ComplexF64
+function core(G::MasubaraGF; etype::DataType=Float64)
+    dtype = Complex{etype}
     M = G.number; g = G.GF
     phis = zeros(dtype, M) #store λk(iω_(k+1))
     phis[1] = λ(g[1])
@@ -75,11 +74,11 @@ function core(G::MasubaraGF)
 end
 
 function evaluation(z::Number, G::MasubaraGF; 
-    optim::Symbol = :none)
-    dtype = ComplexF64
+    optim::Symbol = :none, etype::DataType=Float64)
+    dtype = Complex{etype}
     M = G.number
     g = G.GF
-    phis = core(G)
+    phis = core(G, etype=etype)
     abcd = eye(dtype, 2)
     for j = 1:M
         prod = zeros(dtype, 2,2)
@@ -100,8 +99,10 @@ function evaluation(z::Number, G::MasubaraGF;
     return invh(θ)
 end
 
-function spectrum_density(ω::Real, η::Real, G::MasubaraGF)
+function spectrum_density(ω::Real, η::Real, G::MasubaraGF;
+    etype::DataType=Float64)
+    dtype = Complex{etype}
     z = ω + 1.0im * η
-    return 2*evaluation(z, G) |> imag
+    return 2*(evaluation(z, G, etype=etype) |> imag)
 end
 
