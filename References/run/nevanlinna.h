@@ -92,7 +92,7 @@ public:
     void write () {
         for(int i = 0;i < N_real_; i++){
             ofs << std::fixed << std::setprecision(15);
-            ofs << freq_[i].real() << " " << 1 / M_PI * val_[i].imag() <<std::endl;
+            ofs << freq_[i].real() << " " << 2 * val_[i].imag() <<std::endl;
         }
     }
 private:

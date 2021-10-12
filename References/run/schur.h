@@ -66,7 +66,12 @@ void Schur<T>::core() {
         }
         phis[j + 1] = (- abcds[j + 1](1, 1) * imag.val()[j + 1] + abcds[j + 1](0, 1)) /
                         (abcds[j + 1](1, 0) * imag.val()[j + 1] - abcds[j + 1](0, 0));   
-    }
+//std::cout << j+1<<" "<<phis[j].real() << " " <<phis[j].imag()<< std::endl;
+//if(j==M-2)
+//{
+//	std::cout << j+2 <<" "<<phis[j+1].real() << " " <<phis[j+1].imag()<< std::endl;
+//    }
+}
 }
 
 
