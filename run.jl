@@ -3,26 +3,30 @@ using PyPlot
 using DelimitedFiles
 using Printf
 
-fname = "delta"
-path = @sprintf "./data/i%s.txt" fname
-opath = @sprintf "./data/o%s_julia.txt" fname
-g = make_input(path);
+fac = [0, 1]
+A = x-> x*gaussian(x,fac)
+x = [i for i in range(-5,5,length=1000)]
+y = [A(i) for i in x ]
 
-η = 0.001
-omega = [i for i in range(-10,10,length=6000)];
-A = [spectrum_density(w,η,g) for w in omega] 
+plot(x,y)
+PyPlot.display_figs()
 
-open(opath, "w") do file
-    for i = 1:6000
-        writedlm(file, [omega[i] A[i]])
+open("./data/ag3_bose_b20.txt","w") do file
+    for i = 1:1000
+        writedlm(file,[x[i] A(x[i])])
     end
 end
 
-"""
-phis = core(g)
-open("./data/phi_julia.txt","w") do file
-    for i = 1:length(phis)
-        writedlm(file, [i real(phis[i]) imag(phis[i])])
+num = 30
+β = 20
+
+
+B = x -> gaussian(x,fac)
+ωn = [Masubara_freq(i,β,type=:b) for i=1:num]
+GF = [Masubara_GF(i,B,β,type=:b) for i=1:num]
+
+open("./data/ig3_bose_b20.txt","w") do file
+    for i = 1:num
+        writedlm(file,[ωn[i] real(GF[i]) imag(GF[i])])
     end
 end
-"""
