@@ -4,234 +4,303 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 06a7ec74-0684-4974-aa00-1c12dc3acc7b
+# ╔═╡ 51a61cd4-185c-11ec-0a43-4517c063bc43
 begin
-	using Plots
-	using DelimitedFiles
+	using LinearAlgebra
 	using Random; Random.seed!()
-	using Printf
-	"using packages"
+	using DelimitedFiles
+	using Plots
+	"packages"
 end
 
-# ╔═╡ ce825258-41b1-4c40-91f7-05d851b248e2
-function Masubara_freq(n::Int64, β::Real; type::Symbol= :f)
-    if type == :b  N = 2n
-    elseif type == :f  N = 2n + 1
-    else @error "type should be :b for bosons and :f for fermions" 
-    end
-    return N*π/β
-end
-
-# ╔═╡ 9cbcd233-c37f-49f6-a6bf-5d92cf744972
-function masubara(n::Int64, ϵ::Real, β::Real)
-	ωn = Masubara_freq(n,β)
-	return 1/(1.0im * ωn - ϵ)
-end
-
-# ╔═╡ 74ae31c5-545b-4b82-b9f0-1d2b7cccaa04
-function Masubara_GF(n::Int64, A::Function, β::Real, type::Symbol;
-    Λ::Float64=10., L::Int64=1000000)
-    # G(iωn) = 1/2π ∫dΩ A(Ω)/(iωn - Ω)
-    ωn = Masubara_freq(n, β, type=type)
-    dL = 2*Λ/L
-    Gn = 0.
-    for n = 0:L
-        ω = -Λ + dL*n
-        Gn += A(ω)/(1.0im*ωn-ω) * dL
-    end
-    return Gn/(2π)
-end
-
-# ╔═╡ 1474d231-7d61-4a6d-80f8-2dd89f039168
-function delta(x::Real; c::Real = 0., η::Real = 0.05)
-    num = η
-    den = ((x-c)^2 + η^2) * π
-    return num/den
-end
-
-# ╔═╡ 7cda46b1-0a59-47f0-b612-6b877de3ecb6
-function gaussian(x::Real, fac::AbstractVector)
-    # f(x) = 1/(σ√(2π)) exp(-((x-μ)/σ)^2 /2 )
-    μ = fac[1]; σ2 = fac[2]
-    σ2 <= 0. ? (@error "σ2 should be positive.") : 
-    norm = √(2π * σ2)
-    m = (x-μ)^2 / σ2
-    return 1/norm*exp(-m/2)
-end
-
-
-# ╔═╡ c1758648-ae67-4ce6-9f5f-7d1b8512445e
-function multi_gaussian(N::Int64; ms::Vector{Float64}=[-3.,3.], smax::Real=3.)
-    fac = rand(N,2)
-    fac[:,1] = rand(N) .* (ms[2] - ms[1]) .+ ms[1]
-    fac[:,2] = rand(N) .* smax
-    function f(x::Real)
-        res = 0.
-        for i = 1: N
-            res += gaussian(x, fac[i,:])
-        end
-        res/N
-    end
-    return f, fac
-end
-
-# ╔═╡ e25846d0-fe93-4f2e-b500-9f218998af08
-β = 100
-
-# ╔═╡ e720ee46-b4c8-4539-b598-5655959f51f5
-ϵ = 1.0
-
-# ╔═╡ 2d0673e6-1cbf-4435-9d29-dd4303f36358
-N = [i for i=1:36]
-
-# ╔═╡ 5fec2475-8abf-4572-8d4c-58838e54a170
-freq = [Masubara_freq(i,β,type=:f) for i in N]
-
-# ╔═╡ e3ae6751-dcad-49d4-9ff9-8dbc7e42fcb8
+# ╔═╡ 0520406d-2b17-427d-a830-c563a191a816
 md"""
-Generate data:
-
-$$H = \epsilon c^\dagger c$$
-$$G(i\omega_n) = \frac{1}{i\omega_n - \epsilon}$$
-$$A(\omega) = 2\pi \delta(\omega - \epsilon)$$
+Conformal transform h and h1
 """
 
-# ╔═╡ f1228fa1-a310-496d-8a86-6ba8de8b4575
-g1 = [1/(1.0im*w - ϵ) for w in freq]
-
-# ╔═╡ 37ae6364-6465-4368-9bbd-b05e3b30497b
+# ╔═╡ c27ab801-37a4-4174-9c7d-623c08f63203
 begin
-	open("../References/run/input_delta.txt", "w") do file
-		istring = @sprintf "idelta.txt %i odelta.txt" length(N)
-		write(file,istring)
-	end
-	"input file"
+	arg = [i for i in range(0,2π, length=100)]
+	circle_x = [cos(i) for i in arg]
+	circle_y = [sin(i) for i in arg]
+	"circle r = 1"	
 end
 
-# ╔═╡ c333b147-9776-4a79-a50e-564590115a17
-begin
-	open("../References/run/idelta.txt", "w") do file
-		for i =1:length(N)
-			writedlm(file,[freq[i] real(g1[i]) imag(g1[i])])
-		end
-	end
-	"ifile.txt"
-end
-
-# ╔═╡ ebd94ab6-bdc8-49fd-bde0-ac573c5b3bae
+# ╔═╡ d2f19b71-1947-4197-a00c-4d90df01fd96
 md"""
-Gaussian
+###  Check θ(z)
 """
 
-# ╔═╡ 3428ee85-399c-441e-a3e9-e3acac392734
-omega=[i for i in range(-5,5,length=100)]
-
-# ╔═╡ 8403d091-a0b4-4540-9fea-4c8d9e7e9fbe
-A1, fac1 = multi_gaussian(1)
-
-# ╔═╡ 541dc0b0-2fac-49b3-bfdd-8575aa2c056b
-begin
-	y1 = [A1(x) for x in omega]
-	plot(omega, y1, lw=2, label=false)
-	plot!(xlabel="ω", ylabel = "A(ω)")
-end
-
-# ╔═╡ 65938662-b78e-4713-bb21-4715105aeed4
-begin
-	open("../References/run/Ag1.txt", "w") do file
-		for i =1:length(omega)
-			writedlm(file,[omega[i] y1[i]])
-		end
-	end
-	"Afile.txt"
-end
-
-# ╔═╡ dc06a8da-da64-4468-8e56-c544ef71d408
-begin
-	open("../References/run/input_g1.txt", "w") do file
-		istring = @sprintf "ig1.txt %i og1.txt" length(N)
-		write(file,istring)
-	end
-	"input file"
-end
-
-# ╔═╡ 8245d16b-81d7-41a6-9197-0c7aaabbeaad
-g2 = [Masubara_GF(i,A1,β,:f) for i in N]
-
-# ╔═╡ 944d8b32-73bb-44b9-af06-c8aa6202bf5c
-begin
-	open("../References/run/ig1.txt", "w") do file
-		for i =1:length(N)
-			writedlm(file,[freq[i] real(g2[i]) imag(g2[i])])
-		end
-	end
-	"ifile.txt"
-end
-
-# ╔═╡ 5a46bfa5-f0b0-45de-bcaf-2e1619cd9c49
+# ╔═╡ b71809a2-fc70-438c-8205-60dce946131f
 md"""
-N=3 Gaussian
+#### delta function
 """
 
-# ╔═╡ 74686cc2-9214-42d6-9d35-2ed4bf63b43a
-A3, fac3 = multi_gaussian(3)
-
-# ╔═╡ c13a426a-2805-41ae-b95f-259baacf6d33
+# ╔═╡ 0d7c7bef-170e-46e1-907f-9b2a8e60bd91
 begin
-	y3 = [A3(x) for x in omega]
-	plot(omega, y3, lw=2, label=false)
-	plot!(xlabel="ω", ylabel = "A(ω)")
-end
+	function eye(n::Int64)
+		res = zeros(n,n)
+		for i = 1:n res[i,i] = 1.0 end
+		return res
+	end
 
-# ╔═╡ bd203a88-79d3-42ff-ac53-9b264d53f1f7
-begin
-	open("../References/run/Ag3.txt", "w") do file
-		for i =1:length(omega)
-			writedlm(file,[omega[i] y3[i]])
+	function eye(dtype::DataType, n::Int64)
+		res = zeros(dtype, n, n)
+		I = 1.0 |> dtype
+		for i = 1:n res[i,i] = I end
+		return res	
+	end
+			
+	function pauli(symbol::Symbol)
+		if symbol==:x return [0. 1.; 1. 0.]
+		elseif symbol==:y return [0. -1im; 1im 0.]
+		elseif symbol==:z return [1. 0.; 0. -1.]
+		elseif symbol==:+ return [0. 1.; 0. 0.]
+		elseif symbol==:- return [0. 0.; 1. 0.]
+		else
+			error("The input should be :x,:y,:z,:+,:-.")
 		end
 	end
-	"Afile.txt"
-end
 
-# ╔═╡ 21b0b5ae-b058-4239-813b-bd7f6967d7c1
-begin
-	open("../References/run/input_g3.txt", "w") do file
-		istring = @sprintf "ig3.txt %i og3.txt" length(N)
-		write(file,istring)
+	function delta(x::Real; c::Real = 0., η::Real = 0.05)
+		num = η
+		den = ((x-c)^2 + η^2) * π
+		return num/den
 	end
-	"input file"
-end
 
-# ╔═╡ 824527d8-e9f4-4363-8db4-d1de26b2d256
-g3 = [Masubara_GF(i,A3,β,:f) for i in N]
+	function gaussian(x::Real, fac::AbstractVector)
+		# f(x) = 1/(σ√(2π)) exp(-((x-μ)/σ)^2 /2 )
+		μ = fac[1]; σ2 = fac[2]
+		σ2 <= 0. ? (@error "σ2 should be positive.") : 
+		norm = √(2π * σ2)
+		m = (x-μ)^2 / σ2
+		return 1/norm*exp(-m/2)
+	end
 
-# ╔═╡ fc8f5f1d-0541-49f2-93d0-6badc50c6a19
-begin
-	open("../References/run/ig3.txt", "w") do file
-		for i =1:length(N)
-			writedlm(file,[freq[i] real(g3[i]) imag(g3[i])])
+	function multi_gaussian(N::Int64; ms::Vector{Float64}=[-3.,3.], smax::Real=3.)
+		fac = rand(N,2)
+		fac[:,1] = rand(N) .* (ms[2] - ms[1]) .+ ms[1]
+		fac[:,2] = rand(N) .* smax
+		function f(x::Real)
+			res = 0.
+			for i = 1: N
+				res += gaussian(x, fac[i,:])
+			end
+			res/N
 		end
+		return f, fac
 	end
-	"ifile.txt"
+
+	function Masubara_freq(n::Int64, β::Real; type::Symbol= :f)
+		if type == :b  N = 2n
+		elseif type == :f  N = 2n + 1
+		else @error "type should be :b for bosons and :f for fermions" 
+		end
+		return N*π/β
+	end
+
+	function Masubara_GF(n::Int64, A::Function, β::Real;
+		type::Symbol = :f, Λ::Float64=100., L::Int64=1000000)
+		# G(iωn) = 1/2π ∫dΩ A(Ω)/(iωn - Ω)
+		ωn = Masubara_freq(n, β, type=type)
+		dL = 2*Λ/L
+		Gn = 0.
+		for n = 0:L
+			ω = -Λ + dL*n
+			Gn += A(ω)/(1.0im*ωn-ω) * dL
+		end
+		return Gn/(2π)
+	end
+
+	function h(z::Number)
+		#Conformal mapping(Mobius transform) 
+		#\bar{C+} -> \bar{D}        
+		return (z - 1.0im)/(z + 1.0im)
+	end
+
+	function invh(z::Number)
+		return 1.0im*(1 + z)/(1 - z)
+	end
+
+	function h1(z::Number, Y::Number)
+		#Conformal mapping(Mobius transform) 
+		#C+ -> D
+		return (z - Y)/(z - Y')
+	end
+
+	function invh1(z::Complex, Y::Number)
+		return (z*Y'-Y)/(z-1)
+	end
+
+	function ispossemidef(A::Matrix)
+		evals = eigvals(A)
+		return all(evals .>= 0)
+	end
+	"utilities"
 end
 
-# ╔═╡ 959b5fd8-84d3-46cd-baed-c3d25d8c187f
-md"""
-$G(iω_n) = \frac{1}{2π} ∫dΩ \frac{A(Ω)}{(iω_n - Ω)}$
+# ╔═╡ ac782b5a-26b2-4b8f-a9d8-3baf7d1c22c5
+begin
+	fnum = 50; β=100
+	plot(circle_x, circle_y, line=(2, :black),label=false)
+	ωn = [Masubara_freq(i,β,type=:f) for i=1:fnum]
+	scatter!(zeros(fnum), ωn, label="iωn")
+	hω = [h(1.0im*i) for i in ωn]
+	scatter!(real.(hω), imag.(hω), label="h(iωn)")
+	plot!(ylim = (-1.5,1.5), xlim =(-1.2,1.2))
+end
 
-如何写积分？
-"""
+# ╔═╡ 22756d1d-983c-47eb-b6a5-0caeaa8d6fa0
+begin
+	struct Giωn
+		ωn::Real
+		val::Complex
+	end
+
+	struct MasubaraGF
+		number::Int64
+		gtype::Symbol
+		GF::Vector{Giωn}
+	end
+	
+	function λ(G::Giωn)
+    	return h(-G.val)
+	end
+
+	function pick_matrix(G::MasubaraGF)
+		# input :freq: Masubara frenquencies; val: G
+		N = G.num; g = G.GF
+		pick = zeros(ComplexF64, N, N)
+		for i = 1:N, j = 1:N
+			up = 1 - λ(g[i])*λ(g[j])'
+			down = 1 - h(1.0im*g[i].ωn)*h(1.0im*g[j].ωn)'
+			pick[i,j] = up/down
+		end
+		return pick
+	end
+
+	function isNevanlinnasolvable(G::MasubaraGF; err::Float64 = 1.e-6)
+		# check if the pick_matrix is semi positive semidefinite
+		pick = pick_matrix(G)
+		evals = eigvals(pick) 
+		return all((evals .+ err) .>= 0), minimum(evals)
+	end
+	"struct and pick_matrix"
+end
+
+# ╔═╡ e7027211-d85d-43c1-8647-8c48ce0c54f8
+begin	
+	function θk(abcd::Matrix, val::Number)
+	    up = -abcd[2,2] * val + abcd[1,2]
+	    down = abcd[2,1] * val - abcd[1,1]
+	    return up/down
+	end
+	
+	function core(G::MasubaraGF)
+		T = ComplexF64
+		M=G.number; g = G.GF
+		phis = zeros(T, M) ; phis[1] = λ(g[1]) #store λk(iω_(k+1))
+		abcds = Vector{Matrix{T}}(undef,M)
+		for i = 1:M 
+			abcds[i] = eye(T,2) 
+		end
+		for j = 1:(M-1)
+			for k=j:(M-1)
+				prod = zeros(T,2,2)
+				prod[1,1] = h1(1.0im*g[k].ωn,1.0im*g[j].ωn)
+				prod[1,2] = phis[j]
+				prod[2,1] = phis[j]' * h1(1.0im*g[k].ωn,1.0im*g[j].ωn)
+				prod[2,2] = 1. |> T
+				abcds[k] *= prod
+			end
+			phis[j+1] = θk(abcds[j+1], λ(g[j+1]))
+		end
+		return phis
+	end
+	
+	function evaluation(z::Number, G::MasubaraGF; 
+		optim::Symbol = :none)
+		dtype = ComplexF64
+		M = G.number
+		g = G.GF
+		phis = core(G)
+		abcd = eye(dtype,2)
+		for j = 1:M
+			prod = zeros(dtype,2,2)
+			prod[1,1] = h1(z,1.0im*g[j].ωn)
+			prod[1,2]= phis[j]
+			prod[2,1] = phis[j]' * h1(z,1.0im*g[j].ωn)
+			prod[2,2] = 1. |> dtype
+			abcd *= prod
+		end
+
+		if optim == :none
+			θm(z::Number) = 0.0 + 0.0im
+		end
+
+		up = abcd[1,1] * θm(z) + abcd[1,2]
+		down = abcd[2,1] * θm(z) + abcd[2,2]
+		θ = up/down
+		return invh(θ)
+	end
+
+	function spectrum_density(ω::Real, η::Real, G::MasubaraGF)
+		z = ω + 1.0im * η
+		return evaluation(z, G)/π |> imag
+	end
+end
+
+# ╔═╡ 02175367-7ea1-45c8-8188-10b01993efde
+function make_input(path::String, num::Int64; type::Symbol = :f)
+    data = readdlm(path)
+    fnum = min(num, length(data[:,1])) # number of frenquencies used
+    res = [Giωn(data[i,1],data[i,2]+1.0im*data[i,3]) for i = 1:fnum] |> reverse
+    return MasubaraGF(fnum, type, res)
+end
+
+# ╔═╡ 4033c412-34be-439f-8dcf-42f4ed570611
+begin
+	N = 36
+	p1 = "./data/idelta.txt"; G1 = make_input(p1,N)
+	p2 = "./data/ig1.txt"; G2 = make_input(p2,N)
+	p3 = "./data/ig3.txt"; G3 = make_input(p3,N)
+	
+	gf1 = G1.GF
+	gf2 = G2.GF
+	gf3 = G3.GF
+	"load data"
+end
+
+# ╔═╡ 290742b3-a4fb-4763-b0b2-eaad702e7c94
+N
+
+# ╔═╡ 08f205d9-b396-4b95-9068-3097c36cf1bd
+begin
+	w = [gf1[i].ωn for i=1:N]
+	gt = [-gf1[i].val for i=1:N]
+	g = [evaluation(1.0im*i, G1) for i in w]
+	scatter(real.(gt), imag.(gt),marker=(:hex,5),label="data:-g(iωn)")
+	scatter!(real.(g), imag.(g), label="interploate")
+	plot!(xlabel="1", ylabel="i")
+end
+
+# ╔═╡ 1a3e64ec-4491-478d-9885-d7c8f828618c
+begin
+	omega = [i for i in range(-5,5,length=1000)] ; η = 0.001
+	A = [spectrum_density(i,η,G1) for i in omega]
+	plot(omega,A,label=false)
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
-Plots = "~1.22.0"
+Plots = "~1.22.1"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -683,9 +752,9 @@ version = "1.0.14"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
-git-tree-sha1 = "b1a708d607125196ea1acf7264ee1118ce66931b"
+git-tree-sha1 = "4c2637482176b1c2fb99af4d83cb2ff0328fc33c"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.22.0"
+version = "1.22.1"
 
 [[Preferences]]
 deps = ["TOML"]
@@ -791,9 +860,9 @@ version = "0.33.10"
 
 [[StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "f41020e84127781af49fc12b7e92becd7f5dd0ba"
+git-tree-sha1 = "2ce41e0d042c60ecd131e9fb7154a3bfadbf50d3"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.2"
+version = "0.6.3"
 
 [[TOML]]
 deps = ["Dates"]
@@ -1043,36 +1112,19 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─9cbcd233-c37f-49f6-a6bf-5d92cf744972
-# ╟─74ae31c5-545b-4b82-b9f0-1d2b7cccaa04
-# ╟─ce825258-41b1-4c40-91f7-05d851b248e2
-# ╟─1474d231-7d61-4a6d-80f8-2dd89f039168
-# ╟─7cda46b1-0a59-47f0-b612-6b877de3ecb6
-# ╟─c1758648-ae67-4ce6-9f5f-7d1b8512445e
-# ╟─e25846d0-fe93-4f2e-b500-9f218998af08
-# ╟─e720ee46-b4c8-4539-b598-5655959f51f5
-# ╟─2d0673e6-1cbf-4435-9d29-dd4303f36358
-# ╟─5fec2475-8abf-4572-8d4c-58838e54a170
-# ╟─e3ae6751-dcad-49d4-9ff9-8dbc7e42fcb8
-# ╟─f1228fa1-a310-496d-8a86-6ba8de8b4575
-# ╟─37ae6364-6465-4368-9bbd-b05e3b30497b
-# ╟─c333b147-9776-4a79-a50e-564590115a17
-# ╟─ebd94ab6-bdc8-49fd-bde0-ac573c5b3bae
-# ╟─3428ee85-399c-441e-a3e9-e3acac392734
-# ╟─8403d091-a0b4-4540-9fea-4c8d9e7e9fbe
-# ╟─541dc0b0-2fac-49b3-bfdd-8575aa2c056b
-# ╟─65938662-b78e-4713-bb21-4715105aeed4
-# ╟─dc06a8da-da64-4468-8e56-c544ef71d408
-# ╟─8245d16b-81d7-41a6-9197-0c7aaabbeaad
-# ╟─944d8b32-73bb-44b9-af06-c8aa6202bf5c
-# ╟─5a46bfa5-f0b0-45de-bcaf-2e1619cd9c49
-# ╟─74686cc2-9214-42d6-9d35-2ed4bf63b43a
-# ╟─c13a426a-2805-41ae-b95f-259baacf6d33
-# ╟─bd203a88-79d3-42ff-ac53-9b264d53f1f7
-# ╠═21b0b5ae-b058-4239-813b-bd7f6967d7c1
-# ╠═824527d8-e9f4-4363-8db4-d1de26b2d256
-# ╟─fc8f5f1d-0541-49f2-93d0-6badc50c6a19
-# ╟─06a7ec74-0684-4974-aa00-1c12dc3acc7b
-# ╟─959b5fd8-84d3-46cd-baed-c3d25d8c187f
+# ╟─290742b3-a4fb-4763-b0b2-eaad702e7c94
+# ╟─0520406d-2b17-427d-a830-c563a191a816
+# ╟─c27ab801-37a4-4174-9c7d-623c08f63203
+# ╟─ac782b5a-26b2-4b8f-a9d8-3baf7d1c22c5
+# ╟─d2f19b71-1947-4197-a00c-4d90df01fd96
+# ╟─b71809a2-fc70-438c-8205-60dce946131f
+# ╟─08f205d9-b396-4b95-9068-3097c36cf1bd
+# ╟─1a3e64ec-4491-478d-9885-d7c8f828618c
+# ╟─e7027211-d85d-43c1-8647-8c48ce0c54f8
+# ╟─4033c412-34be-439f-8dcf-42f4ed570611
+# ╟─02175367-7ea1-45c8-8188-10b01993efde
+# ╟─22756d1d-983c-47eb-b6a5-0caeaa8d6fa0
+# ╠═0d7c7bef-170e-46e1-907f-9b2a8e60bd91
+# ╟─51a61cd4-185c-11ec-0a43-4517c063bc43
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

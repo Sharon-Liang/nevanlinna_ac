@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ig3.txt 36 og3_2.txt
+=======
+ig3.txt 36 og3.txt
+>>>>>>> 4a82e3420032da483cf8eb0f1120d7b97657d825

@@ -1,12 +1,14 @@
-function pauli(symbol::Symbol)
-    if symbol==:x return [0. 1.; 1. 0.]
-    elseif symbol==:y return [0. -1im; 1im 0.]
-    elseif symbol==:z return [1. 0.; 0. -1.]
-    elseif symbol==:+ return [0. 1.; 0. 0.]
-    elseif symbol==:- return [0. 0.; 1. 0.]
-    else
-        error("The input should be :x,:y,:z,:+,:-.")
-    end
+function eye(n::Int64)
+    res = zeros(n,n)
+    for i = 1:n res[i,i] = 1.0 end
+    return res
+end
+
+function eye(dtype::DataType, n::Int64)
+    res = zeros(dtype, n, n)
+    I = 1.0 |> dtype
+    for i = 1:n res[i,i] = I end
+    return res	
 end
 
 function delta(x::Real; c::Real = 0., η::Real = 0.05)
@@ -46,8 +48,8 @@ function Masubara_freq(n::Int64, β::Real; type::Symbol= :f)
     return N*π/β
 end
 
-function Masubara_GF(n::Int64, A::Function, β::Real, type::Symbol;
-    Λ::Float64=100., L::Int64=1000000)
+function Masubara_GF(n::Int64, A::Function, β::Real;
+    type::Symbol = :f, Λ::Float64=100., L::Int64=1000000)
     # G(iωn) = 1/2π ∫dΩ A(Ω)/(iωn - Ω)
     ωn = Masubara_freq(n, β, type=type)
     dL = 2*Λ/L
@@ -59,45 +61,28 @@ function Masubara_GF(n::Int64, A::Function, β::Real, type::Symbol;
     return Gn/(2π)
 end
 
-function ispossemidef(A::Matrix)
-    evals = eigvals(A)
-    return all(evals .>= 0.) 
-end
-
-function MobiusTransform(z::ComplexF32)
+function h(z::Number)
+    #Conformal mapping(Mobius transform) 
+    #\bar{C+} -> \bar{D}        
     return (z - 1.0im)/(z + 1.0im)
 end
 
-function invMobiusTransform(z::ComplexF32)
+function invh(z::Number)
     return 1.0im*(1 + z)/(1 - z)
 end
 
-function NG(gval::Vector)
-    #input: gval: values of masubara GF
+function h1(z::Number, Y::Number)
+    #Conformal mapping(Mobius transform) 
+    #C+ -> D
+    return (z - Y)/(z - Y')
 end
 
-
-function pick_matrix(freq::Vector, gval::Vector)
-    # input :freq: Masubara frenquencies; val: G
-    dim = length(freq)
-    if length(val) != dim
-        @error DimensionMismatch("dimension of val must match freq")
-    end
-    pmat = zeros(ComplexF32, dim, dim)
-    for i = 1:dim, j = 1:dim
-        num = 1 - val[i]*val[j]'
-        den = 1 - MobiusTransform(freq[i])*MobiusTransform(freq[j])'
-        pmat[i,j] = num/den
-    end
-    return pmat
+function invh1(z::Complex, Y::Number)
+    return (z*Y'-Y)/(z-1)
 end
 
-function isNevanlinnasolvable(freq::Vector, val::Vector)
-    # check if the pick_matrix is semi positive semidefinite
-    pmat = pick_matrix(freq, val)
-    return pmat |> ispossemidef
+function ispossemidef(A::Matrix)
+    evals = eigvals(A)
+    return all(evals .>= 0)
 end
 
-function isNevanlinnaunique(freq::Vector, val::Vector)
-    return pick_matrix(freq, val) |> det |> iszero
-end
