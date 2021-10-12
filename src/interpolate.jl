@@ -101,7 +101,6 @@ end
 
 function spectrum_density(ω::Real, η::Real, G::MasubaraGF;
     etype::DataType=Float64)
-    dtype = Complex{etype}
     z = ω + 1.0im * η
     return 2*(evaluation(z, G, etype=etype) |> imag)
 end
