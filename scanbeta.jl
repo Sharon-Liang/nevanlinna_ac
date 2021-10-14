@@ -3,27 +3,37 @@ using nevanlinna_ac
 using DelimitedFiles
 using Printf
 
-println("2021-10-12: g=1.0, scan beta (10,20)")
-beta = [i for i in range(10,20,step=0.1)]
-len = length(beta)
-chi8 = similar(beta)
-chi28 = similar(beta)
+println("2021-10-14: scan g and beta")
 η = 0.001
+beta = [10.0, 20.0, 30.0, 40.0]
+gamma = [1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 6.0]
+omega = [i for i in range(-5,5,length=1000)]
 
-for i = 1:len
-    β = beta[i]
-    path1 = @sprintf "./data/scan_beta/g8_b_%.1f.txt" β
-    path2 = @sprintf "./data/scan_beta/g28_b_%.1f.txt" β
+for j = 1:length(gamma), b = 1:length(beta)
+    g = gamma[j]; β = beta[b]
+    path1 = @sprintf "./data/gt/gt8_g_%.1f_b_%i.txt" g β
+    path2 = @sprintf "./data/gt/gt28_g_%.1f_b_%i.txt" g β
+    opath1 = @sprintf "./data/gt/a_g_%.1f_b_%i.txt" g β
+    opath2 = @sprintf "./data/gt/a5_g_%.1f_b_%i.txt" g β
 
-    g8 = make_input(path1)
-    chi8[i] = spectrum_density(0,η,g8)
+    g8 = make_input(path1); g8s = make_input(path1, 5)
+    g28 = make_input(path2); g28s = make_input(path2, 5)
 
-    g28 = make_input(path2)
-    chi28[i] = spectrum_density(0,η,g28)
-end
+    chi8 = [spectrum_density(i,η,g8) for i in omega]
+    chi28 = [spectrum_density(i,η,g28) for i in omega]
 
-open("./data/scan_beta/chi.txt","w") do file
-    for i = 1:len
-        writedlm(file,[beta[i] chi8[i] chi28[i]])
+    chi8s = [spectrum_density(i,η,g8s) for i in omega]
+    chi28s = [spectrum_density(i,η,g28s) for i in omega]
+
+    open(opath1,"w") do file
+        for i = 1:length(omega)
+            writedlm(file,[omega[i] chi8[i] chi28[i]])
+        end
+    end
+
+    open(opath2,"w") do file
+        for i = 1:length(omega)
+            writedlm(file,[omega[i] chi8s[i] chi28s[i]])
+        end
     end
 end
