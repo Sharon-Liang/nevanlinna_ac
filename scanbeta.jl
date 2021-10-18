@@ -6,7 +6,7 @@ using Printf
 println("2021-10-14: scan g and beta")
 η = 0.001
 beta = [10.0, 20.0, 30.0, 40.0]
-gamma = [1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 6.0]
+gamma = [0.8, 0.9, 1.1, 1.2]
 omega = [i for i in range(-5,5,length=1000)]
 
 for j = 1:length(gamma), b = 1:length(beta)
