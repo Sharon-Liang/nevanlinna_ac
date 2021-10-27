@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+
+\bibitem{jarrell1996bayesian}
+Mark Jarrell and James~E Gubernatis.
+\newblock Bayesian inference and the analytical continuation of imaginary-time
+  quantum monte carlo data.
+\newblock {\em Physics Reports}, 269(3):133--195, 1996.
+
+\bibitem{XiaoLRT}
+Ming-Wen Xiao.
+\newblock {\em Lecture notes: Linear Response Theory}.
+\newblock School of Physics, Nanjing University.
+
+\bibitem{gubernatis_kawashima_werner_2016}
+James Gubernatis, Naoki Kawashima, and Philipp Werner.
+\newblock {\em Quantum Monte Carlo Methods: Algorithms for Lattice Models}.
+\newblock Cambridge University Press, 2016.
+
+\bibitem{acton1997numerical}
+Forman~S. Acton.
+\newblock {\em Numerical Methods that Work (Spectrum)}.
+\newblock The Mathematical Association of America, 1997.
+
+\bibitem{fei2021nevanlinna}
+Jiani Fei, Chia-Nan Yeh, and Emanuel Gull.
+\newblock Nevanlinna analytical continuation.
+\newblock {\em Physical Review Letters}, 126(5):056402, 2021.
+
+\bibitem{schur1918potenzreihen}
+J~Schur.
+\newblock {\"U}ber potenzreihen, die im innern des einheitskreises
+  beschr{\"a}nkt sind.
+\newblock {\em Journal f{\"u}r die reine und angewandte Mathematik (Crelles
+  Journal)}, 1918(148):122--145, 1918.
+
+\bibitem{nevanlinna1919uber}
+Rolf Nevanlinna.
+\newblock Uber beschrankte funktionen, die in gegeben punkten vorgeschrieben
+  werte annehmen.
+\newblock {\em Ann. Acad. Sci. Fenn. Ser. A 1 Mat. Dissertationes}, 1919.
+
+\end{thebibliography}

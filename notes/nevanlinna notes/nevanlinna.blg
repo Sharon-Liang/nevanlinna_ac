@@ -1,0 +1,47 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: nevanlinna.aux
+The style file: unsrt.bst
+Database file #1: nevanlinnaNotes.bib
+Database file #2: nevanlinna.bib
+You've used 7 entries,
+            1791 wiz_defined-function locations,
+            491 strings with 4633 characters,
+and the built_in function-call counts, 1285 in all, are:
+= -- 112
+> -- 46
+< -- 0
++ -- 19
+- -- 12
+* -- 74
+:= -- 214
+add.period$ -- 21
+call.type$ -- 7
+change.case$ -- 4
+chr.to.int$ -- 0
+cite$ -- 7
+duplicate$ -- 62
+empty$ -- 139
+format.name$ -- 12
+if$ -- 282
+int.to.chr$ -- 0
+int.to.str$ -- 7
+missing$ -- 8
+newline$ -- 38
+num.names$ -- 7
+pop$ -- 25
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 18
+stack$ -- 0
+substring$ -- 68
+swap$ -- 8
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 12
+width$ -- 8
+write$ -- 74
