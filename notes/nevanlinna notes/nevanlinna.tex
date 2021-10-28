@@ -68,8 +68,9 @@
 \section{The analytic continuation problem}
 \label{sec:the-analytic-continuation-problem}
 
-Another way is to extract real frequency dynamical information from
-imaginary-time correlation functions $G(\tau)$ by analytic continuation.
+The analytic continuation problem seeks   
+to extract real frequency dynamical information from
+imaginary-time correlation functions $G(\tau)$ data.
 Technically, this is a highly nontirvial task\cite{jarrell1996bayesian}. To 
 see this, we use the relation between $G(\tau)$ and $A(\omega)$
 \cite{jarrell1996bayesian,XiaoLRT}:
@@ -77,28 +78,40 @@ see this, we use the relation between $G(\tau)$ and $A(\omega)$
 	G(\tau) = \int_{-\infty}^{\infty} d\omega
 		\frac{e^{-\tau \omega }}{1 - \lambda e^{-\beta \omega}}
 		A(\omega)
+		= \int_{-\infty}^{\infty} d\omega
+		K(\tau, \omega) A(\omega)
 \end{equation}
-For large $|\omega|$, the kernal 
-$K(\tau, \omega) = \frac{e^{-\tau \omega }}{1 - \lambda e^{-\beta \omega}}$
-is exponentially small, so the large $|\omega|$ features of $A(\omega)$ 
-depend upon subtle features in $G(\tau)$. To obtain $A(\omega)$ from 
-$G(\tau)$ is thus akin to parameterizing a two-neuclei redioactive 
-decay problem\cite{gubernatis_kawashima_werner_2016}:
+where $K(\tau, \omega) = \frac{e^{-\tau \omega }}{1 - \lambda e^{-\beta \omega}}$
+is the kernel. One may consider to solve the problem by firstly 
+discretize $\tau$ and $\omega$ and get:
 \begin{equation}
-	y = Ae^{-at} + Be^{-bt}
+	G(\tau_i) = \sum_{j=1}^{N_\omega} K_{ij} A(\omega_j)
 \end{equation}
-This type of problem is well known to be ill-posed and F. S. Acton describe 
-it as a problem "not to compute"\cite{acton1997numerical}.
-% Gt 准是因为只需要 trace, 这里trace是能算准的， G(iwn)和Gt有解析表达的关系
-% 不存在任何奇异性，因此两者是一样准的
+Then do SVD decomposition of rectangular matrix $K$, write
+$K_ij = U_{il} \lambda_l V_{lj}$. Finally the spectral function 
+reads
+\begin{equation}
+	A(\omega_j) = \sum_{l=1}^{N_\tau} \frac{1}{\lambda_l} V_{ij}
+		\sum_{i=1}^{N_\omega} G(\tau_i) U_{il}
+\end{equation}
+It seems fine at the first glanse. However, if we consider 
+the properties of $K(\tau, \omega)$, we would notice that it 
+is highly sigular since it is exponentially small for large 
+$|\omega|$, so small errors $G(\tau)$ would be amplified by
+exponentially small $\lambda_l$. This problem is well-known
+ill-posed\cite{acton1997numerical, peschel1999density} and 
+enormous efforts have been made\cite{}.
 
-Thankfully, we can take the advantage of the cMPO method that one 
-can get very accurate values of $C_{AB}(\tau)$ as well as 
-$C_{AB}(i\omega_n)$, and to use the recently developed Nevanlinna 
-analytic continuation method\cite{fei2021nevanlinna}. The method 
-is briefly demonstrated below.
-      
 
+%=====================================================================
+%=====================================================================
+\section{How to solve?}
+\label{sec:how-to-solve}
+
+$\cdots$
+
+Here we introduce the recently developed Nevanlinna 
+analytic continuation method\cite{fei2021nevanlinna}.      
 %=====================================================================
 %=====================================================================
 \section{Nevanlinna analytic continuation}

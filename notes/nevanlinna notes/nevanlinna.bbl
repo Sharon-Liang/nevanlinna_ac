@@ -11,15 +11,18 @@ Ming-Wen Xiao.
 \newblock {\em Lecture notes: Linear Response Theory}.
 \newblock School of Physics, Nanjing University.
 
-\bibitem{gubernatis_kawashima_werner_2016}
-James Gubernatis, Naoki Kawashima, and Philipp Werner.
-\newblock {\em Quantum Monte Carlo Methods: Algorithms for Lattice Models}.
-\newblock Cambridge University Press, 2016.
-
 \bibitem{acton1997numerical}
 Forman~S. Acton.
 \newblock {\em Numerical Methods that Work (Spectrum)}.
 \newblock The Mathematical Association of America, 1997.
+
+\bibitem{peschel1999density}
+Ingo Peschel, Xiaoqun Wang, Matthias Kaulke, and Karen Hallberg.
+\newblock {\em Density-Matrix Renormalization-a New Numerical Method in
+  Physics: Lectures of a Seminar and Workshop Held at the max-planck-institut
+  f{\"u}r physik komplexer systeme, Dresden, Germany, August 24th to September
+  18th, 1998}.
+\newblock Springer, 1999.
 
 \bibitem{fei2021nevanlinna}
 Jiani Fei, Chia-Nan Yeh, and Emanuel Gull.
