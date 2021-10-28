@@ -39,6 +39,13 @@
 \newcommand{\I}{ {\mathbb I} }
 \newcommand{\im}{ {\mathrm{Im}} }
 \newcommand{\sgn}{ {\mathrm{Sgn}} }
+\newcommand{\Y}{ {\mathcal{Y}} }
+\newcommand{\C}{ {\mathcal{C}} }
+\newcommand{\Cbar}{ {\bar{\mathcal{C}}} }
+\newcommand{\D}{ {\mathcal{D}} }
+\newcommand{\Dbar}{ {\bar{\mathcal{D}}} }
+\newcommand{\B}{ {\mathcal{B}} }
+\newcommand{\N}{ {\mathcal{N}} }
 
 %=======================================================================
 %=======================================================================
@@ -82,7 +89,7 @@ see this, we use the relation between $G(\tau)$ and $A(\omega)$
 		K(\tau, \omega) A(\omega)
 \end{equation}
 where $K(\tau, \omega) = \frac{e^{-\tau \omega }}{1 - \lambda e^{-\beta \omega}}$
-is the kernel. One may consider to solve the problem by firstly 
+is the kernel, $\lambda =\pm 1$ for bosons/fermions respectively. One may consider to solve the problem by firstly 
 discretize $\tau$ and $\omega$ and get:
 \begin{equation}
 	G(\tau_i) = \sum_{j=1}^{N_\omega} K_{ij} A(\omega_j)
@@ -114,27 +121,133 @@ Here we introduce the recently developed Nevanlinna
 analytic continuation method\cite{fei2021nevanlinna}.      
 %=====================================================================
 %=====================================================================
-\section{Nevanlinna analytic continuation}
-\label{sec:nevanlinna-analytical-continuation}
+\section{Nevanlinna analytic continuation method}
+\label{sec:nevanlinna-analytical-continuation-method}
+
+The Nevanlinna analytic continuation method\cite{fei2021nevanlinna} 
+is an interpolation method. The key step is to build the conformal mappings 
+from the open upper half of the complex plane $\C^+$ 
+to a closed unit disk $\Dbar$ in the complex plane and 
+make use of the Schur algorithm\cite{schur1918potenzreihen} to do the interpolate.
+
+%=====================================================================
+\subsection{Schur function}
+\label{subsec:schur-function}
+
+Wikipedia: 
+\href{https://en.wikipedia.org/wiki/Schur_class}{Schur class}
+
+A Schur class($\mathcal{S}$) consists of the Schur functions, which are the 
+\href{https://en.wikipedia.org/wiki/Holomorphic_function}{holomorphic functions} 
+from the open unit disk $\D$ to 
+the closed unit disk $\Dbar$. 
+Schur\cite{schur1918potenzreihen} studied 
+these functions and found that Schur function $g_0(z)$ can be written as 
+a continued fraction expansion from:
+\begin{equation}\label{eq:Schur-algorithm}
+	g_0(z) = \gamma_0 + \frac{1-|\gamma_0|^2}{\gamma_0^* + \frac{1}{
+		z\gamma_1 + \frac{z(1-|\gamma_1|^2)}{
+			\gamma_1^* + \frac{1}{z\gamma_2 + \cdots}
+			}
+			}}
+\end{equation}
+using the recurrence relation:
+\begin{equation}\label{eq:schur-function-recursion}
+	zg_{j+1}(z) = \frac{g_j(z) - \gamma_j}{1 - \gamma_j^* g_j(z)}
+\end{equation}
+where $g_j \in \mathcal{S}$ and $\gamma_j = g_j(0)$ are called Schur 
+parameters and $|\gamma_j| \leq 1$. 
 
 
 %=====================================================================
-\subsection{Schur algorithm}
-\label{subsec:schur-algorithm}
+\subsection{The Nevanlinna–Pick theorem}
+\label{subsec:pick-theorem}
+
+Wikipedia: 
+\href{https://en.wikipedia.org/wiki/Nevanlinna%E2%80%93Pick_interpolation}{The Nevanlinna–Pick theorem}
+
+The Nevanlinna–Pick theorem states the following.
+Given the initial data consisting of $n$ points 
+$\{\gamma_0, \dots, \gamma_{n-1} \} \in \D$ and target data
+$\{z_0, \dots, z_{n-1} \} \in \D$, there exists 
+a holomorphic function $g(z): \D \to \Dbar$ 
+such that $g(\lambda_j) = z_j$ for all $j$, if and only if 
+the Pick matrix
+\begin{equation}
+	P_{jk} = \frac{1-z_k^* z_j}{1 - \lambda_j^* \lambda_k}
+\end{equation}
+is positive semi-definite. Furthermore, the function $g(z)$ is 
+unique if and only if the Pick matrix has zero determinant.
 
 
-The Nevanlinna analytic continuation method\cite{fei2021nevanlinna} 
-is basically an interpolation method. In this method, one should firstly using 
+%=====================================================================
+\subsection{Interpolation of Green's functions}
+\label{subsec:interpolation-of-GF}
+
+The retared Green's function $G^R(\omega + i\eta)$ and the Masubara 
+Green's function $G(i\omega_n)$ can be expressed consistently by replacing 
+the variables $i\omega_n$ and $\omega + i\eta$ with a single complex 
+variable $z$. $G(z)$ is analytic in the upper half plane. 
+Our problem is that once we have Masubara frequencies $\{i\omega_n\} \in \C^+$ 
+and target data $\{ G(i\omega_n)\} \in \C$, where $\C$ is 
+the complex plane, how can we get interpolate them and get the 
+holomorphic function $G(z)$?
+
+Based on the knowledge of Schur function, if we can find maps 
+to map the initial data set $\{ G(i\omega_n)\}$
+from $\C^+$ to $\D^+$ and the target 
+target data $\{ G(i\omega_n)\}$ from $\C$ to $\bar{\D^+}$, 
+then we can apply the Schur function. 
+To accomplish this task, we can to make use of the generalized 
+Schur algorthm\cite{adamyan2003reconstruction}. It generalize the 
+method from $g(z) \in \mathcal{S}$ to all contractive functions 
+$\theta(z) \in \B$, which 
+are holomorphic functions mapping from $\mathcal{C^+}$ 
+to $\Dbar$.	
+
+The mapping from $\C^+/\bar{\C^+}$ to 
+$\D^+/\bar{\D^+}$ is called Mobius transform.
+It has the form:
+\begin{equation}\label{eq:def-mobius-transform}
+	h(z, \Y)  = \frac{z - \Y}{z - \Y^*}
+\end{equation}
+where $\Y \in \Cbar^+$ and $\Y \neq 0$. We can easily prove that 
+$|h(z, \Y)| \leq 1$ for $z \in \Cbar^+$ and
+$|h(z, \Y)| = 1$ if $z$ is real. $h(z, \Y)$ maps $\Y \in \Cbar^+$
+to the center of the unit disk $\D$ and the real axis as the 
+edge of $\Dbar$, the rest part of upper half complex plane is 
+wrapped inside the unit disk. If $ \tilde{z} \in \D$, the inverse 
+transform is:
+\begin{equation}\label{eq:def-inv-mobius-transform}
+	h^{-1}(\tilde{z}, \Y) = \frac{\Y - \tilde{z}\Y^*}{1 - \tilde{z}}
+\end{equation}
+Angin one can prove 
+$\im h^{-1}(\tilde{z}, \Y) = (\im\Y)(1 - |\tilde{z}|^2 ) > 0$.
+
+
+%如何在圆内插值
+%如何把GF map 到 \C^bar
+
+
+
+
+
+%=====================================================================
+\section{old}
+
+
+
+In this method, one should firstly using 
 conformal transforms to map the Masubara Green's functions $\mathcal{G}$, 
-which is analytic in the upper half of the complex plane $\mathcal{C}^+$ and 
+which is analytic in the upper half of the complex plane $\C^+$ and 
 contains singularities in the lower half plane, to a closed unit disk 
-$\bar{\mathcal{D}}$ in the complex plane. The mappings are shown in \cref{fig:conformal-map}. 
+$\Dbar$ in the complex plane. The mappings are shown in \cref{fig:conformal-map}. 
 It becomes a Schur class($\mathcal{S}$) 
 function and would have a continued fraction expansion where the parameters 
 can be rescrsively defined\cite{schur1918potenzreihen}. Then one can 
 apply the Nevanlinna iterative algorithm to interpolate the Schur 
 functions\cite{nevanlinna1919uber}.
-Finally, one can do a inverse conformal transform back to $\mathcal{C}^+$ and 
+Finally, one can do a inverse conformal transform back to $\C^+$ and 
 obtains $\mathcal{G}(z)$, it's then natural to do analytic continuation 
 $z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation-flow-chart}.
 
@@ -143,10 +256,10 @@ $z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation
 	\begin{minipage}[t]{0.7\linewidth}
 		\centering
 		\begin{tikzpicture}[node distance=50pt]
-			\node[draw=none,fill=none]  (C)  {$\mathcal{C}^+$};
-			\node[draw=none,fill=none, right=of C]  (Cbar)  {$\bar{\mathcal{C}}^+$};                 
-			\node[draw=none,fill=none, below=of C]  (D)     {$\mathcal{D}$};               
-			\node[draw=none,fill=none,right=55pt of D]  (Dbar)  {$\bar{\mathcal{D}}$};
+			\node[draw=none,fill=none]  (C)  {$\C^+$};
+			\node[draw=none,fill=none, right=of C]  (Cbar)  {$\Cbar^+$};                 
+			\node[draw=none,fill=none, below=of C]  (D)     {$\D$};               
+			\node[draw=none,fill=none,right=55pt of D]  (Dbar)  {$\Dbar$};
 		
 			\draw[->] (C)  -- node[above] {$f$} (Cbar) ;
 			\draw[->] (C)  -- node[left] {$h_1$} (D) ;
@@ -169,7 +282,7 @@ $z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation
 	\begin{minipage}[t]{0.9\linewidth}
 		\centering
 		\begin{tikzpicture}[node distance=90pt]
-			\node[draw,rounded corners]  (start)  {data set $\{\mathcal{Y}_n, \mathcal{G}(\mathcal{Y}_n)\}$};
+			\node[draw,rounded corners]  (start)  {data set $\{\Y_n, \mathcal{G}(\Y_n)\}$};
 			\node[draw,right=20pt of start]  (f)  {$f$};                 
 			\node[draw, right=of f]  (h)     {$h$};               
 			\node[draw,right=of h]  (interpolate)  {Interpolate};
@@ -180,8 +293,8 @@ $z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation
 			\node[draw, rounded corners, left=20pt of imag]  (end)  {spectrum $A(\omega)$};
 
 			\draw[->] (start) -- (f) ;
-			\draw[->] (f)  -- node[above] {$\{\mathcal{Y}_n, \mathcal{NG}(\mathcal{Y}_n)\}$} (h) ;
-			\draw[->] (h)  -- node[above] {$\{\mathcal{Y}_n, \theta(\mathcal{Y}_n)\}$} (interpolate) ;
+			\draw[->] (f)  -- node[above] {$\{\Y_n, \mathcal{NG}(\Y_n)\}$} (h) ;
+			\draw[->] (h)  -- node[above] {$\{\Y_n, \theta(\Y_n)\}$} (interpolate) ;
 			\draw[->] (tm) -- (interpolate) ;
 			\draw[->] (interpolate) -- node[right] {$\theta(z)$} (invh) ;
 			\draw[->] (invh) -- node[above] {$\mathcal{NG}(z)$} (ac) ;
@@ -193,21 +306,21 @@ $z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation
 	\label{fig:calculation-flow-chart}
 \end{figure}
 
-For fermionic Green's functions, the mapping from $\mathcal{C}^+$ to 
-$\bar{\mathcal{C}^+}$ is simple. Since $\im \mathcal{G}(z) \leq 0$ if 
-$z \in \mathcal{C}^+$, the mapping is just to take 
+For fermionic Green's functions, the mapping from $\C^+$ to 
+$\bar{\C^+}$ is simple. Since $\im \mathcal{G}(z) \leq 0$ if 
+$z \in \C^+$, the mapping is just to take 
 $\mathcal{G} \to -\mathcal{G} = \mathcal{NG}$ and $\mathcal{NG} \subset N$. While for 
 bosonic Green's functions, this mapping is a little bit complicated and 
 we will discuss in the next section. The data set we have is 
-$\{i\omega_n, \mathcal{G}(i\omega_n)\}$, here we denote $\mathcal{Y}_n = i\omega_n$ 
-and $\mathcal{C}_n = \mathcal{NG}(i\omega_n) = -\mathcal{G}(i\omega_n)$. 
+$\{i\omega_n, \mathcal{G}(i\omega_n)\}$, here we denote $\Y_n = i\omega_n$ 
+and $\C_n = \mathcal{NG}(i\omega_n) = -\mathcal{G}(i\omega_n)$. 
 
 Then we use the Möbius transform
 \begin{equation}\label{eq:Mobius-transform}
 	h(z) = \frac{z - i}{z + i}
 \end{equation}
-to map $\mathcal{C}_n \subset N$ to 
-$\theta(\mathcal{Y}_n) = h(\mathcal{C}_n) \subset \bar{\mathcal{D}}$. 
+to map $\C_n \subset N$ to 
+$\theta(\Y_n) = h(\C_n) \subset \Dbar$. 
 The recursive final $\theta(z)$ can conveniently be written in a
 matrix form:
 \begin{equation}\label{eq:recursive-theta}
@@ -224,15 +337,15 @@ where
 	\right) = \prod_{n=1}^M
 	\left(
 		\begin{matrix}
-			h_1(z, \mathcal{Y}_j) & \phi_j \\
-			\phi_j^* h_1(z, \mathcal{Y}_j) & 1
+			h_1(z, \Y_j) & \phi_j \\
+			\phi_j^* h_1(z, \Y_j) & 1
 		\end{matrix}
 	\right)
 \end{equation}
-where $h_1(z, \mathcal{Y}_n) = \frac{z - \mathcal{Y}_n}{z -\mathcal{Y}_n^*}$ 
-is a conformal map form $\mathcal{C}^+$ to $\mathcal{D}$. $\theta_j(z)$ is 
+where $h_1(z, \Y_n) = \frac{z - \Y_n}{z -\Y_n^*}$ 
+is a conformal map form $\C^+$ to $\D$. $\theta_j(z)$ is 
 the interpolation function of $j$-th step and
-$\phi_j = \theta_j(\mathcal{Y}_j)$. There is a freedom to choose $\theta_{M+1}(z)$.
+$\phi_j = \theta_j(\Y_j)$. There is a freedom to choose $\theta_{M+1}(z)$.
 One can use this freedom to select the “best” of all consistent spectral functions.
 
 %=====================================================================

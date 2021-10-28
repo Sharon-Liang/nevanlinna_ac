@@ -5,6 +5,9 @@
 \tocdepth@restore 
 \contentsline {section}{\numberline {I}The analytic continuation problem}{2}{section*.4}%
 \contentsline {section}{\numberline {II}How to solve?}{2}{section*.5}%
-\contentsline {section}{\numberline {III}Nevanlinna analytic continuation}{2}{section*.6}%
-\contentsline {subsection}{\numberline {A}Schur algorithm}{2}{section*.7}%
-\contentsline {section}{\numberline {}References}{4}{section*.8}%
+\contentsline {section}{\numberline {III}Nevanlinna analytic continuation method}{2}{section*.6}%
+\contentsline {subsection}{\numberline {A}Schur function}{3}{section*.7}%
+\contentsline {subsection}{\numberline {B}The Nevanlinna–Pick theorem}{3}{section*.8}%
+\contentsline {subsection}{\numberline {C}Interpolation of Green's functions}{3}{section*.9}%
+\contentsline {section}{\numberline {IV}old}{4}{section*.10}%
+\contentsline {section}{\numberline {}References}{5}{section*.11}%

@@ -5,45 +5,45 @@ The style file: unsrt.bst
 Database file #1: nevanlinnaNotes.bib
 Database file #2: nevanlinna.bib
 Warning--I didn't find a database entry for ""
-You've used 7 entries,
+You've used 8 entries,
             1791 wiz_defined-function locations,
-            491 strings with 4777 characters,
-and the built_in function-call counts, 1298 in all, are:
-= -- 112
-> -- 49
+            498 strings with 4997 characters,
+and the built_in function-call counts, 1533 in all, are:
+= -- 134
+> -- 60
 < -- 0
-+ -- 20
-- -- 13
-* -- 76
-:= -- 217
-add.period$ -- 21
-call.type$ -- 7
-change.case$ -- 4
++ -- 24
+- -- 16
+* -- 96
+:= -- 255
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 5
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 62
-empty$ -- 139
-format.name$ -- 13
-if$ -- 284
+cite$ -- 8
+duplicate$ -- 71
+empty$ -- 161
+format.name$ -- 16
+if$ -- 334
 int.to.chr$ -- 0
-int.to.str$ -- 7
-missing$ -- 8
-newline$ -- 38
-num.names$ -- 7
-pop$ -- 25
+int.to.str$ -- 8
+missing$ -- 9
+newline$ -- 43
+num.names$ -- 8
+pop$ -- 26
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 18
+skip$ -- 21
 stack$ -- 0
-substring$ -- 68
-swap$ -- 8
+substring$ -- 87
+swap$ -- 9
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 12
-width$ -- 8
-write$ -- 74
+while$ -- 15
+width$ -- 9
+write$ -- 85
 (There was 1 warning)
