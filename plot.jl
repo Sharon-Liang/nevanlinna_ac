@@ -2,10 +2,9 @@ using Plots; pyplot(xtickfontsize=13, ytickfontsize=13, xguidefontsize=16, yguid
 default(palette = palette(:okabe_ito))
 using DelimitedFiles
 using Printf
-#using StatsFuns, SpecialFunctions
+using StatsFuns, SpecialFunctions
 using nevanlinna_ac
 
-"""
 function spectral_density(J::Real, ω::Real, β::Real; η::Float64=0.05,Γ::Real=1.)
     # 2Imχ(ω)
     if J/Γ == 0.
@@ -23,7 +22,12 @@ function spectral_density(J::Real, ω::Real, β::Real; η::Float64=0.05,Γ::Real
         @error "No exact results. J/Γ should be 1. or 0."
     end
 end
-"""
+
+function chi_div_w(path::String)
+    dl = readdlm(path)
+    dl[:,2] = dl[:,2] ./ dl[:,1]
+    return dl
+end
 
 function chi_div_w(w::Vector, path::String, n::Int64)
 	η = 0.001
@@ -32,57 +36,150 @@ function chi_div_w(w::Vector, path::String, n::Int64)
 	return [spectrum_density(i,η,gs) for i in w]
 end
 
-#setups
-#o = [-i for i in range(-2π,2π,step = 4π/400)]
-o = [-i for i in range(-1,1,step = 0.01)]
-#brange = [10.0, 20.0, 30.0, 40.0]
-#de = [spectral_density(1.0, i, 20) for i in o]
+g = 1.0; (d,r) = divrem(g, 1)
+invT = [10, 20, 30, 40]
 
-g = 1.0
-β = 20
-
-#load Zi-Long Li data
-#pathl = @sprintf "./data/TFIsing-Li/Aw_%.1f_b20.txt" g
-#dl = readdlm(pathl)
-
-
-
-
-
-#n = 5 #number of Masubara frequencies used
-nrange = [6, 7, 8]
-chi = Array{Vector}(undef,3,2)
-for  i = 1:3
-    path1 = @sprintf "./data/gt/gt8_g_%.1f_b_%i.txt" g β
-    path2 = @sprintf "./data/gt/gt28_g_%.1f_b_%i.txt" g β
-    chi[i,1] = chi_div_w(o, path1, nrange[i])
-    chi[i,2] = chi_div_w(o, path2, nrange[i])
+"""load Zi-Long Li data"""
+plca = Vector{String}(undef, length(invT))
+plcs = Vector{String}(undef, length(invT))
+for i = 1:length(invT)
+    plca[i] = @sprintf "./data/TFIsing-Li/g_%ip%i_beta_%i_A.txt" d 10*r invT[i]
+    plcs[i] = @sprintf "./data/TFIsing-Li/g_%ip%i_beta_%i_S.txt" d 10*r invT[i]
 end
 
-#sc = 0.01 .* sum.(chi)
-#for i = 1:4
-#    s = @sprintf "%.5f" sc[i]
-#    println(s)
-#end
+"""setups"""
+omega = [i for i in range(-4π,4π,step = π/400)]
+
+"""Nevanlinna"""
+pcollect = Vector{String}(undef, length(invT))
+for i = 1:length(invT)
+    pcollect[i] = @sprintf "./data/gt/gt28_g_%.1f_b_%i.txt" g invT[i]
+end
+
+pcollect2 = Vector{String}(undef, length(invT))
+for i = 1:length(invT)
+    pcollect2[i] = @sprintf "./data/gt/gt8_g_%.1f_b_%i.txt" g invT[i]
+end
+
+dc = Vector{Vector}(undef,length(invT))
+dc2 = Vector{Vector}(undef,length(invT))
+dl = Vector{Matrix}(undef,length(invT))
+for i = 1:length(invT)
+    dc[i] = chi_div_w(omega, pcollect[i], 5)
+    dc2[i] = chi_div_w(omega, pcollect2[i], 5)
+    dl[i] = chi_div_w(plca[i])
+    d = readdlm(plcs[i]); bs0 = invT[i]*d[800,2]
+    dl[i][800,2] = bs0
+end
+
+"""sum rule check"""
+dω = π/400
+for i = 1:4
+    s1 = sum(dc[i])* dω 
+    s2 = sum(dc2[i])* dω
+    str1 = @sprintf "β=%i, D=16, sum = %.5f" invT[i] s1
+    str2 = @sprintf "β=%i, D=8, sum = %.5f" invT[i] s2
+    println(str1)
+    println(str2)
+end
+
+for i = 1:4
+    s = sum(dl[i])* dω 
+    str = @sprintf "β=%i, sum = %.5f" invT[i] s
+    println(str)
+end
 
 
-#v = 2 * abs(g-1)
+
+β = 20; num = div(β, 10) |> Int
+
 plot()
-#plot!(o, de ./ o, line=(:black,2),label="theory")
-#plot!([-v,v], seriestype="vline",line=(:dash, :black), label=false)
-#plot!(dl[:,1], dl[:,2] ./ dl[:,1], line=(:black,2), label="Li")
-for j=1:3
-    plot!(o, chi[j,1], line=(2), label=@sprintf "D=8,n=%i" nrange[j])
-end
-for j=1:3
-    plot!(o, chi[j,2], line=(:dash, 1), 
-    marker=(:circle, 2, stroke(0)), 
-    label=@sprintf "D=2×8,n=%i" nrange[j])
-end
-
-
-plot!(xlim=(-1, 1))
-plot!(title = @sprintf "g = %.1f, β=20, η = 0.001" g)
+v = 2 * abs(g-1)
+plot!([-v,v], seriestype="vline",line=(:dash, :black), label=false)
+plot!(dl[num][:,1], dl[num][:,2], line=(:orange, 2),label="Li")
+plot!(omega, dc[num],line=(:dash, 2),label="cmpo:n=5")
+plot!(xlim=(-2π, 2π))
+plot!(title = @sprintf "g = %.1f, β=20, η=0.001" g)
 plot!(xlabel="ω", ylabel="χ''(ω)/ω")
-spath = @sprintf "./notes/chi_g_%.1f_b_20_dchange.pdf" g
+spath = @sprintf "./notes/chi_g_%.1f_b20.pdf" g
 savefig(spath)
+
+
+nrange = [3,5,7,9]
+li = [:dash, :solid]
+c = palette(:tab20c)
+dn = Vector{Vector}(undef,length(nrange))
+for i = 1:length(nrange)
+    dn[i] = chi_div_w(omega, pcollect[num], nrange[i])
+end
+plot!(dl[num][:,1], dl[num][:,2], line=(:black, 2),label="Li")
+for j=1:length(nrange)
+    plot!(omega, dn[j], line=(li[rem(j,2)+1], c[nrange[j]],1.5), 
+    label=@sprintf "n=%i" nrange[j])
+end 
+plot!(xlim=(-1,1))
+plot!(title = @sprintf "g = %.1f, β=20, η=0.001" g)
+plot!(xlabel="ω", ylabel="χ''(ω)/ω")
+spath = @sprintf "./notes/chi_g_%.1f_b20_nchange.pdf" g
+savefig(spath)
+
+
+nrange = [4,5,6,7]
+dn = Vector{Vector}(undef,length(nrange))
+dn2 = Vector{Vector}(undef,length(nrange))
+for i = 1:length(nrange)
+    dn[i] = chi_div_w(omega, pcollect[num], nrange[i])
+    dn2[i] = chi_div_w(omega, pcollect2[num], nrange[i])
+end
+c = palette(:tab20c)
+plot!(dl[num][:,1], dl[num][:,2], line=(:black, 2),label="Li")
+for j=1:length(nrange)
+    plot!(omega, dn[j], line=(:solid, c[4j-3], 2), 
+    label=@sprintf "D=16, n=%i" nrange[j])
+    plot!(omega, dn2[j], line=(:dash, c[4j-2],1.5), 
+    marker=(:circle, 4, :white, stroke(1.5,c[4j-2],1.0)), 
+    label=@sprintf "D=8 , n=%i" nrange[j])
+end
+plot!(xlim=(-0.5,0.5))
+plot!(title = @sprintf "g = %.1f, β=20, η=0.001" g)
+plot!(xlabel="ω", ylabel="χ''(ω)/ω")
+spath = @sprintf "./notes/chi_g_%.1f_b20_dchange.pdf" g
+savefig(spath)
+
+
+
+
+"""
+de = [spectral_density(1.0, i, β) for i in omega]
+plot!(omega, de ./omega, line=(:black,2),label="theory")
+plot!(dl[num][:,1], dl[num][:,2], line=(:dash,:orange, 2),label="Li")
+plot!(omega, dc[num],line=(:dash, 2),label="cmpo:n=5")
+plot!(xlim=(-1,1))
+#plot!(xlim=(0,2π), ylim=(0, maximum(de)*1.1))
+plot!(title = @sprintf "g = %.1f, β = %i, η=0.001" g β)
+plot!(xlabel="ω", ylabel="χ''(ω)/ω")
+spath = @sprintf "./notes/chi_g_%.1f_b20.pdf" g
+savefig(spath)
+
+c = palette(:okabe_ito)
+for j=1:4
+    plot!(omega, dc[j], line=(1.7), label=@sprintf "cmpo:β=%i" invT[j])
+end
+for j=1:4
+    plot!(dl[j][:,1], dl[j][:,2], line=(:dash, c[4+j],1), 
+    marker=(:circle, 3, :white, stroke(1,c[4+j],1.0)), 
+    label=@sprintf "Li:β=%i" invT[j])
+end
+plot!(xlim=(-0.5, 0.5))
+plot!(title = @sprintf "g = %.1f, cmpo n=5, η=0.001" g)
+plot!(xlabel="ω", ylabel="χ''(ω)/ω")
+spath = @sprintf "./notes/chi_g_%.1f.pdf" g
+savefig(spath)
+"""
+
+"""sum rule check"""
+
+
+
+
+
