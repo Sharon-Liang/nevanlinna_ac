@@ -38,6 +38,7 @@
 \newcommand{\tr}{ {\rm Tr} }
 \newcommand{\I}{ {\mathbb I} }
 \newcommand{\im}{ {\mathrm{Im}} }
+\newcommand{\re}{ {\mathrm{Re}} }
 \newcommand{\sgn}{ {\mathrm{Sgn}} }
 \newcommand{\Y}{ {\mathcal{Y}} }
 \newcommand{\C}{ {\mathcal{C}} }
@@ -168,7 +169,7 @@ Wikipedia:
 
 The Nevanlinna–Pick theorem states the following.
 Given the initial data consisting of $n$ points 
-$\{\gamma_0, \dots, \gamma_{n-1} \} \in \D$ and target data
+$\{\lambda_0, \dots, \lambda_{n-1} \} \in \D$ and target data
 $\{z_0, \dots, z_{n-1} \} \in \D$, there exists 
 a holomorphic function $g(z): \D \to \Dbar$ 
 such that $g(\lambda_j) = z_j$ for all $j$, if and only if 
@@ -352,7 +353,24 @@ One can use this freedom to select the “best” of all consistent spectral fun
 
 
 
+\appendix
+\section{Mobius transform}
+\label{app:mobius-transform}
 
+Proof of $|h(z, \Y)| \leq 1$ for $z \in \Cbar^+$ and
+$|h(z, \Y)| = 1$ if $z$ is real. 
+We already know that $\im z \geq 0,  \im \Y >0$.
+\begin{align}
+\begin{split}
+|h(z, \Y)|^2 &= \frac{z - \Y}{z - \Y^*} \frac{z^* - \Y^*}{z^* - \Y} 
+	  = \frac{|z|^2 + |\Y|^2 - z\Y^* - z^*\Y}{|z|^2 + |\Y|^2 - z\Y - z^*\Y^*}\\
+	& = \frac{|z|^2 + |\Y|^2 - 2(\re z \re \Y  + \im z \im \Y)}
+		{|z|^2 + |\Y|^2 - 2(\re z \re \Y  - \im z \im \Y)}
+\end{split}
+\end{align}
+If $\im z = 0$, $|h(z, \Y)|^2 = 1$. If $\im z > 0$, $|h(z, \Y)|^2 < 1$.
+And we notice that if $\im \Y = 0$, we map all points in $\Cbar$ to 
+point $1$ except for point $\Y$ itself.
 
 \bibliographystyle{unsrt} %引用顺序
 \bibliography{nevanlinna.bib}
