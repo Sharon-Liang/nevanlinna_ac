@@ -5,6 +5,27 @@ using Printf
 using StatsFuns, SpecialFunctions
 using nevanlinna_ac
 
+"""
+    Check G(iω_n)
+"""
+function Masubara_freq(n::Int64, β::Real; type::Symbol=:b)
+    if type == :b  N = 2n
+    elseif type == :f  N = 2n + 1
+    else @error "type should be :b for bosons and :f for fermions" 
+    end
+    return N*π/β
+end
+
+function giwn(n::Int, β::Real, τ::Vector, g::Vector)
+    isapprox(β, τ[end], atol=0.1) ? iωn = 1.0im*Masubara_freq(n,β,type=:b) : error("wrong β")
+    len = length(τ)
+    res = 0.0 + 0.0im
+    for i = 1: len
+        res += -g[i] * exp(iωn*τ[i])
+    end
+    return β/len*res
+end
+
 function spectral_density(J::Real, ω::Real, β::Real; η::Float64=0.05,Γ::Real=1.)
     # 2Imχ(ω)
     if J/Γ == 0.
@@ -36,16 +57,33 @@ function chi_div_w(w::Vector, path::String, n::Int64)
 	return [spectrum_density(i,η,gs) for i in w]
 end
 
-g = 1.0; (d,r) = divrem(g, 1)
-invT = [10, 20, 30, 40]
 
 """load Zi-Long Li data"""
-plca = Vector{String}(undef, length(invT))
-plcs = Vector{String}(undef, length(invT))
+g = 2.0
+(d,r) = divrem(g, 1)
+invT = [10, 20, 30, 40]
+N = 40
+
+plc = Vector{String}(undef, length(invT))
+oplc = Vector{String}(undef, length(invT))
 for i = 1:length(invT)
-    plca[i] = @sprintf "./data/TFIsing-Li/g_%ip%i_beta_%i_A.txt" d 10*r invT[i]
-    plcs[i] = @sprintf "./data/TFIsing-Li/g_%ip%i_beta_%i_S.txt" d 10*r invT[i]
+    plc[i] = @sprintf "./data/TFIsing-Li/imaginary_time_data/g_%ip%i_beta_%i_tau.txt" d 10*r invT[i]
+    oplc[i] = @sprintf "./data/TFIsing-Li/imaginary_time_data/g_%ip%i_beta_%i_iwn.txt" d 10*r invT[i]
 end
+
+for i = 1:length(invT)
+    open(oplc[i], "w") do file
+        for n = 1:N
+            d = readdlm(plc[i])
+            res = giwn(n,invT[i],d[:,1],d[:,2])
+            writedlm(file, [Masubara_freq(n,invT[i]) real(res) imag(res)])
+        end
+    end
+end
+        
+
+
+
 
 """setups"""
 omega = [i for i in range(-4π,4π,step = π/400)]
