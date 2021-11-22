@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{jarrell1996bayesian}
 Mark Jarrell and James~E Gubernatis.
@@ -29,12 +29,30 @@ Jiani Fei, Chia-Nan Yeh, and Emanuel Gull.
 \newblock Nevanlinna analytical continuation.
 \newblock {\em Physical Review Letters}, 126(5):056402, 2021.
 
+\bibitem{schur1917potenzreihen}
+J~Schur.
+\newblock {\"U}ber potenzreihen, die im innern des einheitskreises
+  beschr{\"a}nkt sind.
+\newblock {\em Journal für die reine und angewandte Mathematik},
+  1917(147):205--232, 1917.
+
 \bibitem{schur1918potenzreihen}
 J~Schur.
 \newblock {\"U}ber potenzreihen, die im innern des einheitskreises
   beschr{\"a}nkt sind.
 \newblock {\em Journal f{\"u}r die reine und angewandte Mathematik (Crelles
   Journal)}, 1918(148):122--145, 1918.
+
+\bibitem{dym2003contributions}
+Harry Dym and Victor Katsnelson.
+\newblock Contributions of issai schur to analysis.
+\newblock {\em PROGRESS IN MATHEMATICS-BOSTON-}, 210:xci--xci, 2003.
+
+\bibitem{Note1}
+Schur published under the name of both I. Schur, and J. Schur, the latter
+  especially in \protect \textit {Journal für die reine und angewandte
+  Mathematik}. This has led to some confusion. See:\protect \href
+  {https://en.wikipedia.org/wiki/Issai_Schur##cite_note-2}{Issai Schur}.
 
 \bibitem{adamyan2003reconstruction}
 Vadym~M Adamyan, J~Alcober, and IM~Tkachenko.

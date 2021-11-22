@@ -6,10 +6,13 @@
 \contentsline {section}{\numberline {I}The analytic continuation problem}{2}{section*.4}%
 \contentsline {section}{\numberline {II}How to solve?}{2}{section*.5}%
 \contentsline {section}{\numberline {III}Nevanlinna analytic continuation method}{2}{section*.6}%
-\contentsline {subsection}{\numberline {A}Schur function}{3}{section*.7}%
-\contentsline {subsection}{\numberline {B}The Nevanlinna–Pick theorem}{3}{section*.8}%
-\contentsline {subsection}{\numberline {C}Interpolation of Green's functions}{3}{section*.9}%
-\contentsline {section}{\numberline {IV}old}{4}{section*.10}%
+\contentsline {subsection}{\numberline {A}Schur Algorithm}{3}{section*.7}%
+\contentsline {subsection}{\numberline {B}Generalized Schur Algorithm}{4}{section*.8}%
+\contentsline {subsection}{\numberline {C}The Nevanlinna–Pick theorem}{4}{section*.9}%
+\contentsline {subsection}{\numberline {D}Interpolation of Green's functions}{4}{section*.10}%
+\contentsline {section}{\numberline {IV}old}{4}{section*.11}%
 \appendix 
-\contentsline {section}{\numberline {A}Mobius transform}{5}{section*.11}%
-\contentsline {section}{\numberline {}References}{6}{section*.12}%
+\contentsline {section}{\numberline {A}Conformal transforms}{6}{section*.12}%
+\contentsline {subsection}{\numberline {1}The linear fractional transform}{6}{section*.13}%
+\contentsline {subsection}{\numberline {2}The Mobius transform}{6}{section*.14}%
+\contentsline {section}{\numberline {}References}{7}{section*.15}%

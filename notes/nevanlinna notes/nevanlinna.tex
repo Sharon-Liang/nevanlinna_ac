@@ -129,35 +129,81 @@ The Nevanlinna analytic continuation method\cite{fei2021nevanlinna}
 is an interpolation method. The key step is to build the conformal mappings 
 from the open upper half of the complex plane $\C^+$ 
 to a closed unit disk $\Dbar$ in the complex plane and 
-make use of the Schur algorithm\cite{schur1918potenzreihen} to do the interpolate.
+make use of the Schur algorithm
+\cite{schur1917potenzreihen,schur1918potenzreihen,dym2003contributions} 
+to do the interpolate.
 
 %=====================================================================
-\subsection{Schur function}
-\label{subsec:schur-function}
+\subsection{Schur Algorithm}
+\label{subsec:schur-algorithm}
 
-Wikipedia: 
-\href{https://en.wikipedia.org/wiki/Schur_class}{Schur class}
+Schur Algorithm was introduced by I. Schur\footnote{Schur 
+	published under the name of both I. Schur, 
+	and J. Schur, the latter especially in  
+	\textit{Journal für die reine 
+	und angewandte Mathematik}. This has led to some confusion.
+	See:\href{https://en.wikipedia.org/wiki/Issai_Schur#cite_note-2}{Issai Schur}} 
+in Section 1 of Ref.\cite{schur1917potenzreihen}.
+Here we list the main results we need while
+for a detailed introduction, see Ref.\cite{dym2003contributions}. 
 
 A Schur class($\mathcal{S}$) consists of the Schur functions, which are the 
 \href{https://en.wikipedia.org/wiki/Holomorphic_function}{holomorphic functions} 
 from the open unit disk $\D$ to 
 the closed unit disk $\Dbar$. 
-Schur\cite{schur1918potenzreihen} studied 
-these functions and found that Schur function $g_0(z)$ can be written as 
-a continued fraction expansion from:
-\begin{equation}\label{eq:Schur-algorithm}
-	g_0(z) = \gamma_0 + \frac{1-|\gamma_0|^2}{\gamma_0^* + \frac{1}{
-		z\gamma_1 + \frac{z(1-|\gamma_1|^2)}{
-			\gamma_1^* + \frac{1}{z\gamma_2 + \cdots}
-			}
-			}}
-\end{equation}
-using the recurrence relation:
+For a given Schur function $s_0(z)$, the Schur algorithm defines a set of
+$\{s_j(z) \in \mathcal{S}\}_{0\leq j <\infty}$ starting from $s_0(z)$ by the recurrence relation:
 \begin{equation}\label{eq:schur-function-recursion}
-	zg_{j+1}(z) = \frac{g_j(z) - \gamma_j}{1 - \gamma_j^* g_j(z)}
+	zs_{j+1}(z) = \frac{s_j(z) - \gamma_j}{1 - \gamma_j^* s_j(z)}
 \end{equation}
-where $g_j \in \mathcal{S}$ and $\gamma_j = g_j(0)$ are called Schur 
+where $s_j \in \mathcal{S}$ and $\gamma_j \equiv s_j(0)$ are called Schur 
 parameters and $|\gamma_j| \leq 1$. 
+
+On the other hand, given an arbitrary strictly contractive sequence 
+of Schur parameters $\{\gamma_0, \gamma_1, \dots, \gamma_j, \dots\} \in \D$, 
+one can construct a unique Schur function $s_0(z)$ by means of a continued 
+fraction algorithm. In which we use the inverse relation of
+\cref{eq:schur-function-recursion}
+\begin{equation}\label{eq:inv-schur-function-recursion}
+	s_j(z) = \frac{\gamma_j + zs_{j+1(z)}}{1 + \gamma_j^* z s_j(z)}
+\end{equation}
+to construct the $n$-th Schur approximant, 
+which we will denote by 
+$s_0(z; \gamma_0,\gamma_1, \dots, \gamma_n)$. Namely, we write:
+\begin{align}\label{eq:schur-continued-fraction}
+\begin{split}
+	&s_n(z;\gamma_n) = \gamma_n \\
+	&s_j(z;\gamma_j,\gamma_{j+1},\dots \gamma_n) 
+	= \frac{\gamma_j + zs_{j+1}(z;\gamma_{j+1},\dots \gamma_n)}
+		{1 + \gamma_j^* z s_{j+1}(z;\gamma_{k+1},\dots \gamma_n)}
+\end{split}
+\end{align}
+where $j = n-1, n-2, \dots, 1, 0$.
+
+The Schur algorithm can used to solve the interpolation problem in $\D$. 
+For given $\{\Y_0, \Y_1, \dots ,\Y_N\} \in \D$ 
+and $\{\gamma_0, \gamma_1, \dots ,\gamma_N\} \in \D$, the Schur function 
+ $s:\D \to \D$ and $s(\Y_j) = \gamma_j$ 
+for $j = 0,1,\dots,N$ can be easily constructed by combining 
+\cref{eq:schur-continued-fraction} and the linear fractional transform 
+$f(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}$:
+\begin{align}\label{eq:schur-interpolation}
+	\begin{split}
+		&s_N(z;\gamma_N) = \gamma_N \\
+		&s_j(z;\gamma_j,\gamma_{j+1},\dots \gamma_N) 
+		= \frac{\gamma_j + f(z,\Y_{j})s_{j+1}(z;\gamma_{j+1},\dots \gamma_N)}
+			{1 + \gamma_j^* f(z,\Y_{j})s_{j+1}(z;\gamma_{k+1},\dots \gamma_N)}
+	\end{split}
+\end{align}
+where $j = N-1, N-2, \dots, 1, 0$.
+
+
+%=====================================================================
+\subsection{Generalized Schur Algorithm}
+\label{subsec:generalized-schur-algorithm}
+
+
+
 
 
 %=====================================================================
@@ -206,28 +252,9 @@ $\theta(z) \in \B$, which
 are holomorphic functions mapping from $\mathcal{C^+}$ 
 to $\Dbar$.	
 
-The mapping from $\C^+/\bar{\C^+}$ to 
-$\D^+/\bar{\D^+}$ is called Mobius transform.
-It has the form:
-\begin{equation}\label{eq:def-mobius-transform}
-	h(z, \Y)  = \frac{z - \Y}{z - \Y^*}
-\end{equation}
-where $\Y \in \Cbar^+$ and $\Y \neq 0$. We can easily prove that 
-$|h(z, \Y)| \leq 1$ for $z \in \Cbar^+$ and
-$|h(z, \Y)| = 1$ if $z$ is real. $h(z, \Y)$ maps $\Y \in \Cbar^+$
-to the center of the unit disk $\D$ and the real axis as the 
-edge of $\Dbar$, the rest part of upper half complex plane is 
-wrapped inside the unit disk. If $ \tilde{z} \in \D$, the inverse 
-transform is:
-\begin{equation}\label{eq:def-inv-mobius-transform}
-	h^{-1}(\tilde{z}, \Y) = \frac{\Y - \tilde{z}\Y^*}{1 - \tilde{z}}
-\end{equation}
-Angin one can prove 
-$\im h^{-1}(\tilde{z}, \Y) = (\im\Y)(1 - |\tilde{z}|^2 ) > 0$.
 
 
-%如何在圆内插值
-%如何把GF map 到 \C^bar
+
 
 
 
@@ -354,8 +381,43 @@ One can use this freedom to select the “best” of all consistent spectral fun
 
 
 \appendix
-\section{Mobius transform}
-\label{app:mobius-transform}
+%=====================================================================
+%=====================================================================
+\section{Conformal transforms}
+\label{app:conformal-transforms}
+
+\subsection{The linear fractional transform}
+\label{appsub:linear-fractional-transform}
+The linear fractional transform is:
+\begin{equation}\label{eq:linear-fractional-transform}
+	f(z, \Y) = \frac{z - \Y}{1 - z\Y^*}
+\end{equation}
+
+It is a one to one mapping of the open unit disk $\D$ onto 
+itself and a one to one mapping of the unit circle $\mathcal{T}$.
+It maps point $\Y$ to the center of $\D$.
+
+
+\subsection{The Mobius transform}
+\label{appsub:mobius-transform}
+The mapping from $\C^+/\bar{\C^+}$ to 
+$\D^+/\bar{\D^+}$ is called Mobius transform.
+It has the form:
+\begin{equation}\label{eq:def-mobius-transform}
+	h(z, \Y)  = \frac{z - \Y}{z - \Y^*}
+\end{equation}
+where $\Y \in \Cbar^+$ and $\Y \neq 0$. We can easily prove that 
+$|h(z, \Y)| \leq 1$ for $z \in \Cbar^+$ and
+$|h(z, \Y)| = 1$ if $z$ is real. $h(z, \Y)$ maps $\Y \in \Cbar^+$
+to the center of the unit disk $\D$ and the real axis as the 
+edge of $\Dbar$, the rest part of upper half complex plane is 
+wrapped inside the unit disk. If $ \tilde{z} \in \D$, the inverse 
+transform is:
+\begin{equation}\label{eq:def-inv-mobius-transform}
+	h^{-1}(\tilde{z}, \Y) = \frac{\Y - \tilde{z}\Y^*}{1 - \tilde{z}}
+\end{equation}
+Angin one can prove 
+$\im h^{-1}(\tilde{z}, \Y) = (\im\Y)(1 - |\tilde{z}|^2 ) > 0$.
 
 Proof of $|h(z, \Y)| \leq 1$ for $z \in \Cbar^+$ and
 $|h(z, \Y)| = 1$ if $z$ is real. 

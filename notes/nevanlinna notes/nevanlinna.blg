@@ -3,47 +3,49 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: nevanlinna.aux
 The style file: unsrt.bst
 Database file #1: nevanlinnaNotes.bib
+Warning--entry type for "Note1" isn't style-file defined
+--line 1 of file nevanlinnaNotes.bib
 Database file #2: nevanlinna.bib
 Warning--I didn't find a database entry for ""
-You've used 8 entries,
+You've used 11 entries,
             1791 wiz_defined-function locations,
-            498 strings with 4997 characters,
-and the built_in function-call counts, 1533 in all, are:
-= -- 134
-> -- 60
+            514 strings with 5568 characters,
+and the built_in function-call counts, 2078 in all, are:
+= -- 185
+> -- 73
 < -- 0
-+ -- 24
-- -- 16
-* -- 96
-:= -- 255
-add.period$ -- 24
-call.type$ -- 8
-change.case$ -- 5
++ -- 30
+- -- 19
+* -- 129
+:= -- 333
+add.period$ -- 31
+call.type$ -- 11
+change.case$ -- 7
 chr.to.int$ -- 0
-cite$ -- 8
-duplicate$ -- 71
-empty$ -- 161
-format.name$ -- 16
-if$ -- 334
+cite$ -- 11
+duplicate$ -- 94
+empty$ -- 226
+format.name$ -- 19
+if$ -- 456
 int.to.chr$ -- 0
-int.to.str$ -- 8
-missing$ -- 9
-newline$ -- 43
-num.names$ -- 8
-pop$ -- 26
+int.to.str$ -- 11
+missing$ -- 11
+newline$ -- 56
+num.names$ -- 10
+pop$ -- 37
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 21
+skip$ -- 33
 stack$ -- 0
-substring$ -- 87
-swap$ -- 9
+substring$ -- 137
+swap$ -- 12
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 15
-width$ -- 9
-write$ -- 85
-(There was 1 warning)
+while$ -- 21
+width$ -- 13
+write$ -- 112
+(There were 2 warnings)
