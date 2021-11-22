@@ -54,16 +54,22 @@ Schur published under the name of both I. Schur, and J. Schur, the latter
   Mathematik}. This has led to some confusion. See:\protect \href
   {https://en.wikipedia.org/wiki/Issai_Schur##cite_note-2}{Issai Schur}.
 
-\bibitem{adamyan2003reconstruction}
-Vadym~M Adamyan, J~Alcober, and IM~Tkachenko.
-\newblock Reconstruction of distributions by their moments and local
-  constraints.
-\newblock {\em Applied Mathematics Research eXpress}, 2003(2):33--70, 2003.
+\bibitem{Pick1917}
+Georg Pick.
+\newblock {\"U}ber die beschr{\"a}nkungen analytischer funktionen durch
+  vorgegebene funktionswerte.
+\newblock {\em Mathematische Annalen}, 78(1):270--275, 1917.
 
 \bibitem{nevanlinna1919uber}
 Rolf Nevanlinna.
 \newblock Uber beschrankte funktionen, die in gegeben punkten vorgeschrieben
   werte annehmen.
 \newblock {\em Ann. Acad. Sci. Fenn. Ser. A 1 Mat. Dissertationes}, 1919.
+
+\bibitem{adamyan2003reconstruction}
+Vadym~M Adamyan, J~Alcober, and IM~Tkachenko.
+\newblock Reconstruction of distributions by their moments and local
+  constraints.
+\newblock {\em Applied Mathematics Research eXpress}, 2003(2):33--70, 2003.
 
 \end{thebibliography}

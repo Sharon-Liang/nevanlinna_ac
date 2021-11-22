@@ -170,62 +170,118 @@ fraction algorithm. In which we use the inverse relation of
 to construct the $n$-th Schur approximant, 
 which we will denote by 
 $s_0(z; \gamma_0,\gamma_1, \dots, \gamma_n)$. Namely, we write:
-\begin{align}\label{eq:schur-continued-fraction}
-\begin{split}
+\begin{align}
+	\label{eq:schur-continued-fraction-1}
 	&s_n(z;\gamma_n) = \gamma_n \\
+	\label{eq:schur-continued-fraction-2}
 	&s_j(z;\gamma_j,\gamma_{j+1},\dots \gamma_n) 
 	= \frac{\gamma_j + zs_{j+1}(z;\gamma_{j+1},\dots \gamma_n)}
 		{1 + \gamma_j^* z s_{j+1}(z;\gamma_{k+1},\dots \gamma_n)}
-\end{split}
 \end{align}
 where $j = n-1, n-2, \dots, 1, 0$.
 
-The Schur algorithm can used to solve the interpolation problem in $\D$. 
-For given $\{\Y_0, \Y_1, \dots ,\Y_N\} \in \D$ 
-and $\{\gamma_0, \gamma_1, \dots ,\gamma_N\} \in \D$, the Schur function 
- $s:\D \to \D$ and $s(\Y_j) = \gamma_j$ 
-for $j = 0,1,\dots,N$ can be easily constructed by combining 
-\cref{eq:schur-continued-fraction} and the linear fractional transform 
-$f(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}$:
-\begin{align}\label{eq:schur-interpolation}
-	\begin{split}
-		&s_N(z;\gamma_N) = \gamma_N \\
-		&s_j(z;\gamma_j,\gamma_{j+1},\dots \gamma_N) 
-		= \frac{\gamma_j + f(z,\Y_{j})s_{j+1}(z;\gamma_{j+1},\dots \gamma_N)}
-			{1 + \gamma_j^* f(z,\Y_{j})s_{j+1}(z;\gamma_{k+1},\dots \gamma_N)}
-	\end{split}
+Given the initial data consisting of $N$ points 
+$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \in \D$ and target data
+$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \in \D$, 
+we can find a holomorphic function $s(z): \D \to \Dbar$ 
+such that $s(\Y_j) = \gamma_j$ for all $j$ by combining 
+\cref{eq:schur-continued-fraction-1}, \cref{eq:schur-continued-fraction-2} 
+and the linear fractional transform 
+$\xi(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}$:
+\begin{align}
+	\label{eq:schur-interpolation-1}
+	&s_{N-1}(z;\gamma_{N-1}) 
+		= \frac{\gamma_{N-1} + \xi(z,\Y_{N-1})s_N(z)}
+			{1 + \gamma_{N-1}^*\xi(z,\Y_{N-1})s_N(z)} \\
+	\label{eq:schur-interpolation-2}
+	&s_j(z;\gamma_j,\gamma_{j+1},\dots \gamma_N) 
+		= \frac{\gamma_j + \xi(z,\Y_{j})s_{j+1}(z;\gamma_{j+1},\dots \gamma_N)}
+			{1 + \gamma_j^* \xi(z,\Y_{j})s_{j+1}(z;\gamma_{k+1},\dots \gamma_N)}
 \end{align}
-where $j = N-1, N-2, \dots, 1, 0$.
+where $j = N-2, N-3, \dots, 1, 0$ and $s_0(z) \equiv s(z)$. In \cref{eq:schur-interpolation-1}, 
+we notice that there is an degrees of freedom to choose an 
+arbitrary $s_N(z) \in \mathcal{S}$, \cref{eq:schur-continued-fraction-1} 
+correponds the special case $s_{n+1}(z) = 0$.
+
+G. Pick and R. Nevanlinna studied the interpolatio problem 
+independently in 1917\cite{Pick1917} and 1919\cite{nevanlinna1919uber} 
+respectively, showing that an 
+interpolating function exists if and only if the Pick matrix
+\begin{equation}\label{eq:pick-matrix-origional}
+	P_{jk} = \frac{1-\gamma_k^* \gamma_j}{1 - \Y_j^* \Y_k}
+\end{equation}
+is positive semi-definite. Furthermore, the function $s(z)$ is 
+unique if and only if the Pick matrix has zero determinant. It 
+is called the 
+\href{https://en.wikipedia.org/wiki/Nevanlinna%E2%80%93Pick_interpolation}
+	{the Nevanlinna–Pick theorem.}
 
 
 %=====================================================================
 \subsection{Generalized Schur Algorithm}
 \label{subsec:generalized-schur-algorithm}
 
+Schur algorithm can be modified to expand all contractive 
+functions($\in \B$)\cite{adamyan2003reconstruction}, which are
+holomorphic functions mapping from the upper half plane $\C^+$ 
+to $\Dbar$.
 
-
-
-
-%=====================================================================
-\subsection{The Nevanlinna–Pick theorem}
-\label{subsec:pick-theorem}
-
-Wikipedia: 
-\href{https://en.wikipedia.org/wiki/Nevanlinna%E2%80%93Pick_interpolation}{The Nevanlinna–Pick theorem}
-
-The Nevanlinna–Pick theorem states the following.
-Given the initial data consisting of $n$ points 
-$\{\lambda_0, \dots, \lambda_{n-1} \} \in \D$ and target data
-$\{z_0, \dots, z_{n-1} \} \in \D$, there exists 
-a holomorphic function $g(z): \D \to \Dbar$ 
-such that $g(\lambda_j) = z_j$ for all $j$, if and only if 
-the Pick matrix
-\begin{equation}
-	P_{jk} = \frac{1-z_k^* z_j}{1 - \lambda_j^* \lambda_k}
+Given the initial data consisting of $N$ points 
+$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \in \C^+$ and target data
+$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \in \Dbar$, 
+in order to find a holomorphic function $\theta(z) \in \B$ 
+such that $\theta(\Y_j) = z_j$ for all $j$, we should make use 
+of the Mobius transform $h(z, \Y)  = \frac{z - \Y}{z - \Y^*}$ 
+which maps $\C^+/\Cbar^+$ to $\D/\Dbar$, 
+which means it estabishes a one-to-one correspondence of $\theta(z)$ 
+to a schur function $s(z)$ with:
+\begin{equation}\label{eq:s-theta-relation}
+	\theta(h^{-1}(z,\Y)) = s(z),\ \mathrm{or} \ \
+	s(h(z,\Y)) = \theta(z)
 \end{equation}
-is positive semi-definite. Furthermore, the function $g(z)$ is 
-unique if and only if the Pick matrix has zero determinant.
 
+The recursion relation between $\theta_j(z)$ and the next contractive 
+function $\theta_{j+1}(z)$ can be easily build as follows. From 
+\cref{eq:s-theta-relation}, we have:
+\begin{equation}\label{eq:s-theta-relation-z0}
+	s_j(0) = \theta_j(h^{-1}(0,\Y_j)) = \theta_j(\Y_j) = \gamma_j
+\end{equation}
+Let $\theta_{j+1}(z) = s_{j+1}(h(z,\Y_j))$,
+then use the recursion relation 
+\cref{eq:schur-function-recursion}, we have: 
+\begin{equation}\label{eq:schur-function-recursion-theta}
+	z\theta_{j+1}(h^{-1}(z,\Y_j)) 
+	= \frac{\theta_j(h^{-1}(z,\Y_j)) 
+		- \gamma_j}{1 - \gamma_j^* \theta_j(h^{-1}(z,\Y_j))}
+	\overset{\mathrm{def}}{=} \phi(h^{-1}(z,\Y_j))
+\end{equation}
+
+Form the first and the third terms of \cref{eq:schur-function-recursion-theta}
+we have:
+\begin{equation}
+	\phi(h^{-1}(z,\Y_j)) = z\theta_{j+1}(h^{-1}(z,\Y_j)) 
+	=h(h^{-1}(z, \Y_j), \Y_j) \theta_{j+1}(h^{-1}(z,\Y_j)) 
+\end{equation}
+replace $h^{-1}(z,\Y_j)$ with $z\in\D$ by $z \in \C^+$, we have
+\begin{equation}\label{eq:def-phi}
+	\phi(z) =h(z, \Y_j) \theta_{j+1}(z) 
+\end{equation}
+We can read from \cref{eq:def-phi} that $\phi(z) \in \B$ 
+and $\phi(\Y_j) = 0$.
+
+Form the second and the third terms of \cref{eq:schur-function-recursion-theta}
+we can read:
+\begin{equation}\label{eq:phi-theta-j}
+	\phi(z)
+	= \frac{\theta_j(z) - \gamma_j}{1 - \gamma_j^* \theta_j(z)}
+\end{equation}
+Together with \cref{eq:def-phi} we get the recursion relation between 
+$\theta_j(z)$ and $\theta_{j+1}(z)$:
+\begin{equation}\label{eq:recursion-relation-theta}
+	\theta_j(z) = \frac{\phi(z) + \lambda_j}{1 + \lambda_j^*\phi(z)}
+		= \frac{h(z, \Y_j) \theta_{j+1}(z)  + \lambda_j}
+			{1 + \lambda_j^*h(z, \Y_j) \theta_{j+1}(z) }
+\end{equation}
 
 %=====================================================================
 \subsection{Interpolation of Green's functions}
@@ -390,7 +446,7 @@ One can use this freedom to select the “best” of all consistent spectral fun
 \label{appsub:linear-fractional-transform}
 The linear fractional transform is:
 \begin{equation}\label{eq:linear-fractional-transform}
-	f(z, \Y) = \frac{z - \Y}{1 - z\Y^*}
+	\xi(z, \Y) = \frac{z - \Y}{1 - z\Y^*}
 \end{equation}
 
 It is a one to one mapping of the open unit disk $\D$ onto 
