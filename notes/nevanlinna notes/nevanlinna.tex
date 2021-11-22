@@ -239,49 +239,76 @@ to a schur function $s(z)$ with:
 	\theta(h^{-1}(z,\Y)) = s(z),\ \mathrm{or} \ \
 	s(h(z,\Y)) = \theta(z)
 \end{equation}
+We denote $h(z, \Y_j)$ as $h_j(z)$ form now on.
 
 The recursion relation between $\theta_j(z)$ and the next contractive 
 function $\theta_{j+1}(z)$ can be easily build as follows. From 
 \cref{eq:s-theta-relation}, we have:
 \begin{equation}\label{eq:s-theta-relation-z0}
-	s_j(0) = \theta_j(h^{-1}(0,\Y_j)) = \theta_j(\Y_j) = \gamma_j
+	s_j(0) = \theta_j(h_j^{-1}(0)) = \theta_j(\Y_j) = \gamma_j
 \end{equation}
-Let $\theta_{j+1}(z) = s_{j+1}(h(z,\Y_j))$,
+Let $\theta_{j+1}(z) = s_{j+1}(h_j(z)$,
 then use the recursion relation 
 \cref{eq:schur-function-recursion}, we have: 
 \begin{equation}\label{eq:schur-function-recursion-theta}
-	z\theta_{j+1}(h^{-1}(z,\Y_j)) 
-	= \frac{\theta_j(h^{-1}(z,\Y_j)) 
-		- \gamma_j}{1 - \gamma_j^* \theta_j(h^{-1}(z,\Y_j))}
-	\overset{\mathrm{def}}{=} \phi(h^{-1}(z,\Y_j))
+	z\theta_{j+1}(h_j^{-1}(z)) 
+	= \frac{\theta_j(h_j^{-1}(z)) 
+		- \gamma_j}{1 - \gamma_j^* \theta_j(h_j^{-1}(z))}
+	\overset{\mathrm{def}}{=} \phi_j(h_j^{-1}(z))
 \end{equation}
 
 Form the first and the third terms of \cref{eq:schur-function-recursion-theta}
 we have:
 \begin{equation}
-	\phi(h^{-1}(z,\Y_j)) = z\theta_{j+1}(h^{-1}(z,\Y_j)) 
-	=h(h^{-1}(z, \Y_j), \Y_j) \theta_{j+1}(h^{-1}(z,\Y_j)) 
+	\phi_j(h_j^{-1}(z)) = z\theta_{j+1}(h_j^{-1}(z)) 
+	=h(h_j^{-1}(z), \Y_j) \theta_{j+1}(h_j^{-1}(z)) 
 \end{equation}
-replace $h^{-1}(z,\Y_j)$ with $z\in\D$ by $z \in \C^+$, we have
+replace $h_j^{-1}(z)$ with $z\in\D$ by $z \in \C^+$, we have
 \begin{equation}\label{eq:def-phi}
-	\phi(z) =h(z, \Y_j) \theta_{j+1}(z) 
+	\phi_j(z) =h_j(z) \theta_{j+1}(z) 
 \end{equation}
 We can read from \cref{eq:def-phi} that $\phi(z) \in \B$ 
-and $\phi(\Y_j) = 0$.
+and $\phi_j(\Y_j) = 0$.
 
 Form the second and the third terms of \cref{eq:schur-function-recursion-theta}
 we can read:
 \begin{equation}\label{eq:phi-theta-j}
-	\phi(z)
+	\phi_j(z)
 	= \frac{\theta_j(z) - \gamma_j}{1 - \gamma_j^* \theta_j(z)}
 \end{equation}
 Together with \cref{eq:def-phi} we get the recursion relation between 
 $\theta_j(z)$ and $\theta_{j+1}(z)$:
 \begin{equation}\label{eq:recursion-relation-theta}
-	\theta_j(z) = \frac{\phi(z) + \lambda_j}{1 + \lambda_j^*\phi(z)}
-		= \frac{h(z, \Y_j) \theta_{j+1}(z)  + \lambda_j}
-			{1 + \lambda_j^*h(z, \Y_j) \theta_{j+1}(z) }
+	\theta_j(z) = \frac{\phi_j(z) + \gamma_j}{1 + \gamma_j^*\phi_j(z)}
+		= \frac{h_j(z) \theta_{j+1}(z)  + \gamma_j}
+			{1 + \gamma_j^*h_j(z) \theta_{j+1}(z) }
 \end{equation}
+
+The recursive final $\theta(z)$ can conveniently be written in a
+matrix form:
+\begin{equation}\label{eq:recursive-theta}
+	\theta(z)[z;\theta_N(z)] 
+		= \frac{a(z)\theta_N(z) + b(z)}{c(z)\theta_N(z) + d(z)}
+\end{equation}
+where
+\begin{equation}\label{eq:factor-matrix}
+	\left(
+		\begin{matrix}
+			a(z) & b(z) \\
+			c(z) & d(z)
+		\end{matrix}
+	\right) = \prod_{j=1}^{N-1}
+	\left(
+		\begin{matrix}
+			h_j(z)            & \gamma_j \\
+			\gamma_j^* h_j(z) & 1
+		\end{matrix}
+	\right)
+\end{equation}
+Like in \cref{eq:schur-continued-fraction-1}, 
+there is a alse freedom to choose $\theta_N(z)$.
+One can use this freedom to select the “best” of 
+all consistent functions.
 
 %=====================================================================
 \subsection{Interpolation of Green's functions}
@@ -399,38 +426,6 @@ we will discuss in the next section. The data set we have is
 $\{i\omega_n, \mathcal{G}(i\omega_n)\}$, here we denote $\Y_n = i\omega_n$ 
 and $\C_n = \mathcal{NG}(i\omega_n) = -\mathcal{G}(i\omega_n)$. 
 
-Then we use the Möbius transform
-\begin{equation}\label{eq:Mobius-transform}
-	h(z) = \frac{z - i}{z + i}
-\end{equation}
-to map $\C_n \subset N$ to 
-$\theta(\Y_n) = h(\C_n) \subset \Dbar$. 
-The recursive final $\theta(z)$ can conveniently be written in a
-matrix form:
-\begin{equation}\label{eq:recursive-theta}
-	\theta(z)[z;\theta_{M+1}(z)] 
-		= \frac{a(z)\theta_{M+1}(z) + b(z)}{c(z)\theta_{M+1}(z) + d(z)}
-\end{equation}
-where
-\begin{equation}\label{eq:factor-matrix}
-	\left(
-		\begin{matrix}
-			a(z) & b(z) \\
-			c(z) & d(z)
-		\end{matrix}
-	\right) = \prod_{n=1}^M
-	\left(
-		\begin{matrix}
-			h_1(z, \Y_j) & \phi_j \\
-			\phi_j^* h_1(z, \Y_j) & 1
-		\end{matrix}
-	\right)
-\end{equation}
-where $h_1(z, \Y_n) = \frac{z - \Y_n}{z -\Y_n^*}$ 
-is a conformal map form $\C^+$ to $\D$. $\theta_j(z)$ is 
-the interpolation function of $j$-th step and
-$\phi_j = \theta_j(\Y_j)$. There is a freedom to choose $\theta_{M+1}(z)$.
-One can use this freedom to select the “best” of all consistent spectral functions.
 
 %=====================================================================
 
