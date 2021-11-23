@@ -307,8 +307,7 @@ where
 \end{equation}
 Like in \cref{eq:schur-continued-fraction-1}, 
 there is a alse freedom to choose $\theta_N(z)$.
-One can use this freedom to select the “best” of 
-all consistent functions.
+
 
 %=====================================================================
 \subsection{Interpolation of Green's functions}
@@ -317,51 +316,42 @@ all consistent functions.
 The retared Green's function $G^R(\omega + i\eta)$ and the Masubara 
 Green's function $G(i\omega_n)$ can be expressed consistently by replacing 
 the variables $i\omega_n$ and $\omega + i\eta$ with a single complex 
-variable $z$. $G(z)$ is analytic in the upper half plane. 
+variable $z$. $G(z)$ is analytic in the upper half plane $\C^+$. 
 Our problem is that once we have Masubara frequencies $\{i\omega_n\} \in \C^+$ 
 and target data $\{ G(i\omega_n)\} \in \C$, where $\C$ is 
 the complex plane, how can we get interpolate them and get the 
-holomorphic function $G(z)$?
+holomorphic function $G(z):\C^+ \to C$?
 
-Based on the knowledge of Schur function, if we can find maps 
-to map the initial data set $\{ G(i\omega_n)\}$
-from $\C^+$ to $\D^+$ and the target 
-target data $\{ G(i\omega_n)\}$ from $\C$ to $\bar{\D^+}$, 
-then we can apply the Schur function. 
-To accomplish this task, we can to make use of the generalized 
-Schur algorthm\cite{adamyan2003reconstruction}. It generalize the 
-method from $g(z) \in \mathcal{S}$ to all contractive functions 
-$\theta(z) \in \B$, which 
-are holomorphic functions mapping from $\mathcal{C^+}$ 
-to $\Dbar$.	
+Based on the knowledge of Schur algorithm, if we can find 
+a one-to-one correspondence of $G(z)$ and a contractive 
+function $\theta(z) \in \B$, then we can futher generalize 
+the algorithm in \cref{subsec:generalized-schur-algorithm}.
 
+To do this, we firstly introduce the Nevanlinna functions $f(z) \in \N$.
+In complex analysis, a Nevanlinna function is a complex
+function that is analytic in the open upper half plane $\C^+$ and
+has non-negative imaginary part, i.e., maps into $\Cbar^+$ (the
+overline denotes inclusion of the boundary).
+The invertible Möbius transform $h(z) = \frac{z-i}{z+i}$ 
+maps Nevanlinna functions one to one to contractive
+functions:
+\begin{equation}\label{eq:f-theta-relation}
+	\theta(z) = h(f(z)),\ \mathrm{or} \ \
+	f(z) = h^{-1}(\theta(z))
+\end{equation}
 
+Given the initial data consisting of $N$ points 
+$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \in \C^+$ and target data
+$\{C_0, C_1, \dots ,C_{N-1}\} \in \Cbar$, 
+The only thing we needed is to let $\gamma_j$ in 
+\cref{eq:recursion-relation-theta} be $\gamma_j \equiv h(C_j)$.
 
+Moreover, the corresponding Pick matrix is generalized to:
+\begin{equation}\label{eq:pick-matrix-nevanlinna}
+	P_{jk} = \frac{1-h(C_k)^* h(C_j)}{1 - h(\Y_j)^* h(\Y_k)}
+\end{equation}
 
-
-
-
-
-
-%=====================================================================
-\section{old}
-
-
-
-In this method, one should firstly using 
-conformal transforms to map the Masubara Green's functions $\mathcal{G}$, 
-which is analytic in the upper half of the complex plane $\C^+$ and 
-contains singularities in the lower half plane, to a closed unit disk 
-$\Dbar$ in the complex plane. The mappings are shown in \cref{fig:conformal-map}. 
-It becomes a Schur class($\mathcal{S}$) 
-function and would have a continued fraction expansion where the parameters 
-can be rescrsively defined\cite{schur1918potenzreihen}. Then one can 
-apply the Nevanlinna iterative algorithm to interpolate the Schur 
-functions\cite{nevanlinna1919uber}.
-Finally, one can do a inverse conformal transform back to $\C^+$ and 
-obtains $\mathcal{G}(z)$, it's then natural to do analytic continuation 
-$z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation-flow-chart}.
-
+The aforementioned conformaling mappings are shown in \cref{fig:conformal-map}.
 \begin{figure}[htbp]
 	\centering
 	\begin{minipage}[t]{0.7\linewidth}
@@ -373,61 +363,60 @@ $z \to \omega + i0^+$. The calculation process is shown in \cref{fig:calculation
 			\node[draw=none,fill=none,right=55pt of D]  (Dbar)  {$\Dbar$};
 		
 			\draw[->] (C)  -- node[above] {$f$} (Cbar) ;
-			\draw[->] (C)  -- node[left] {$h_1$} (D) ;
+			\draw[->] (C)  -- node[left] {$h_i$} (D) ;
 			\draw[->] (C)  -- node[above] {$\theta$} (Dbar) ;
 			\draw[->] (Cbar) -- node[right] {$h$} (Dbar) ;
-			\draw[->] (D) -- node[below] {$g$} (Dbar) ;
+			\draw[->] (D) -- node[below] {$s$} (Dbar) ;
 
-			\node[draw=none,fill=none, right=20pt of Cbar] (f) {$f$: Nevanlinna function $\in N$};
-			\node[draw=none,fill=none, below=1pt of f]  (g)  {$g$: Schur function $\in \mathcal{S}$};                 
-			\node[draw=none,fill=none, below=1pt of g]  (t)     {$\theta$: Contractive function $\in B$};               
-			\node[draw=none,fill=none,below=1pt of t]  (h)  {$h/h_1$: Conformal mapping};
+			\node[draw=none,fill=none, right=20pt of Cbar] (f) {$f$: Nevanlinna function $\in \N$};
+			\node[draw=none,fill=none, below=1pt of f]  (s)  {$s$: Schur function $\in \mathcal{S}$};                 
+			\node[draw=none,fill=none, below=1pt of s]  (t)     {$\theta$: Contractive function $\in \B$};               
+			\node[draw=none,fill=none,below=1pt of t]  (h)  {$h/h_i$: Conformal mapping};
 		\end{tikzpicture}
 	\end{minipage}
 	\caption{Conformal mappings}
 	\label{fig:conformal-map}
 \end{figure}
 
-\begin{figure}[htbp]
-	\centering
-	\begin{minipage}[t]{0.9\linewidth}
-		\centering
-		\begin{tikzpicture}[node distance=90pt]
-			\node[draw,rounded corners]  (start)  {data set $\{\Y_n, \mathcal{G}(\Y_n)\}$};
-			\node[draw,right=20pt of start]  (f)  {$f$};                 
-			\node[draw, right=of f]  (h)     {$h$};               
-			\node[draw,right=of h]  (interpolate)  {Interpolate};
-			\node[draw,rounded corners,above=20pt of interpolate]  (tm)  {$\theta_{M+1}(z)$};
-			\node[draw, below=30pt of interpolate]  (invh)  {$h^{-1}$};
-			\node[draw, left=50pt of invh]  (ac)  {$z \to \omega + i0^+$};
-			\node[draw, left=of ac]  (imag)  {$2\im()$};
-			\node[draw, rounded corners, left=20pt of imag]  (end)  {spectrum $A(\omega)$};
+Now we are ready to disscuss the Green's functions. The Lehmann 
+representation of Green's function $G(z)$ is:
+\begin{equation}\label{eq:Lehmann-GF-Masubara}
+	G(z) = \frac{1}{Z} \sum_{nm} |A_{nm}|^2
+		\frac{e^{-\beta E_n} \pm e^{-\beta E_m} }{z - E_m + E_n}
+\end{equation}
+where the "$+$" sign is for fermionic Green's functions and 
+"$-$" sign is for bosonic Green's functions.
 
-			\draw[->] (start) -- (f) ;
-			\draw[->] (f)  -- node[above] {$\{\Y_n, \mathcal{NG}(\Y_n)\}$} (h) ;
-			\draw[->] (h)  -- node[above] {$\{\Y_n, \theta(\Y_n)\}$} (interpolate) ;
-			\draw[->] (tm) -- (interpolate) ;
-			\draw[->] (interpolate) -- node[right] {$\theta(z)$} (invh) ;
-			\draw[->] (invh) -- node[above] {$\mathcal{NG}(z)$} (ac) ;
-			\draw[->] (ac) -- node[above] {$-\mathcal{G}(\omega + i0^+)$} (imag) ;
-			\draw[->] (imag) -- (end) ;
-		\end{tikzpicture}
-	\end{minipage}
-	\caption{Calculation flow chart}
-	\label{fig:calculation-flow-chart}
-\end{figure}
+In fermionic case, if we take $z = x + iy$ with $y>0$, 
+i.e. $z\in \C^+$, we can easily prove that $\im G(z) \leq 0$.
+Therefore $-G(z) \in \N$ is an Nevanlinna function.
 
-For fermionic Green's functions, the mapping from $\C^+$ to 
-$\bar{\C^+}$ is simple. Since $\im \mathcal{G}(z) \leq 0$ if 
-$z \in \C^+$, the mapping is just to take 
-$\mathcal{G} \to -\mathcal{G} = \mathcal{NG}$ and $\mathcal{NG} \subset N$. While for 
-bosonic Green's functions, this mapping is a little bit complicated and 
-we will discuss in the next section. The data set we have is 
-$\{i\omega_n, \mathcal{G}(i\omega_n)\}$, here we denote $\Y_n = i\omega_n$ 
-and $\C_n = \mathcal{NG}(i\omega_n) = -\mathcal{G}(i\omega_n)$. 
+While the bosonic case is less trivial. 
+%The real part of bosonic Green's function is:
+%\begin{equation}\label{eq:real-bose-GF}
+%	\re G(z) = \frac{1}{Z} \sum_{nm} 
+%		\frac{|A_{nm}|^2(x - E_m + E_n)}{(x - E_m + E_n)^2 + y^2}
+%		(e^{-\beta E_n} - e^{-\beta E_m}) 
+%\end{equation}
+The imaginary part of bosonic Green's function is:
+\begin{equation}\label{eq:imag-bose-GF}
+	\im G(z) = \frac{1}{Z} \sum_{nm}
+		\frac{y |A_{nm}|^2 e^{-\beta E_m}}{(x - E_m + E_n)^2 + y^2}
+		[(1 - e^{\beta(E_m - E_n)} ]
+\end{equation}
+which is negative when $E_m > E_n$ and positive when $E_m < E_n$. 
+We can construct a $\tilde{G}(z)$ like:
+\begin{equation}\label{eq:Lehmann-construc-GF}
+	\tilde{G}(z) = \frac{1}{Z} \sum_{nm}
+		\frac{|A_{nm}|^2}{z - E_m + E_n}
+		\frac{e^{-\beta E_n} - e^{-\beta E_m} }{E_m - E_n}
+\end{equation}
+and $-\tilde{G}(z) \in \N$ is a Nevanlinna function.
 
 
 %=====================================================================
+\section{Hardy basis optimization}
+\label{sec:hardy-basis-optimization}
 
 
 
