@@ -160,7 +160,7 @@ where $s_j \in \mathcal{S}$ and $\gamma_j \equiv s_j(0)$ are called Schur
 parameters and $|\gamma_j| \leq 1$. 
 
 On the other hand, given an arbitrary strictly contractive sequence 
-of Schur parameters $\{\gamma_0, \gamma_1, \dots, \gamma_j, \dots\} \in \D$, 
+of Schur parameters $\{\gamma_0, \gamma_1, \dots, \gamma_j, \dots\} \subset \D$, 
 one can construct a unique Schur function $s_0(z)$ by means of a continued 
 fraction algorithm. In which we use the inverse relation of
 \cref{eq:schur-function-recursion}
@@ -181,8 +181,8 @@ $s_0(z; \gamma_0,\gamma_1, \dots, \gamma_n)$. Namely, we write:
 where $j = n-1, n-2, \dots, 1, 0$.
 
 Given the initial data consisting of $N$ points 
-$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \in \D$ and target data
-$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \in \D$, 
+$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \D$ and target data
+$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \subset \D$, 
 we can find a holomorphic function $s(z): \D \to \Dbar$ 
 such that $s(\Y_j) = \gamma_j$ for all $j$ by combining 
 \cref{eq:schur-continued-fraction-1}, \cref{eq:schur-continued-fraction-2} 
@@ -227,8 +227,8 @@ holomorphic functions mapping from the upper half plane $\C^+$
 to $\Dbar$.
 
 Given the initial data consisting of $N$ points 
-$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \in \C^+$ and target data
-$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \in \Dbar$, 
+$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \C^+$ and target data
+$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \subset \Dbar$, 
 in order to find a holomorphic function $\theta(z) \in \B$ 
 such that $\theta(\Y_j) = z_j$ for all $j$, we should make use 
 of the Mobius transform $h(z, \Y)  = \frac{z - \Y}{z - \Y^*}$ 
@@ -247,7 +247,7 @@ function $\theta_{j+1}(z)$ can be easily build as follows. From
 \begin{equation}\label{eq:s-theta-relation-z0}
 	s_j(0) = \theta_j(h_j^{-1}(0)) = \theta_j(\Y_j) = \gamma_j
 \end{equation}
-Let $\theta_{j+1}(z) = s_{j+1}(h_j(z)$,
+Let $\theta_{j+1}(z) = s_{j+1}(h_j(z))$,
 then use the recursion relation 
 \cref{eq:schur-function-recursion}, we have: 
 \begin{equation}\label{eq:schur-function-recursion-theta}
@@ -261,7 +261,7 @@ Form the first and the third terms of \cref{eq:schur-function-recursion-theta}
 we have:
 \begin{equation}
 	\phi_j(h_j^{-1}(z)) = z\theta_{j+1}(h_j^{-1}(z)) 
-	=h_j(h_j^{-1}(z), \Y_j) \theta_{j+1}(h_j^{-1}(z)) 
+	=h_j(h_j^{-1}(z)) \theta_{j+1}(h_j^{-1}(z)) 
 \end{equation}
 replace $h_j^{-1}(z)$ with $z\in\D$ by $z \in \C^+$, we have
 \begin{equation}\label{eq:def-phi}
@@ -279,9 +279,9 @@ we can read:
 Together with \cref{eq:def-phi} we get the recursion relation between 
 $\theta_j(z)$ and $\theta_{j+1}(z)$:
 \begin{equation}\label{eq:recursion-relation-theta}
-	\theta_j(z) = \frac{\phi_j(z) + \gamma_j}{1 + \gamma_j^*\phi_j(z)}
+	\theta_j(z) = \frac{\phi_j(z) + \gamma_j}{\gamma_j^*\phi_j(z)+1}
 		= \frac{h_j(z) \theta_{j+1}(z)  + \gamma_j}
-			{1 + \gamma_j^*h_j(z) \theta_{j+1}(z) }
+			{\gamma_j^*h_j(z) \theta_{j+1}(z) +1}
 \end{equation}
 
 The recursive final $\theta(z)$ can conveniently be written in a
@@ -317,8 +317,9 @@ The retared Green's function $G^R(\omega + i\eta)$ and the Masubara
 Green's function $G(i\omega_n)$ can be expressed consistently by replacing 
 the variables $i\omega_n$ and $\omega + i\eta$ with a single complex 
 variable $z$. $G(z)$ is analytic in the upper half plane $\C^+$. 
-Our problem is that once we have Masubara frequencies $\{i\omega_n\} \in \C^+$ 
-and target data $\{ G(i\omega_n)\} \in \C$, where $\C$ is 
+Our problem is that once we have Masubara frequencies 
+$\{i\omega_n\} \subset \C^+$ 
+and target data $\{ G(i\omega_n)\} \subset  \C$, where $\C$ is 
 the complex plane, how can we get interpolate them and get the 
 holomorphic function $G(z):\C^+ \to C$?
 
@@ -341,8 +342,8 @@ functions:
 \end{equation}
 
 Given the initial data consisting of $N$ points 
-$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \in \C^+$ and target data
-$\{C_0, C_1, \dots ,C_{N-1}\} \in \Cbar$, 
+$\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \C^+$ and target data
+$\{C_0, C_1, \dots ,C_{N-1}\} \subset \Cbar$, 
 The only thing we needed is to let $\gamma_j$ in 
 \cref{eq:recursion-relation-theta} be $\gamma_j \equiv h(C_j)$.
 
