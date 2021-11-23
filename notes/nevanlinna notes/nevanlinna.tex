@@ -261,13 +261,13 @@ Form the first and the third terms of \cref{eq:schur-function-recursion-theta}
 we have:
 \begin{equation}
 	\phi_j(h_j^{-1}(z)) = z\theta_{j+1}(h_j^{-1}(z)) 
-	=h(h_j^{-1}(z), \Y_j) \theta_{j+1}(h_j^{-1}(z)) 
+	=h_j(h_j^{-1}(z), \Y_j) \theta_{j+1}(h_j^{-1}(z)) 
 \end{equation}
 replace $h_j^{-1}(z)$ with $z\in\D$ by $z \in \C^+$, we have
 \begin{equation}\label{eq:def-phi}
 	\phi_j(z) =h_j(z) \theta_{j+1}(z) 
 \end{equation}
-We can read from \cref{eq:def-phi} that $\phi(z) \in \B$ 
+We can read from \cref{eq:def-phi} that $\phi_j(z) \in \B$ 
 and $\phi_j(\Y_j) = 0$.
 
 Form the second and the third terms of \cref{eq:schur-function-recursion-theta}
@@ -363,7 +363,7 @@ The aforementioned conformaling mappings are shown in \cref{fig:conformal-map}.
 			\node[draw=none,fill=none,right=55pt of D]  (Dbar)  {$\Dbar$};
 		
 			\draw[->] (C)  -- node[above] {$f$} (Cbar) ;
-			\draw[->] (C)  -- node[left] {$h_i$} (D) ;
+			\draw[->] (C)  -- node[left] {$h_j$} (D) ;
 			\draw[->] (C)  -- node[above] {$\theta$} (Dbar) ;
 			\draw[->] (Cbar) -- node[right] {$h$} (Dbar) ;
 			\draw[->] (D) -- node[below] {$s$} (Dbar) ;
@@ -371,7 +371,7 @@ The aforementioned conformaling mappings are shown in \cref{fig:conformal-map}.
 			\node[draw=none,fill=none, right=20pt of Cbar] (f) {$f$: Nevanlinna function $\in \N$};
 			\node[draw=none,fill=none, below=1pt of f]  (s)  {$s$: Schur function $\in \mathcal{S}$};                 
 			\node[draw=none,fill=none, below=1pt of s]  (t)     {$\theta$: Contractive function $\in \B$};               
-			\node[draw=none,fill=none,below=1pt of t]  (h)  {$h/h_i$: Conformal mapping};
+			\node[draw=none,fill=none,below=1pt of t]  (h)  {$h/h_j$: Conformal mapping};
 		\end{tikzpicture}
 	\end{minipage}
 	\caption{Conformal mappings}
