@@ -26,3 +26,4 @@ Manifest.toml
 References/run/*.txt
 References/run/*.h
 References/run/*.cpp
+Manifest.toml
