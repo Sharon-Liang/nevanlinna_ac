@@ -69,22 +69,22 @@ N = 40
 plca = Vector{String}(undef, length(invT))
 plcs = Vector{String}(undef, length(invT))
 for i = 1:length(invT)
-    plca[i] = @sprintf "./data/TFIsing-Li/g_%ip%i_beta_%i_A.txt" d 10*r invT[i]
-    plcs[i] = @sprintf "./data/TFIsing-Li/g_%ip%i_beta_%i_S.txt" d 10*r invT[i]
+    plca[i] = @sprintf "./data/ising-Li/g_%ip%i_beta_%i_A.txt" d 10*r invT[i]
+    plcs[i] = @sprintf "./data/ising-Li/g_%ip%i_beta_%i_S.txt" d 10*r invT[i]
 end
 
 #load ls data
 D = [8, 16]
 pc = Matrix{String}(undef, length(invT), 2*length(D))
 for i = 1:length(invT), j=1:length(D)
-    pc[i,2j-1] = @sprintf "./data/imagtime/gdivwn_g_%.1f_D_%i_beta_%i.txt" g D[j] invT[i]
-    pc[i,2j] = @sprintf "./data/imagtime/gdivwn_g_%.1f_D_2m%i_beta_%i.txt" g D[j] invT[i]
+    pc[i,2j-1] = @sprintf "./data/ising-imagtime/gdivwn_g_%.1f_D_%i_beta_%i.txt" g D[j] invT[i]
+    pc[i,2j] = @sprintf "./data/ising-imagtime/gdivwn_g_%.1f_D_2m%i_beta_%i.txt" g D[j] invT[i]
 end
 
 dc = Matrix{Vector}(undef, length(invT), 2*length(D))
 dl = Vector{Matrix}(undef,length(invT))
 
-n = 4
+n = 5
 for i = 1:length(invT)
     dl[i] = chi_div_w(plca[i])
     d = readdlm(plcs[i]); bs0 = invT[i]*d[800,2]
@@ -94,8 +94,32 @@ for i = 1:length(invT)
     end
 end
 
+for i = 1:length(invT)
+    path = @sprintf "./data/ising-Li/g_%ip%i_beta_%i_Adivw.txt" d 10*r invT[i]
+    open(path,"w") do file
+        for w = 1:size(dl[i])[1]
+            writedlm(file, [dl[i][w,1] dl[i][w,2]])
+        end
+    end
+end
+
 β = 20
 t = div(β,10)
+
+opc = Matrix{String}(undef, length(invT), 2*length(D))
+for i = 1:length(invT), j=1:length(D)
+    opc[i,2j-1] = @sprintf "./data/ising-spectrum/Aw_ac_g_%.1f_D_%i_beta_%i_n_%i.txt" g D[j] invT[i] n
+    opc[i,2j] = @sprintf "./data/ising-spectrum/Aw_ac_g_%.1f_D_2m%i_beta_%i_n_%i.txt" g D[j] invT[i] n
+end
+
+for i = 1:length(invT), j=1:2*length(D)
+    open(opc[i,j],"w") do file
+        for w=1:length(omega)
+            out = dc[i,j] .* omega
+            writedlm(file, [omega[w] out[w]])
+        end
+    end
+end
 
 
 
@@ -119,6 +143,16 @@ savefig(spath)
 
 #g=1.0
 de = [spectral_density(1.0, i, β) for i in omega]
+for t = 1:length(invT)
+    de = [spectral_density(1.0, i, invT[t]) for i in omega]
+    path = @sprintf "./data/ising-spectrum/Aw_exact_g_%.1f_beta_%i.txt" g invT[t]
+    open(path,"w") do file
+        for w = 1:length(omega)
+            writedlm(file, [omega[w] de[w]])
+        end
+    end
+end
+
 plot(omega, de ./omega, line=(:black,2),label="theory")
 plot!(dl[t][:,1], dl[t][:,2], line=(:solid, 2),label="Li")
 plot!(omega, dc[t,1],line=(:dash, 2),label="χ=8")
