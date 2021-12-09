@@ -61,7 +61,7 @@ end
 """Nevanlinna"""
 omega = [i for i in range(-4π,4π,step = π/400)]
 #load Zi-Long Li data
-g = 1.0
+g = 2.0
 (d,r) = divrem(g, 1)
 invT = [10, 20, 30, 40]
 N = 40
@@ -77,9 +77,13 @@ end
 D = [8, 16]
 pc = Matrix{String}(undef, length(invT), 2*length(D))
 for i = 1:length(invT), j=1:length(D)
-    pc[i,2j-1] = @sprintf "./data/ising-imagtime/gdivwn_g_%.1f_D_%i_beta_%i.txt" g D[j] invT[i]
-    pc[i,2j] = @sprintf "./data/ising-imagtime/gdivwn_g_%.1f_D_2m%i_beta_%i.txt" g D[j] invT[i]
+    pc[i,2j-1] = @sprintf "./data/ising-imagtime/giwn_g_%.1f_D_%i_beta_%i.txt" g D[j] invT[i]
+    pc[i,2j] = @sprintf "./data/ising-imagtime/giwn_g_%.1f_D_2m%i_beta_%i.txt" g D[j] invT[i]
 end
+
+
+
+
 
 dc = Matrix{Vector}(undef, length(invT), 2*length(D))
 dl = Vector{Matrix}(undef,length(invT))
@@ -87,12 +91,17 @@ dl = Vector{Matrix}(undef,length(invT))
 n = 5
 for i = 1:length(invT)
     dl[i] = chi_div_w(plca[i])
-    d = readdlm(plcs[i]); bs0 = invT[i]*d[800,2]
+    data = readdlm(plcs[i]); bs0 = invT[i]*data[800,2]
     dl[i][800,2] = bs0
-    for j=1:2*length(D)
-        dc[i,j] = chi_div_w(omega, pc[i,j], n)
-    end
+    #for j=1:2*length(D)
+    #    dc[i,j] = chi_div_w(omega, pc[i,j], n)
+    #end
 end
+
+
+
+
+
 
 for i = 1:length(invT)
     path = @sprintf "./data/ising-Li/g_%ip%i_beta_%i_Adivw.txt" d 10*r invT[i]
