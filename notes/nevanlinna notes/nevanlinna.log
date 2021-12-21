@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.5.18)  24 NOV 2021 17:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.5.18)  21 DEC 2021 13:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -181,6 +181,17 @@ File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen147
 \Gin@req@width=\dimen148
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks24
+\thm@bodyfont=\toks25
+\thm@headfont=\toks26
+\thm@notefont=\toks27
+\thm@headpunct=\toks28
+\thm@preskip=\skip55
+\thm@postskip=\skip56
+\thm@headsep=\skip57
+\dth@everypar=\toks29
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2021-02-27 v7.00k Hypertext links for LaTeX
  (/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
@@ -282,9 +293,9 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 286.
 )
-\Hy@SectionHShift=\skip55
+\Hy@SectionHShift=\skip58
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 15.
+Package hyperref Info: Option `colorlinks' set `true' on input line 16.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/scalerel/scalerel.sty
 Package: scalerel 2016/12/29 v1.8 Routines for constrained scaling and stretching of objects, relative to a reference object or in absolute terms
  (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/calc.sty
@@ -293,23 +304,23 @@ Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Bcount=\count284
 \calc@Adimen=\dimen153
 \calc@Bdimen=\dimen154
-\calc@Askip=\skip56
-\calc@Bskip=\skip57
+\calc@Askip=\skip59
+\calc@Bskip=\skip60
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count285
-\calc@Cskip=\skip58
+\calc@Cskip=\skip61
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count286
 )
-\thesrwidth=\skip59
-\thesrheight=\skip60
-\srblobheight=\skip61
-\srblobdepth=\skip62
-\mnxsrwidth=\skip63
-\LMex=\skip64
-\LMpt=\skip65
+\thesrwidth=\skip62
+\thesrheight=\skip63
+\srblobheight=\skip64
+\srblobdepth=\skip65
+\mnxsrwidth=\skip66
+\LMex=\skip67
+\LMpt=\skip68
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/cleveref/cleveref.sty
 Package: cleveref 2018/03/27 v0.21.4 Intelligent cross-referencing
 Package cleveref Info: `hyperref' support loaded on input line 2370.
@@ -323,8 +334,9 @@ LaTeX Info: Redefining \cpagerefrange on input line 2370.
 LaTeX Info: Redefining \Cpagerefrange on input line 2370.
 LaTeX Info: Redefining \labelcref on input line 2370.
 LaTeX Info: Redefining \labelcpageref on input line 2370.
+Package cleveref Info: `amsthm' support loaded on input line 3026.
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (/usr/local/texlive/2021/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (/usr/local/texlive/2021/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
-\pgfutil@everybye=\toks24
+\pgfutil@everybye=\toks30
 \pgfutil@tempdima=\dimen155
 \pgfutil@tempdimb=\dimen156
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.tex)) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
@@ -336,10 +348,10 @@ Package: pgf 2020/12/27 v3.1.8b (3.1.8b)
  (/usr/local/texlive/2021/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (/usr/local/texlive/2021/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
 Package: pgfsys 2020/12/27 v3.1.8b (3.1.8b)
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks25
-\pgfkeys@temptoks=\toks26
+\pgfkeys@pathtoks=\toks31
+\pgfkeys@temptoks=\toks32
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
-\pgfkeys@tmptoks=\toks27
+\pgfkeys@tmptoks=\toks33
 ))
 \pgf@x=\dimen157
 \pgf@y=\dimen158
@@ -357,9 +369,9 @@ Package: pgfsys 2020/12/27 v3.1.8b (3.1.8b)
 \c@pgf@countb=\count288
 \c@pgf@countc=\count289
 \c@pgf@countd=\count290
-\t@pgf@toka=\toks28
-\t@pgf@tokb=\toks29
-\t@pgf@tokc=\toks30
+\t@pgf@toka=\toks34
+\t@pgf@tokb=\toks35
+\t@pgf@tokc=\toks36
 \pgf@sys@id@count=\count291
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2020/12/27 v3.1.8b (3.1.8b)
@@ -396,9 +408,9 @@ Package: pgfcore 2020/12/27 v3.1.8b (3.1.8b)
 \pgfmath@dimen=\dimen167
 \pgfmath@count=\count294
 \pgfmath@box=\box65
-\pgfmath@toks=\toks31
-\pgfmath@stack@operand=\toks32
-\pgfmath@stack@operation=\toks33
+\pgfmath@toks=\toks37
+\pgfmath@stack@operand=\toks38
+\pgfmath@stack@operation=\toks39
 ) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex))) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count295
 )) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
@@ -482,8 +494,8 @@ Package: pgffor 2020/12/27 v3.1.8b (3.1.8b)
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
 \pgffor@iter=\dimen194
 \pgffor@skip=\dimen195
-\pgffor@stack=\toks34
-\pgffor@toks=\toks35
+\pgffor@stack=\toks40
+\pgffor@toks=\toks41
 )) (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2020/12/27 v3.1.8b (3.1.8b)
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
@@ -523,10 +535,10 @@ File: tikzlibraryshapes.geometric.code.tex 2020/12/27 v3.1.8b (3.1.8b)
  (/usr/local/texlive/2021/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geometric.code.tex
 File: pgflibraryshapes.geometric.code.tex 2020/12/27 v3.1.8b (3.1.8b)
 ))
-Class revtex4-2 Info: Unrecognized LaTeX tabular. Please update this document class! (Proceeding with fingers crossed.) on input line 39.
-Class revtex4-2 Info: cite was not loaded (OK!) on input line 39.
-Class revtex4-2 Info: mcite was not loaded (OK!) on input line 39.
-Class revtex4-2 Info: multicol was not loaded (OK!) on input line 39.
+Class revtex4-2 Info: Unrecognized LaTeX tabular. Please update this document class! (Proceeding with fingers crossed.) on input line 40.
+Class revtex4-2 Info: cite was not loaded (OK!) on input line 40.
+Class revtex4-2 Info: mcite was not loaded (OK!) on input line 40.
+Class revtex4-2 Info: multicol was not loaded (OK!) on input line 40.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count308
@@ -534,24 +546,24 @@ File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 ) (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.aux)
 \openout1 = `nevanlinna.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
  (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count309
@@ -559,19 +571,19 @@ LaTeX Font Info:    ... okay on input line 39.
 \scratchbox=\box76
 \nofMPsegments=\count310
 \nofMParguments=\count311
-\everyMPshowfont=\toks36
+\everyMPshowfont=\toks42
 \MPscratchCnt=\count312
 \MPscratchDim=\dimen262
 \MPnumerator=\count313
 \makeMPintoPDFobject=\count314
-\everyMPtoPDFconversion=\toks37
+\everyMPtoPDFconversion=\toks43
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring ON on input line 39.
+Package hyperref Info: Link coloring ON on input line 40.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty
@@ -581,44 +593,44 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count315
 )
-LaTeX Info: Redefining \ref on input line 39.
-LaTeX Info: Redefining \pageref on input line 39.
-LaTeX Info: Redefining \nameref on input line 39.
+LaTeX Info: Redefining \ref on input line 40.
+LaTeX Info: Redefining \pageref on input line 40.
+LaTeX Info: Redefining \nameref on input line 40.
  (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.out) (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.out)
 \@outlinefile=\write5
 \openout5 = `nevanlinna.out'.
 
-Class revtex4-2 Info: Taking \maketitle back from hyperref on input line 39.
+Class revtex4-2 Info: Taking \maketitle back from hyperref on input line 40.
 \openout3 = `nevanlinnaNotes.bib'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.toc)
 \tf@toc=\write6
 \openout6 = `nevanlinna.toc'.
 
- [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl [7]) [8] (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.aux)
+ [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7] (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl [8]) [9] (/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.aux)
 Package rerunfilecheck Info: File `nevanlinna.out' has not changed.
-(rerunfilecheck)             Checksum: 7E570C8F3C400CD86651563270FFCBB1;2486.
+(rerunfilecheck)             Checksum: AB063332C84F2594EE8FACD5787B7E27;2734.
  ) 
 Here is how much of TeX's memory you used:
- 24045 strings out of 478994
- 438228 string characters out of 5858184
- 736736 words of memory out of 5000000
- 41074 multiletter control sequences out of 15000+600000
+ 24118 strings out of 478994
+ 439165 string characters out of 5858184
+ 737126 words of memory out of 5000000
+ 41134 multiletter control sequences out of 15000+600000
  419067 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  87i,16n,89p,512b,812s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.pdf" (8 pages, 224299 bytes).
+</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.pdf" (9 pages, 235914 bytes).
 PDF statistics:
- 271 PDF objects out of 1000 (max. 8388607)
- 241 compressed objects within 3 object streams
- 65 named destinations out of 1000 (max. 500000)
- 125 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 298 PDF objects out of 1000 (max. 8388607)
+ 266 compressed objects within 3 object streams
+ 74 named destinations out of 1000 (max. 500000)
+ 141 words of extra memory for PDF output out of 10000 (max. 10000000)
 

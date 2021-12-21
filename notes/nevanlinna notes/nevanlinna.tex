@@ -8,6 +8,7 @@
 %\usepackage[top=1.25in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
 \usepackage{bm}
 \usepackage{graphicx}
+\usepackage{amsthm} %proof environment
 \usepackage{hyperref}% add hypertext capabilities
 \hypersetup{colorlinks=true, 
 			citecolor=blue, 
@@ -64,12 +65,12 @@
 
 The analytic continuation problem seeks   
 to extract real frequency dynamical information from
-imaginary-time correlation functions $G(\tau)$ data.
+imaginary-time correlation functions $C(\tau)$ data.
 Technically, this is a highly nontirvial task\cite{jarrell1996bayesian}. To 
-see this, we use the relation between $G(\tau)$ and $A(\omega)$
+see this, we use the relation between $C(\tau)$ and $A(\omega)$
 \cite{jarrell1996bayesian,XiaoLRT}:
 \begin{equation}\label{eq:gt-Aw}
-	G(\tau) = \int_{-\infty}^{\infty} d\omega
+	C(\tau) = \int_{-\infty}^{\infty} d\omega
 		\frac{e^{-\tau \omega }}{1 - \lambda e^{-\beta \omega}}
 		A(\omega)
 		= \int_{-\infty}^{\infty} d\omega
@@ -79,19 +80,19 @@ where $K(\tau, \omega) = \frac{e^{-\tau \omega }}{1 - \lambda e^{-\beta \omega}}
 is the kernel, $\lambda =\pm 1$ for bosons/fermions respectively. One may consider to solve the problem by firstly 
 discretize $\tau$ and $\omega$ and get:
 \begin{equation}
-	G(\tau_i) = \sum_{j=1}^{N_\omega} K_{ij} A(\omega_j)
+	C(\tau_i) = \sum_{j=1}^{N_\omega} K_{ij} A(\omega_j)
 \end{equation}
 Then do SVD decomposition of rectangular matrix $K$, write
 $K_ij = U_{il} \lambda_l V_{lj}$. Finally the spectral function 
 reads
 \begin{equation}
 	A(\omega_j) = \sum_{l=1}^{N_\tau} \frac{1}{\lambda_l} V_{ij}
-		\sum_{i=1}^{N_\omega} G(\tau_i) U_{il}
+		\sum_{i=1}^{N_\omega} C(\tau_i) U_{il}
 \end{equation}
 It seems fine at the first glanse. However, if we consider 
 the properties of $K(\tau, \omega)$, we would notice that it 
 is highly sigular since it is exponentially small for large 
-$|\omega|$, so small errors $G(\tau)$ would be amplified by
+$|\omega|$, so small errors $C(\tau)$ would be amplified by
 exponentially small $\lambda_l$. This problem is well-known
 ill-posed\cite{acton1997numerical, peschel1999density} and 
 enormous efforts have been made\cite{}.
@@ -374,31 +375,70 @@ representation of Green's function $G(z)$ is:
 where the "$+$" sign is for fermionic Green's functions and 
 "$-$" sign is for bosonic Green's functions.
 
+\subsubsection{Fermionic case}
+\label{eq:fermionic-case}
 In fermionic case, if we take $z = x + iy$ with $y>0$, 
 i.e. $z\in \C^+$, we can easily prove that $\im G(z) \leq 0$.
-Therefore $-G(z) \in \N$ is an Nevanlinna function.
+Therefore $-G(z) \in \N$ is a Nevanlinna function.
+\begin{proof}
+	\begin{equation}
+	\im G(x+iy) = - \frac{1}{Z} \sum_{nm}
+	\frac{\mathcal{Q}^F_{nm} y}{(x - E_m + E_n)^2 + y^2}
+	\end{equation}
+where
+\begin{equation}
+	\mathcal{Q}^F_{nm} = |A_{nm}|^2 (e^{-\beta E_m} + e^{-\beta E_n}) \geq 0
+\end{equation}
+$\therefore \im G(x+iy) \leq 0$ for $y > 0$.
+\end{proof}
 
-While the bosonic case is less trivial. 
-%The real part of bosonic Green's function is:
-%\begin{equation}\label{eq:real-bose-GF}
-%	\re G(z) = \frac{1}{Z} \sum_{nm} 
-%		\frac{|A_{nm}|^2(x - E_m + E_n)}{(x - E_m + E_n)^2 + y^2}
-%		(e^{-\beta E_n} - e^{-\beta E_m}) 
-%\end{equation}
+
+\subsubsection{Bosonic case}
+\label{eq:bosonic-case}
+The bosonic case is less trivial. 
 The imaginary part of bosonic Green's function is:
-\begin{equation}\label{eq:imag-bose-GF}
-	\im G(z) = \frac{1}{Z} \sum_{nm}
-		\frac{y |A_{nm}|^2 e^{-\beta E_m}}{(x - E_m + E_n)^2 + y^2}
-		[(1 - e^{\beta(E_m - E_n)} ]
+\begin{equation}
+	\im G(x+iy) = - \frac{1}{Z} \sum_{nm}
+	\frac{\mathcal{Q}^B_{nm} y}{(x - E_m + E_n)^2 + y^2}
+	\end{equation}
+where
+\begin{equation}
+	\mathcal{Q}^B_{nm} = |A_{nm}|^2 (e^{-\beta E_m} - e^{-\beta E_n})
+	=\sgn(E_m-E_n) |\mathcal{Q}^B_{nm}|
 \end{equation}
-which is negative when $E_m > E_n$ and positive when $E_m < E_n$. 
-We can construct a $\tilde{G}(z)$ like:
-\begin{equation}\label{eq:Lehmann-construc-GF}
-	\tilde{G}(z) = \frac{1}{Z} \sum_{nm}
-		\frac{|A_{nm}|^2}{z - E_m + E_n}
-		\frac{e^{-\beta E_n} - e^{-\beta E_m} }{E_m - E_n}
-\end{equation}
-and $-\tilde{G}(z) \in \N$ is a Nevanlinna function.
+$\im G(x+iy)$ doesn't have a definite sign.
+
+However, we can prove that $-zG(z)$ is a Nevanlinna function.
+\begin{proof}
+	\begin{equation}
+	-\im[(x + iy) G(x+iy)]= -x\im G(x+iy) - y\re G(x+iy)
+	\end{equation}
+	where:
+	\begin{equation}\label{eq:real-bose-GF}
+		\re G(z) = \frac{1}{Z} \sum_{nm} 
+			\frac{\mathcal{Q}^B_{nm}(x - E_m + E_n)}
+			{(x - E_m + E_n)^2 + y^2}
+	\end{equation}
+	For given $(n,m)$:
+	\begin{align}
+	\begin{split}
+		\tilde{\mathcal{Q}}^B_{nm} 
+		&= xy\mathcal{Q}^B_{nm} - (x-E_m + E_n)y\mathcal{Q}^B_{nm} \\
+		&= y(E_m - E_n)\mathcal{Q}^B_{nm} \\
+		&= y|E_m - E_n||\mathcal{Q}^B_{nm}|
+	\end{split}
+	\end{align}
+	$\therefore \tilde{\mathcal{Q}}^B_{nm} \geq 0$ for $y > 0$.
+	\begin{equation}
+		\im[-zG(z)] = \frac{1}{Z} \sum_{nm} 
+		\frac{\tilde{\mathcal{Q}}^B_{nm}}
+		{(x - E_m + E_n)^2 + y^2} \geq 0
+	\end{equation}
+
+\end{proof}
+
+Moreover, $-i\omega_n G(i\omega_n)$ is the Fourier transform of 
+$\frac{\mathrm{d}G(\tau)}{\mathrm{d} \tau}$.
 
 
 %=====================================================================

@@ -215,6 +215,17 @@ INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/amscls/amsthm.sty
 INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
 INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
 INPUT /usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -905,11 +916,11 @@ INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam1
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
-INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
-INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
-INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
-INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
+INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
+INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
+INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.aux
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.out
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.out
@@ -929,3 +940,4 @@ INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb
+INPUT /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb
