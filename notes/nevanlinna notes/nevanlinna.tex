@@ -34,6 +34,7 @@
 \newcommand{\Dbar}{ {\bar{\mathcal{D}}} }
 \newcommand{\B}{ {\mathcal{B}} }
 \newcommand{\N}{ {\mathcal{N}} }
+\newcommand{\longeq}{\scalebox{3}[1]{=}}
 
 %=======================================================================
 %=======================================================================
@@ -408,18 +409,22 @@ where
 \end{equation}
 $\im G(x+iy)$ doesn't have a definite sign.
 
-However, we can prove that $-zG(z)$ is a Nevanlinna function.
+However, we can prove that $\tilde{G}(z) = -zG(z)$ is 
+a Nevanlinna function.
 \begin{proof}
-	\begin{equation}
-	-\im[(x + iy) G(x+iy)]= -x\im G(x+iy) - y\re G(x+iy)
-	\end{equation}
+	\begin{align}
+	\begin{split}
+		\im\tilde{G}(x + iy) &= -\im[(x + iy) G(x+iy)] \\
+			&= -x\im G(x+iy) - y\re G(x+iy)
+	\end{split}
+	\end{align}
 	where:
 	\begin{equation}\label{eq:real-bose-GF}
 		\re G(z) = \frac{1}{Z} \sum_{nm} 
 			\frac{\mathcal{Q}^B_{nm}(x - E_m + E_n)}
 			{(x - E_m + E_n)^2 + y^2}
 	\end{equation}
-	For given $(n,m)$:
+	For given $(n,m)$-term:
 	\begin{align}
 	\begin{split}
 		\tilde{\mathcal{Q}}^B_{nm} 
@@ -430,15 +435,25 @@ However, we can prove that $-zG(z)$ is a Nevanlinna function.
 	\end{align}
 	$\therefore \tilde{\mathcal{Q}}^B_{nm} \geq 0$ for $y > 0$.
 	\begin{equation}
-		\im[-zG(z)] = \frac{1}{Z} \sum_{nm} 
+		\therefore \ \im\tilde{G}(x + iy) = \frac{1}{Z} \sum_{nm} 
 		\frac{\tilde{\mathcal{Q}}^B_{nm}}
 		{(x - E_m + E_n)^2 + y^2} \geq 0
 	\end{equation}
-
+	and $\tilde{G}(z)$ is a Nevanlinna function.
 \end{proof}
-
 Moreover, $-i\omega_n G(i\omega_n)$ is the Fourier transform of 
 $\frac{\mathrm{d}G(\tau)}{\mathrm{d} \tau}$.
+
+We can perform analytical continuation $z=\omega + i\eta$ on $\tilde{G}(z)$:
+\begin{align}
+\begin{split}
+	2\im \tilde{G}(\omega + i\eta)
+	&= \omega[-2\im G(\omega + i\eta)] -2\eta\re G(\omega + i\eta)\\
+	&\stackrel{\eta \to 0^+}{\longeq} \omega A(\omega)
+\end{split}
+\end{align}
+where $A(\omega)$ is the spectral function.
+
 
 
 %=====================================================================
