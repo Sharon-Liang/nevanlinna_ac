@@ -49,9 +49,9 @@ end
 
 function isNevanlinnasolvable(x::Vector, y::Vector; 
     tolerance::Float64 = 1.e-6)
-    if all(imag.(x) ≥ 0 == false 
+    if all(imag.(x) ≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
-    elseif all(imag.(y) ≥ 0)) == false
+    elseif all(imag.(y) ≥ 0) == false
         @error "Target data should be in the upper half complex plane"
     end
     x = mti.(x)
@@ -141,9 +141,9 @@ end
 """
 function nevanlinna(z::Number, x::Vector, y::Vector;
     optim::Symbol = :none)
-    if all(imag.(x) ≥ 0 == false 
+    if all(imag.(x) ≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
-    elseif all(imag.(y) ≥ 0)) == false
+    elseif all(imag.(y) ≥ 0) == false
         @error "Target data should be in the upper half complex plane"
     end
     y = mti.(y)
