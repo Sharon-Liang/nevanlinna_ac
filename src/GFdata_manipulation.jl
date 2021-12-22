@@ -1,3 +1,16 @@
+"""
+    Read Masubara Green's function data
+"""
+function readGF(path::String; reverse::Bool=true, num::Int64 = 100)
+    d = readdlm(path)
+    x = 1.0im * d[:,1]
+    y = d[:,2] + 1.0im * d[:,3]
+    if reverse 
+        x = reverse(x); y=reverse(y)
+    end
+    num = min(length(x), num)
+    return x[1:num], y[1:num]
+end
 
 """
     Convert Masubara frequency Green's data to Nevanlinna data
@@ -25,13 +38,21 @@ end
     for fermions, it is A(ω)
     for bosons, it is ωA(ω)
 """
-function spectrum(ω::Real, η::Real, 
+function spectrum(ω::Vector{T} where T<:Real, η::Real, 
     x::Vector, y::Vector, type::Symbol;
     optim = :none)
     x, y = toNevanlinnadata(x,y,type)
+    if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     type == :f ? name = "A(ω)" : name = "ωA(ω)"
-    z = ω + 1.0im * η
-    res = nevanlinna(z, x, y, optim=optim)
-    res = 2*res |> imag
+    z = ω .+ 1.0im * η
+    res = [nevanlinna(i, x, y, optim=optim) for i in z]
+    res = imag.(2*res)
     return res, name
 end
+
+function spectrum(ω::Real, η::Real, 
+    x::Vector, y::Vector, type::Symbol;
+    optim = :none)
+    return spectrum([ω], η, x, y, type, optim = optim)
+end
+

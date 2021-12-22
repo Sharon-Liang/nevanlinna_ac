@@ -14,7 +14,7 @@ end
     Pick matrix of initial data {z, f(z)} with in a unit cell
 """
 function pick_matrix(x::Vector, y::Vector)
-    if (all(abs.(x) > 0) && all(abs.(y) > 0)) == false
+    if (all(abs.(x) .> 0) && all(abs.(y) .> 0)) == false
         @error "pick_matrix: initial data and target data should be in a unit cell"
     elseif length(x) != length(y)
         @error DimensionMismatch
@@ -41,24 +41,26 @@ function isGeneralizedSchursovable(x::Vector, y::Vector;
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
-    x = mti.(x)
-    pick = pick_matrix(x, y)
-    evals = eigvals(pick) 
-    return all((evals .+ tolerance) .>= 0), minimum(evals)      
+        x = mti.(x)
+        pick = pick_matrix(x, y)
+        evals = eigvals(pick) 
+        return all((evals .+ tolerance) .>= 0), minimum(evals)
+    end
 end
 
 function isNevanlinnasolvable(x::Vector, y::Vector; 
     tolerance::Float64 = 1.e-6)
-    if all(imag.(x) ≥ 0) == false 
+    if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
-    elseif all(imag.(y) ≥ 0) == false
+    elseif all(imag.(y) .≥ 0) == false
         @error "Target data should be in the upper half complex plane"
+    else
+        x = mti.(x)
+        y = mti.(y)
+        pick = pick_matrix(x, y)
+        evals = eigvals(pick) 
+        return all((evals .+ tolerance) .>= 0), minimum(evals)
     end
-    x = mti.(x)
-    y = mti.(y)
-    pick = pick_matrix(x, y)
-    evals = eigvals(pick) 
-    return all((evals .+ tolerance) .>= 0), minimum(evals)
 end
 
 
@@ -78,6 +80,7 @@ end
 function inv_recursion(A::Matrix, θp::Number)
     num = -A[2,2] * θp + A[1,2]
     den = A[2,1] * θp - A[1,1]
+    return num/den
 end
 
 
@@ -118,10 +121,11 @@ end
 function generalized_schur(z::Number, x::Vector, y::Vector;
     optim::Symbol = :none)
     if all(imag.(x) .≥ 0) == false 
-        @error "Initial data should be in the upper half complex plane"
+        @warn "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
+        M = length(y)
         ϕ = schur_parameter(x,y)
         abcd = eye(ComplexF64,2)
         for j = 1:M
@@ -141,10 +145,10 @@ end
 """
 function nevanlinna(z::Number, x::Vector, y::Vector;
     optim::Symbol = :none)
-    if all(imag.(x) ≥ 0) == false 
-        @error "Initial data should be in the upper half complex plane"
-    elseif all(imag.(y) ≥ 0) == false
-        @error "Target data should be in the upper half complex plane"
+    if all(imag.(x) .≥ 0) == false 
+        @warn "Initial data should be in the upper half complex plane"
+    elseif all(imag.(y) .≥ 0) == false
+        @warn "Target data should be in the upper half complex plane"
     end
     y = mti.(y)
     res = generalized_schur(z, x, y, optim=optim)

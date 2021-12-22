@@ -16,7 +16,7 @@ export pick_matrix,
        schur_parameter,
        generalized_schur,
        nevanlinna 
-export toNevanlinnadata,
+export readGF, toNevanlinnadata,
        spectrum
 
 include("utilities.jl")
