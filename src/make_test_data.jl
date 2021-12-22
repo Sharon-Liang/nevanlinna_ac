@@ -17,7 +17,7 @@ end
 G(iωn) = 1/2π ∫dΩ A(Ω)/(iωn - Ω)
 """
 function Masubara_GF(n::Int64, A::Function, β::Real;
-    type::Symbol = :f, Λ::Float64=100., err::Float64=eps())
+    type::Symbol = :f, Λ::Float64=100., err::Float64=1.e-15)
     ωn = Masubara_freq(n, β, type=type)
     res = hquadrature(ω -> A(ω)/(1.0im*ωn-ω), -Λ, Λ,rtol=err)
     return res[1]/(2π)
@@ -71,8 +71,8 @@ Fn = 40
 β = 20
 ωn = [Masubara_freq(n,β) for n=1:Fn]
 
-p1 = "./data/gaussian/giwn_delta.txt"
-op1 = "./data/gaussian/A_delta.txt"
+p1 = "./data/gaussian/giwn_delta_eta_0.05.txt"
+op1 = "./data/gaussian/A_delta_eta_0.05.txt"
 
 f = x -> delta(x, c = 1)
 A = [f(ω) for ω in omega]
@@ -93,15 +93,15 @@ open(op1, "w") do file
 end
 
 
-N = 1
+N = 3
 p2 = @sprintf "./data/gaussian/giwn_gaussian_%i.txt" N
 op2 = @sprintf "./data/gaussian/A_gaussian_%i.txt" N
 
-f, _, _ = multi_gaussian(N, μrange=[-2,2])
+f, _, _ = multi_gaussian(N, μrange=[-3,3])
 A = [f(ω) for ω in omega]
 plot(omega, A, lw=2)
 
-G = [Masubara_GF(n,f,β) for n=1:Fn]
+G = [Masubara_GF(n,f,β, err=1.e-15) for n=1:Fn]
 
 
 
