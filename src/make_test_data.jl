@@ -48,7 +48,7 @@ function gaussian(x::Real, μ::Real, s2::Real)
     end
 end
 
-function multi_gaussian(N::Int64; μrange::Vector{Float64}=[-3.,3.], s2max::Real=3.)
+function multi_gaussian(N::Int64; μrange::Vector=[-3.,3.], s2max::Real=3.)
     μs, s2 = rand(Float64, N), rand(Float64, N)
     μs = μs .* (μrange[2] - μrange[1]) .+ μrange[1]
     s2 = s2 .* s2max
@@ -66,7 +66,7 @@ end
 """
     Generate test data
 """
-omega = [i for i in range(-π, π, length=200)]
+omega = [i for i in range(-4π, 4π, length=500)]
 Fn = 40
 β = 20
 ωn = [Masubara_freq(n,β) for n=1:Fn]
@@ -97,11 +97,13 @@ N = 1
 p2 = @sprintf "./data/gaussian/giwn_gaussian_%i.txt" N
 op2 = @sprintf "./data/gaussian/A_gaussian_%i.txt" N
 
-f, _, _ = multi_gaussian(N)
+f, _, _ = multi_gaussian(N, μrange=[-2,2])
 A = [f(ω) for ω in omega]
+plot(omega, A, lw=2)
+
 G = [Masubara_GF(n,f,β) for n=1:Fn]
 
-plot(omega, A, lw=2)
+
 
 open(p2, "w") do file 
     for i=1:Fn
@@ -114,3 +116,5 @@ open(op2, "w") do file
         writedlm(file, [omega[i] A[i]])
     end
 end
+
+println("finish!")
