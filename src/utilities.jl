@@ -11,8 +11,14 @@ end
 
 
 """
-    Conformal transforms
+    Check if a matrix if positive semidefinite.
 """
+function ispossemidef(A::Matrix{T} where T<:Number)
+    evals = eigvals(A)
+    return all(evals .>= 0)
+end
+
+
 """
     Linear fractional transform transforms the unit disk in the 
     complex plane to itself
@@ -26,7 +32,6 @@ function linear_fractional_transform(z::Number, Y::Number)
         return num/den
     end
 end
-
 lft = linear_fractional_transform
 
 """
@@ -44,8 +49,9 @@ function mobius_transform(z::Number, Y::Number)
         num == den ? (return 1) : (return num/den)
     end
 end
-
 mt = mobius_transform
+
+
 """
     Inverse Mobius transform transforms the unit disk in the complex plane
     to the upper half complex plane.
@@ -63,16 +69,9 @@ function inverse_mobius_transform(z::Number, Y::Number)
         return num/den
     end
 end
-
 imt = inverse_mobius_transform
 
-"""
-    Check if a matrix if positive semidefinite.
-"""
-function ispossemidef(A::Matrix{T} where T<:Number)
-    evals = eigvals(A)
-    return all(evals .>= 0)
-end
+
 
 
 
