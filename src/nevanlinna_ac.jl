@@ -5,6 +5,7 @@ __precompile__()
 #BigFloat defalt precision 256
 
 using LinearAlgebra
+using DelimitedFiles
 
 export eye, ispossemidef
 export linear_fractional_transform, lft,

@@ -1,11 +1,11 @@
 """
     Read Masubara Green's function data
 """
-function readGF(path::String; reverse::Bool=true, num::Int64 = 100)
+function readGF(path::String; rev::Bool=true, num::Integer = 100)
     d = readdlm(path)
-    x = 1.0im * d[:,1]
+    x = d[:,1]
     y = d[:,2] + 1.0im * d[:,3]
-    if reverse 
+    if rev == true
         x = reverse(x); y=reverse(y)
     end
     num = min(length(x), num)
