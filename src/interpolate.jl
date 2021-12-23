@@ -1,3 +1,5 @@
+
+
 """
     Conformal transforms used
 """
@@ -13,7 +15,7 @@ end
 """
     Pick matrix of initial data {z, f(z)} with in a unit cell
 """
-function pick_matrix(x::Vector, y::Vector)
+function pick_matrix(x::AbstractVector, y::AbstractVector)
     if (all(abs.(x) .> 0) && all(abs.(y) .> 0)) == false
         @error "pick_matrix: initial data and target data should be in a unit cell"
     elseif length(x) != length(y)
@@ -34,8 +36,8 @@ end
 """
     Check if the Pick matrix is positive semidefinite
 """
-function isGeneralizedSchursovable(x::Vector, y::Vector; 
-    tolerance::Float64 = 1.e-6)
+function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; 
+    tolerance::AbstractFloat = 1.e-10)
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
@@ -48,8 +50,8 @@ function isGeneralizedSchursovable(x::Vector, y::Vector;
     end
 end
 
-function isNevanlinnasolvable(x::Vector, y::Vector; 
-    tolerance::Float64 = 1.e-6)
+function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector; 
+    tolerance::AbstractFloat = 1.e-10)
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
@@ -88,7 +90,7 @@ end
     coefficient of the recursion relation in generalized_schur algorithm
 """
 function coefficient(z::Number, xj::Number, ϕj::Number)
-    A = zeros(ComplexF64,2,2)
+    A = zeros(Ctype,2,2)
     A[1,1] = mt(z, xj)
     A[1,2] = ϕj
     A[2,1] = ϕj'* mt(z,xj)
@@ -101,10 +103,10 @@ end
     core: evaluate 'Schur parameters' for contractive functions
     {y} within a unit circle
 """
-function schur_parameter(x::Vector, y::Vector)
-    M = length(y); T = ComplexF64
-    ϕ = zeros(T, M); ϕ[1] = y[1]
-    abcd = [eye(T,2) for i=1:M]
+function schur_parameter(x::AbstractVector, y::AbstractVector)
+    M = length(y) 
+    ϕ = zeros(Ctype, M); ϕ[1] = y[1]
+    abcd = [eye(Ctype,2) for i=1:M]
     for j = 1:(M-1)
         for k=j:M
             prod = coefficient(x[k], x[j], ϕ[j])
@@ -118,7 +120,7 @@ end
 """
     Generalized Schur algorithm
 """
-function generalized_schur(z::Number, x::Vector, y::Vector;
+function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector;
     optim::Symbol = :none)
     if all(imag.(x) .≥ 0) == false 
         @warn "Initial data should be in the upper half complex plane"
@@ -127,7 +129,7 @@ function generalized_schur(z::Number, x::Vector, y::Vector;
     else
         M = length(y)
         ϕ = schur_parameter(x,y)
-        abcd = eye(ComplexF64,2)
+        abcd = eye(Ctype,2)
         for j = 1:M
             abcd *= coefficient(z,x[j],ϕ[j])
         end
@@ -143,7 +145,7 @@ end
 """
     Nevanlinna Interpolation algorithm
 """
-function nevanlinna(z::Number, x::Vector, y::Vector;
+function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector;
     optim::Symbol = :none)
     if all(imag.(x) .≥ 0) == false 
         @warn "Initial data should be in the upper half complex plane"

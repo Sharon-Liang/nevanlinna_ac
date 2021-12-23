@@ -21,7 +21,7 @@ end
     output y: -G(iωn) for fermions
               -iiωn*G(iωn) for bosons
 """
-function toNevanlinnadata(x::Vector, y::Vector, type::Symbol)
+function toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::Symbol)
     x = 1.0im * x
     if type == :f
         y = -y
@@ -39,19 +39,19 @@ end
     for bosons, it is ωA(ω)
 """
 function spectrum(ω::Vector{T} where T<:Real, η::Real, 
-    x::Vector, y::Vector, type::Symbol;
+    x::AbstractVector, y::AbstractVector, type::Symbol;
     optim = :none)
     x, y = toNevanlinnadata(x,y,type)
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     type == :f ? name = "A(ω)" : name = "ωA(ω)"
-    z = ω .+ 1.0im * η
+    z = ω .+ 1.0im * η |> Ctype
     res = [nevanlinna(i, x, y, optim=optim) for i in z]
     res = imag.(2*res)
     return res, name
 end
 
 function spectrum(ω::Real, η::Real, 
-    x::Vector, y::Vector, type::Symbol;
+    x::AbstractVector, y::AbstractVector, type::Symbol;
     optim = :none)
     return spectrum([ω], η, x, y, type, optim = optim)
 end

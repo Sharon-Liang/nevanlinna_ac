@@ -2,7 +2,7 @@
     Identity matrix
 """
 function eye(n::Int64)
-    return Matrix{Float64}(I,n,n)
+    return Matrix{Ftype}(I,n,n)
 end
 
 function eye(dtype::DataType, n::Int64)

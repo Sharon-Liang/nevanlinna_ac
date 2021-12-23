@@ -20,6 +20,9 @@ export pick_matrix,
 export readGF, toNevanlinnadata,
        spectrum
 
+Ftype = BigFloat
+Ctype = Complex{Ftype}
+
 include("utilities.jl")
 include("optim.jl")
 include("interpolate.jl")
