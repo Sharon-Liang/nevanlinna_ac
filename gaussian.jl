@@ -4,96 +4,95 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ a03fbe02-8cb1-4cfc-92f1-0bc2163a4160
 begin
 	using Pkg; Pkg.activate("./")
 	using nevanlinna_ac
 	using Plots
 	using DelimitedFiles
+	using Printf
 	"packages"
 end
+
+# ╔═╡ 4912866a-e93f-4c52-971f-677d4dab2a26
+@bind n1 html"<input type=range min=1 max=40 step=1>"
 
 # ╔═╡ 08862677-7f44-4325-ba74-b42d40e307ab
 begin
 	A1 = readdlm("./data/gaussian/A_delta_eta_0.05.txt")
-	d1 = readdlm("./data/gaussian/giwn_delta_eta_0.05.txt")
-	x1 = d1[:,1]
-	y1 = d1[:,2] .+ 1.0im*d1[:,3]
-	x1 = x1 |> reverse
-	y1 = y1 |> reverse
+	x1, y1 = readGF("./data/gaussian/giwn_delta_eta_0.05.txt", rev=false, num = n1)
 	"delta function spectrum"
 end
 
-# ╔═╡ 859f5f5a-02fa-4efd-8f23-5d4a1860d008
-num = 21
-
 # ╔═╡ e491e00e-bbf3-47ee-92fa-b13518efe869
 begin
-	x1n, y1n = toNevanlinnadata(x1[1:num], y1[1:num],:f)
+	x1n, y1n = toNevanlinnadata(x1, y1, :f)
 	isNevanlinnasolvable(x1n,y1n)
 end
 
 # ╔═╡ ee2bd9df-7355-4bce-b3a7-7a91efc4e91a
 begin
-	A1n, name = spectrum(A1[:,1],0.05,x1[1:num],y1[1:num],:f)
+	A1n, name = spectrum(A1[:,1],0.05,x1,y1,:f)
 	plot(A1[:,1], A1[:,2], lw = 2, label="theory")
-	plot!(A1[:,1], A1n, line=(:dash,2), label="nevanlinna")
+	plot!(A1[:,1], A1n, line=(:dash,2), label=@sprintf "nevanlinna, n=%i" n1)
 	plot!(xlabel="ω", ylabel=name)
 end
+
+# ╔═╡ f10b4706-8c54-4549-a38a-63a2c8ef22d3
+@bind n2 html"<input type=range min=1 max=40 step=1>"
 
 # ╔═╡ 87cc2e29-fe91-45c0-b609-385bff1756c8
 begin
 	A2 = readdlm("./data/gaussian/A_gaussian_1.txt")
-	d2 = readdlm("./data/gaussian/giwn_gaussian_1.txt")
-	x2 = d2[:,1]
-	y2 = d2[:,2] .+ 1.0im*d2[:,3]
-	x2 = x2 |> reverse
-	y2 = y2 |> reverse
+	x2, y2 = readGF("./data/gaussian/giwn_gaussian_1.txt", num=n2)
 	"single gaussian function spectrum"
 end
 
-# ╔═╡ 02012e17-a7d3-47ef-b706-5bcd85978757
-ng1 = 40
-
 # ╔═╡ bca8dbc4-ab81-4f5c-9969-cde1c5ee981a
 begin
-	x2n, y2n = toNevanlinnadata(x2[1:ng1], y1[1:ng1],:f)
+	x2n, y2n = toNevanlinnadata(x2, y2 ,:f)
 	isNevanlinnasolvable(x2n,y2n)
 end
 
 # ╔═╡ dea33c6f-8c10-4adc-928d-067ed97d3159
 begin
-	A2n, _ = spectrum(A2[:,1],0.05,x2[1:ng1],y2[1:ng1],:f)
+	A2n, _ = spectrum(A2[:,1],0.05,x2,y2,:f)
 	plot(A2[:,1], A2[:,2], lw = 2, label="theory")
-	plot!(A2[:,1], A2n, line=(:dash,2), label="nevanlinna")
+	plot!(A2[:,1], A2n, line=(:dash,2), label=@sprintf "nevanlinna, n=%i" n2)
 	plot!(xlabel="ω", ylabel=name)
 end
+
+# ╔═╡ aaa9e66c-40f1-4f66-bf1f-2bf4b134cfe0
+@bind n3 html"<input type=range min=1 max=40 step=1>"
 
 # ╔═╡ 49517ab2-fb41-403d-8dde-0f47c56676e2
 begin
 	A3 = readdlm("./data/gaussian/A_gaussian_3.txt")
-	d3 = readdlm("./data/gaussian/giwn_gaussian_3.txt")
-	x3 = d3[:,1]
-	y3 = d3[:,2] .+ 1.0im*d3[:,3]
-	x3 = x3 |> reverse
-	y3 = y3 |> reverse
+	x3, y3 = readGF("./data/gaussian/giwn_gaussian_3.txt", rev=true, num=n3)
 	"multi gaussian function spectrum"
 end
 
-# ╔═╡ a8fa541d-d41d-4466-b8ae-2b4ca91b7193
-ng2 = 40
-
 # ╔═╡ 83631e80-e07b-483e-8b47-08928bee91af
 begin
-	x3n, y3n = toNevanlinnadata(x3[1:ng2], y3[1:ng2],:f)
+	x3n, y3n = toNevanlinnadata(x3, y3,:f)
 	isNevanlinnasolvable(x3n,y3n)
 end
 
 # ╔═╡ 580e257c-9ccf-405f-b9ee-0db0470ebaa2
 begin
-	A3n, _ = spectrum(A3[:,1],0.05,x3[1:ng2],y3[1:ng2],:f)
+	A3n, _ = spectrum(A3[:,1],0.05,x3,y3,:f)
 	plot(A3[:,1], A3[:,2], lw = 2, label="theory")
-	plot!(A3[:,1], A3n, line=(:dash,2), label="nevanlinna")
+	plot!(A3[:,1], A3n, line=(:dash,2), label=@sprintf "nevanlinna, n=%i" n3)
 	plot!(xlabel="ω", ylabel=name)
 end
 
@@ -101,17 +100,17 @@ end
 pwd()
 
 # ╔═╡ Cell order:
-# ╟─08862677-7f44-4325-ba74-b42d40e307ab
-# ╟─859f5f5a-02fa-4efd-8f23-5d4a1860d008
-# ╠═e491e00e-bbf3-47ee-92fa-b13518efe869
+# ╠═08862677-7f44-4325-ba74-b42d40e307ab
+# ╟─e491e00e-bbf3-47ee-92fa-b13518efe869
+# ╠═4912866a-e93f-4c52-971f-677d4dab2a26
 # ╠═ee2bd9df-7355-4bce-b3a7-7a91efc4e91a
-# ╠═87cc2e29-fe91-45c0-b609-385bff1756c8
-# ╠═02012e17-a7d3-47ef-b706-5bcd85978757
-# ╠═bca8dbc4-ab81-4f5c-9969-cde1c5ee981a
+# ╟─87cc2e29-fe91-45c0-b609-385bff1756c8
+# ╟─bca8dbc4-ab81-4f5c-9969-cde1c5ee981a
+# ╠═f10b4706-8c54-4549-a38a-63a2c8ef22d3
 # ╠═dea33c6f-8c10-4adc-928d-067ed97d3159
-# ╟─49517ab2-fb41-403d-8dde-0f47c56676e2
-# ╟─a8fa541d-d41d-4466-b8ae-2b4ca91b7193
+# ╠═49517ab2-fb41-403d-8dde-0f47c56676e2
 # ╟─83631e80-e07b-483e-8b47-08928bee91af
+# ╟─aaa9e66c-40f1-4f66-bf1f-2bf4b134cfe0
 # ╟─580e257c-9ccf-405f-b9ee-0db0470ebaa2
 # ╟─a03fbe02-8cb1-4cfc-92f1-0bc2163a4160
 # ╟─7b4d617c-62f9-11ec-2ea6-9937cf302a50
