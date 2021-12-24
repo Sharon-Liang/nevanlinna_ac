@@ -44,8 +44,11 @@ function spectrum(ω::Vector{T} where T<:Real, η::Real,
     x, y = toNevanlinnadata(x,y,type)
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     type == :f ? name = "A(ω)" : name = "ωA(ω)"
-    z = ω .+ 1.0im * η |> Ctype
-    res = [nevanlinna(i, x, y, optim=optim) for i in z]
+    z = ω .+ 1.0im * η
+    res = zeros(Ctype, length(ω))
+    for i = 1:length(ω)
+        res[i] = nevanlinna(z[i], x, y, optim=optim) 
+    end
     res = imag.(2*res)
     return res, name
 end

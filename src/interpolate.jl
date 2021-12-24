@@ -141,6 +141,14 @@ function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector;
     end
 end
 
+function generalized_schur(z::AbstractArray, x::AbstractVector, y::AbstractVector;
+    optim::Symbol = :none)
+    res = similar(z, Ctype)
+    for i=1:length(z)
+        res[i] = generalized_schur(z[i], x, y, optim=optim)
+    end
+    return res
+end
 
 """
     Nevanlinna Interpolation algorithm
@@ -157,4 +165,11 @@ function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector;
     return imti(res)
 end
 
-
+function nevanlinna(z::AbstractArray, x::AbstractVector, y::AbstractVector;
+    optim::Symbol = :none)
+    res = similar(z, Ctype)
+    for i=1:length(z)
+        res[i] = nevanlinna(z[i], x, y, optim=optim)
+    end
+    return res
+end
