@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: nevanlinna.aux
+The style file: unsrt.bst
+Database file #1: nevanlinnaNotes.bib
+Warning--entry type for "Note1" isn't style-file defined
+--line 1 of file nevanlinnaNotes.bib
+Database file #2: nevanlinna.bib
+Warning--I didn't find a database entry for ""
+You've used 12 entries,
+            1791 wiz_defined-function locations,
+            521 strings with 5714 characters,
+and the built_in function-call counts, 2300 in all, are:
+= -- 208
+> -- 77
+< -- 0
++ -- 32
+- -- 20
+* -- 146
+:= -- 367
+add.period$ -- 34
+call.type$ -- 12
+change.case$ -- 8
+chr.to.int$ -- 0
+cite$ -- 12
+duplicate$ -- 103
+empty$ -- 250
+format.name$ -- 20
+if$ -- 504
+int.to.chr$ -- 0
+int.to.str$ -- 12
+missing$ -- 12
+newline$ -- 61
+num.names$ -- 11
+pop$ -- 38
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 36
+stack$ -- 0
+substring$ -- 162
+swap$ -- 13
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 24
+width$ -- 14
+write$ -- 123
+(There were 2 warnings)

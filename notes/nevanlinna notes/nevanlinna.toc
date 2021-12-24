@@ -1,0 +1,19 @@
+\contentsline {title}{Notes: Nevanlinna analytical Continuation Method}{1}{section*.2}%
+\contentsline {abstract}{Abstract}{1}{section*.1}%
+\tocdepth@munge 
+\contentsline {section}{\numberline {}Contents}{1}{section*.3}%
+\tocdepth@restore 
+\contentsline {section}{\numberline {I}The analytic continuation problem}{2}{section*.4}%
+\contentsline {section}{\numberline {II}How to solve?}{2}{section*.5}%
+\contentsline {section}{\numberline {III}Nevanlinna analytic continuation method}{2}{section*.6}%
+\contentsline {subsection}{\numberline {A}Schur Algorithm}{3}{section*.7}%
+\contentsline {subsection}{\numberline {B}Generalized Schur Algorithm}{4}{section*.8}%
+\contentsline {subsection}{\numberline {C}Interpolation of Green's functions}{5}{section*.9}%
+\contentsline {subsubsection}{\numberline {1}Fermionic case}{6}{section*.10}%
+\contentsline {subsubsection}{\numberline {2}Bosonic case}{7}{section*.11}%
+\contentsline {section}{\numberline {IV}Hardy basis optimization}{8}{section*.12}%
+\appendix 
+\contentsline {section}{\numberline {A}Conformal transforms}{8}{section*.13}%
+\contentsline {subsection}{\numberline {1}The linear fractional transform}{8}{section*.14}%
+\contentsline {subsection}{\numberline {2}The Mobius transform}{8}{section*.15}%
+\contentsline {section}{\numberline {}References}{9}{section*.16}%
