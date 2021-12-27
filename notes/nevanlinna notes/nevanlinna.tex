@@ -238,7 +238,7 @@ There is a freedom to choose $s_{N+1}(z)$.
 The inverse relation of \label{eq:recursive-s} is
 \begin{equation}\label{eq:inv-recursive-s}
 	s_N(z) 
-	= \frac{c_N(z) s_1(z) - a_N(z)}{-d_N(z) s_1(z) + b_N(z)}
+	= \frac{-d_N(z) s_1(z) + b_N(z)}{c_N(z) s_1(z) - a_N(z)}
 \end{equation}
 where we define $s(z) \equiv s_1(z)$.
 
@@ -252,14 +252,14 @@ The first step of the recursion gives:
 $\therefore  \gamma_1 = s_1(\Y_1) = \C_1$. and 
 \begin{equation}
 	s_2(z) 
-	= \frac{\gamma_1^* \xi(z, \Y_1) s_1(z) - \xi(z, \Y_1) }
-		{ -s_1(z) + \gamma_1}
+	= \frac{-s_1(z) + \gamma_1}
+		{\gamma_1^* \xi(z, \Y_1) s_1(z) - \xi(z, \Y_1) }
 \end{equation}
 $\therefore \gamma_2 = s_2(\Y_2) 
-= \frac{\gamma_1^* \xi(\Y_2, \Y_1) s_1(\Y_2) - \xi(\Y_2, \Y_1) }
-{ -s_1(\Y_2) + \gamma_1} 
-= \frac{\C_1^* \xi(\Y_2, \Y_1) \C_2 - \xi(\Y_2, \Y_1) }
-{ -C_2 + \C_1}$.
+= \frac{-s_1(\Y_2) + \gamma_1} 
+	{\gamma_1^* \xi(\Y_2, \Y_1) s_1(\Y_2) - \xi(\Y_2, \Y_1) }
+= \frac{-C_2 + \C_1}
+	{\C_1^* \xi(\Y_2, \Y_1) \C_2 - \xi(\Y_2, \Y_1) }$.
 
 For the $j$-th ($j \geq 3$) step of the recursion:
 \begin{equation}
@@ -292,10 +292,10 @@ Then $\gamma_{j+1}$ reads:
 \begin{align}
 \begin{split}
 	\gamma_{j+1} &= s_{j+1}(\Y_{j+1}) 
-	= \frac{c_j(\Y_{j+1}) s_1(\Y_{j+1}) - a_j(\Y_{j+1})}
-	{-d_j(\Y_{j+1}) s_1(\Y_{j+1}) + b_j(\Y_{j+1})} \\
-	&= \frac{c_j(\Y_{j+1}) \C_{j+1} - a_j(\Y_{j+1})}
-	{-d_j(\Y_{j+1}) \C_{j+1} + b_j(\Y_{j+1})}
+	= \frac{-d_j(\Y_{j+1}) s_1(\Y_{j+1}) + b_j(\Y_{j+1})} 
+		{c_j(\Y_{j+1}) s_1(\Y_{j+1}) - a_j(\Y_{j+1})}\\
+	&= \frac{-d_j(\Y_{j+1}) \C_{j+1} + b_j(\Y_{j+1})}
+		{c_j(\Y_{j+1}) \C_{j+1} - a_j(\Y_{j+1})}
 \end{split}
 \end{align}
 
@@ -410,8 +410,9 @@ there is a alse freedom to choose $\theta_N(z)$. And we have:
 	&\gamma_1 = \theta(\Y_1) = C_1 \\
 	\label{eq:schur-parameter-2}
 	&\gamma_j = \theta_j(\Y_j)
-	= \frac{c_{j-1}(\Y_j) \C_j - a_{j-1}(\Y_j)}
-	{-d_{j-1}(\Y_j) \C_j + b_{j-1}(\Y_j)}, \ j>1
+	= \frac{-d_{j-1}(\Y_j) \C_j + b_{j-1}(\Y_j)}
+		{c_{j-1}(\Y_j) \C_j - a_{j-1}(\Y_j)}
+		, \ j>1
 \end{align}
 
 
