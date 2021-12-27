@@ -153,7 +153,7 @@ one can construct a unique Schur function $s_0(z)$ by means of a continued
 fraction algorithm. In which we use the inverse relation of
 \cref{eq:schur-function-recursion}
 \begin{equation}\label{eq:inv-schur-function-recursion}
-	s_j(z) = \frac{\gamma_j + zs_{j+1(z)}}{1 + \gamma_j^* z s_j(z)}
+	s_j(z) = \frac{\gamma_j + zs_{j+1}(z)}{1 + \gamma_j^* z s_{j+1}(z)}
 \end{equation}
 to construct the $n$-th Schur approximant, 
 which we will denote by 
@@ -170,33 +170,142 @@ where $j = n-1, n-2, \dots, 1, 0$.
 
 Given the initial data consisting of $N$ points 
 $\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \D$ and target data
-$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \subset \D$, 
+$\{\C_0, \C_1, \dots ,\C_{N-1}\} \subset \D$, 
 we can find a holomorphic function $s(z): \D \to \Dbar$ 
-such that $s(\Y_j) = \gamma_j$ for all $j$ by combining 
+such that $s(\Y_j) = \C_j$ for all $j$ by combining 
 \cref{eq:schur-continued-fraction-1}, \cref{eq:schur-continued-fraction-2} 
-and the linear fractional transform 
-$\xi(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}$:
+and the linear fractional transform:
+\begin{equation}\label{eq:lf-transform}
+	\xi(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}
+\end{equation}
+and $s(z)$ has the following recursion relation:
+\begin{equation}\label{eq:inv-schur-function-recursion-another-s}
+	s_j(z) 
+	= \frac{\gamma_j + \xi(z, \Y_j) s_{j+1}(z) }
+		{1 + \gamma_j^* \xi(z, \Y_j) s_{j+1}(z)}
+\end{equation}
+where $\gamma_j = s_j(\Y_j)$.
+\begin{proof}
+	\cref{eq:lf-transform} builds a one to one correspondence of 
+	a Schur function $s(z)$ with another Schur function $\tilde{s}(z)$.
+	\begin{equation}\label{eq:s-s-relation}
+		\tilde{s}(\xi^{-1}(z, \Y)) = s(z), \ 
+		\mathrm{or} \ s(\xi(z, \Y)) = \tilde{s}(z)
+	\end{equation}
+	From \cref{eq:s-s-relation}, we have:
+	\begin{equation}\label{eq:s-s-relation-z0}
+		\gamma_j = s_j(0) = \tilde{s}_j(\xi^{-1}(0, \Y)) 
+			= \tilde{s}_j(\Y_j)
+	\end{equation}
+	inserting \cref{eq:s-s-relation} and \cref{eq:s-s-relation-z0}
+	to \cref{eq:inv-schur-function-recursion}, we have: 
+	\begin{equation}
+		\tilde{s}_j(\xi^{-1}(z, \Y_j)) 
+		= \frac{\gamma_j + z \tilde{s}_{j+1}(\xi^{-1}(z, \Y_j)) }
+			{1 + \gamma_j^* z \tilde{s}_{j+1}(\xi^{-1}(z, \Y_j))}
+	\end{equation}
+	replace $\xi^{-1}(z, \Y_j) \in \D$ by $\tilde{z} \in D$, we have:
+	\begin{equation}
+		\tilde{s}_j(\tilde{z}) 
+		= \frac{\gamma_j + \xi(\tilde{z}, \Y_j) \tilde{s}_{j+1}(\tilde{z}) }
+			{1 + \gamma_j^* \xi(\tilde{z}, \Y_j) \tilde{s}_{j+1}(\tilde{z})}
+	\end{equation}
+\end{proof}
+The recursive final $s(z)$ can be conveniently be written in a matrix
+form:
+\begin{equation}\label{eq:recursive-s}
+	s(z)[z, s_{N+1}(z)] 
+	= \frac{a_N(z) s_{N+1}(z) + b_N(z)}{c_N(z) s_{N+1}(z) + d_N(z)}
+\end{equation}
+where
+\begin{equation}\label{eq:factor-matrix-schur}
+	\left(
+		\begin{matrix}
+			a_N(z) & b_N(z) \\
+			c_N(z) & d_N(z)
+		\end{matrix}
+	\right)
+	= \prod_{j=1}^{N}
+	\left(
+		\begin{matrix}
+			\xi(z, \Y_j)            & \gamma_j \\
+			\gamma_j^* \xi(z, \Y_j) & 1
+		\end{matrix}
+	\right)
+\end{equation}
+with $j$ increasing from left to right. 
+There is a freedom to choose $s_{N+1}(z)$. 
+The inverse relation of \label{eq:recursive-s} is
+\begin{equation}\label{eq:inv-recursive-s}
+	s_N(z) 
+	= \frac{c_N(z) s_1(z) - a_N(z)}{-d_N(z) s_1(z) + b_N(z)}
+\end{equation}
+where we define $s(z) \equiv s_1(z)$.
+
+Now we disscuss a little more about the calculation of $\gamma_j$.
+The first step of the recursion gives:
+\begin{equation}
+	s(z)\equiv s_1(z) 
+	= \frac{\xi(z, \Y_1) s_{2}(z) + \gamma_1 }
+		{\gamma_1^* \xi(z, \Y_1) s_{2}(z) + 1}
+\end{equation}
+$\therefore  \gamma_1 = s_1(\Y_1) = \C_1$. and 
+\begin{equation}
+	s_2(z) 
+	= \frac{\gamma_1^* \xi(z, \Y_1) s_1(z) - \xi(z, \Y_1) }
+		{ -s_1(z) + \gamma_1}
+\end{equation}
+$\therefore \gamma_2 = s_2(\Y_2) 
+= \frac{\gamma_1^* \xi(\Y_2, \Y_1) s_1(\Y_2) - \xi(\Y_2, \Y_1) }
+{ -s_1(\Y_2) + \gamma_1} 
+= \frac{\C_1^* \xi(\Y_2, \Y_1) \C_2 - \xi(\Y_2, \Y_1) }
+{ -C_2 + \C_1}$.
+
+For the $j$-th ($j \geq 3$) step of the recursion:
+\begin{equation}
+	s_1(z) 
+	= \frac{a_j(z) s_{j+1}(z) + b_j(z)}{c_j(z) s_{j+1}(z) + d_j(z)}
+\end{equation}
+where
+\begin{equation}
+	\left(
+		\begin{matrix}
+			a_j(z) & b_j(z) \\
+			c_j(z) & d_j(z)
+		\end{matrix}
+	\right)
+	= \prod_{k=1}^{j}
+	\left(
+		\begin{matrix}
+			\xi(z, \Y_k)            & \gamma_k \\
+			\gamma_k^* \xi(z, \Y_k) & 1
+		\end{matrix}
+	\right)
+\end{equation}
+and $\gamma_k$ as well as $	\left(
+	\begin{matrix}
+		a_j(z) & b_j(z) \\
+		c_j(z) & d_j(z)
+	\end{matrix}
+\right)$ are calculated in previous steps. 
+Then $\gamma_{j+1}$ reads:
 \begin{align}
-	\label{eq:schur-interpolation-1}
-	&s_{N-1}(z;\gamma_{N-1}) 
-		= \frac{\gamma_{N-1} + \xi(z,\Y_{N-1})s_N(z)}
-			{1 + \gamma_{N-1}^*\xi(z,\Y_{N-1})s_N(z)} \\
-	\label{eq:schur-interpolation-2}
-	&s_j(z;\gamma_j,\gamma_{j+1},\dots \gamma_N) 
-		= \frac{\gamma_j + \xi(z,\Y_{j})s_{j+1}(z;\gamma_{j+1},\dots \gamma_N)}
-			{1 + \gamma_j^* \xi(z,\Y_{j})s_{j+1}(z;\gamma_{k+1},\dots \gamma_N)}
+\begin{split}
+	\gamma_{j+1} &= s_{j+1}(\Y_{j+1}) 
+	= \frac{c_j(\Y_{j+1}) s_1(\Y_{j+1}) - a_j(\Y_{j+1})}
+	{-d_j(\Y_{j+1}) s_1(\Y_{j+1}) + b_j(\Y_{j+1})} \\
+	&= \frac{c_j(\Y_{j+1}) \C_{j+1} - a_j(\Y_{j+1})}
+	{-d_j(\Y_{j+1}) \C_{j+1} + b_j(\Y_{j+1})}
+\end{split}
 \end{align}
-where $j = N-2, N-3, \dots, 1, 0$ and $s_0(z) \equiv s(z)$. In \cref{eq:schur-interpolation-1}, 
-we notice that there is an degrees of freedom to choose an 
-arbitrary $s_N(z) \in \mathcal{S}$, \cref{eq:schur-continued-fraction-1} 
-correponds the special case $s_{n+1}(z) = 0$.
+
 
 G. Pick and R. Nevanlinna studied the interpolation problem 
 independently in 1917\cite{Pick1917} and 1919\cite{nevanlinna1919uber} 
 respectively, showing that an 
 interpolating function exists if and only if the Pick matrix
 \begin{equation}\label{eq:pick-matrix-origional}
-	P_{jk} = \frac{1-\gamma_k^* \gamma_j}{1 - \Y_j^* \Y_k}
+	P_{jk} = \frac{1-\C_k^* \C_j}{1 - \Y_j^* \Y_k}
 \end{equation}
 is positive semi-definite. Furthermore, the function $s(z)$ is 
 unique if and only if the Pick matrix has zero determinant. It 
@@ -216,9 +325,9 @@ to $\Dbar$.
 
 Given the initial data consisting of $N$ points 
 $\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \C^+$ and target data
-$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \subset \Dbar$, 
+$\{\C_0, \C_1, \dots ,\C_{N-1}\} \subset \Dbar$, 
 in order to find a holomorphic function $\theta(z) \in \B$ 
-such that $\theta(\Y_j) = z_j$ for all $j$, we should make use 
+such that $\theta(\Y_j) = \C_j$ for all $j$, we should make use 
 of the Mobius transform $h(z, \Y)  = \frac{z - \Y}{z - \Y^*}$ 
 which maps $\C^+/\Cbar^+$ to $\D/\Dbar$, 
 which means it estabishes a one-to-one correspondence of $\theta(z)$ 
@@ -233,7 +342,8 @@ The recursion relation between $\theta_j(z)$ and the next contractive
 function $\theta_{j+1}(z)$ can be easily build as follows. From 
 \cref{eq:s-theta-relation}, we have:
 \begin{equation}\label{eq:s-theta-relation-z0}
-	s_j(0) = \theta_j(h_j^{-1}(0)) = \theta_j(\Y_j) = \gamma_j
+	\gamma_j = s_j(0) = \theta_j(h_j^{-1}(0)) 
+		= \theta_j(\Y_j) = \gamma_j
 \end{equation}
 Let $\theta_{j+1}(z) = s_{j+1}(h_j(z))$,
 then use the recursion relation 
@@ -294,7 +404,15 @@ where
 	\right)
 \end{equation}
 with j increasing from left to right. Like in \cref{eq:schur-continued-fraction-1}, 
-there is a alse freedom to choose $\theta_N(z)$.
+there is a alse freedom to choose $\theta_N(z)$. And we have:
+\begin{align}
+	\label{eq:schur-parameter-1}
+	&\gamma_1 = \theta(\Y_1) = C_1 \\
+	\label{eq:schur-parameter-2}
+	&\gamma_j = \theta_j(\Y_j)
+	= \frac{c_{j-1}(\Y_j) \C_j - a_{j-1}(\Y_j)}
+	{-d_{j-1}(\Y_j) \C_j + b_{j-1}(\Y_j)}, \ j>1
+\end{align}
 
 
 %=====================================================================

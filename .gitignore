@@ -27,4 +27,4 @@ References/run/*.txt
 References/run/*.h
 References/run/*.cpp
 
-*.DS_Store
+.DS_Store
