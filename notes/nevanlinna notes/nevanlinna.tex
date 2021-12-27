@@ -170,12 +170,14 @@ where $j = n-1, n-2, \dots, 1, 0$.
 
 Given the initial data consisting of $N$ points 
 $\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \D$ and target data
-$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \subset \D$, 
+$\{\C_0, \C_1, \dots ,\C_{N-1}\} \subset \D$, 
 we can find a holomorphic function $s(z): \D \to \Dbar$ 
-such that $s(\Y_j) = \gamma_j$ for all $j$ by combining 
+such that $s(\Y_j) = \C_j$ for all $j$ by combining 
 \cref{eq:schur-continued-fraction-1}, \cref{eq:schur-continued-fraction-2} 
-and the linear fractional transform 
-$\xi(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}$:
+and the linear fractional transform:
+\begin{equation}\label{eq:lf-transform}
+	\xi(z, \Y_j) = \frac{z - \Y_j}{1 - z\Y_j^*}
+\end{equation}
 \begin{align}
 	\label{eq:schur-interpolation-1}
 	&s_{N-1}(z;\gamma_{N-1}) 
@@ -216,7 +218,7 @@ to $\Dbar$.
 
 Given the initial data consisting of $N$ points 
 $\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \C^+$ and target data
-$\{\gamma_0, \gamma_1, \dots ,\gamma_{N-1}\} \subset \Dbar$, 
+$\{\C_0, \C_1, \dots ,\C_{N-1}\} \subset \Dbar$, 
 in order to find a holomorphic function $\theta(z) \in \B$ 
 such that $\theta(\Y_j) = z_j$ for all $j$, we should make use 
 of the Mobius transform $h(z, \Y)  = \frac{z - \Y}{z - \Y^*}$ 
