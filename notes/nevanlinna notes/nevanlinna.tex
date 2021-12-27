@@ -292,9 +292,9 @@ Then $\gamma_{j+1}$ reads:
 \begin{align}
 \begin{split}
 	\gamma_{j+1} &= s_{j+1}(\Y_{j+1}) 
-	= \frac{c_j(\Y_{j+1}) s_1(\Y_{j+1}) - a_N(\Y_{j+1})}
+	= \frac{c_j(\Y_{j+1}) s_1(\Y_{j+1}) - a_j(\Y_{j+1})}
 	{-d_j(\Y_{j+1}) s_1(\Y_{j+1}) + b_j(\Y_{j+1})} \\
-	&= \frac{c_j(\Y_{j+1}) \C_{j+1} - a_N(\Y_{j+1})}
+	&= \frac{c_j(\Y_{j+1}) \C_{j+1} - a_j(\Y_{j+1})}
 	{-d_j(\Y_{j+1}) \C_{j+1} + b_j(\Y_{j+1})}
 \end{split}
 \end{align}
@@ -404,7 +404,15 @@ where
 	\right)
 \end{equation}
 with j increasing from left to right. Like in \cref{eq:schur-continued-fraction-1}, 
-there is a alse freedom to choose $\theta_N(z)$.
+there is a alse freedom to choose $\theta_N(z)$. And we have:
+\begin{align}
+	\label{eq:schur-parameter-1}
+	&\gamma_1 = \theta(\Y_1) = C_1 \\
+	\label{eq:schur-parameter-2}
+	&\gamma_j = \theta_j(\Y_j)
+	= \frac{c_{j-1}(\Y_j) \C_j - a_{j-1}(\Y_j)}
+	{-d_{j-1}(\Y_j) \C_j + b_{j-1}(\Y_j)}, \ j>1
+\end{align}
 
 
 %=====================================================================

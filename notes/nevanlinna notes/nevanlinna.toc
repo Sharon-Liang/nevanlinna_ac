@@ -8,12 +8,12 @@
 \contentsline {section}{\numberline {III}Nevanlinna analytic continuation method}{2}{section*.6}%
 \contentsline {subsection}{\numberline {A}Schur Algorithm}{3}{section*.7}%
 \contentsline {subsection}{\numberline {B}Generalized Schur Algorithm}{5}{section*.8}%
-\contentsline {subsection}{\numberline {C}Interpolation of Green's functions}{6}{section*.9}%
+\contentsline {subsection}{\numberline {C}Interpolation of Green's functions}{7}{section*.9}%
 \contentsline {subsubsection}{\numberline {1}Fermionic case}{8}{section*.10}%
 \contentsline {subsubsection}{\numberline {2}Bosonic case}{8}{section*.11}%
 \contentsline {section}{\numberline {IV}Hardy basis optimization}{9}{section*.12}%
 \appendix 
 \contentsline {section}{\numberline {A}Conformal transforms}{9}{section*.13}%
 \contentsline {subsection}{\numberline {1}The linear fractional transform}{9}{section*.14}%
-\contentsline {subsection}{\numberline {2}The Mobius transform}{9}{section*.15}%
+\contentsline {subsection}{\numberline {2}The Mobius transform}{10}{section*.15}%
 \contentsline {section}{\numberline {}References}{10}{section*.16}%
