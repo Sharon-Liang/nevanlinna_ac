@@ -107,7 +107,7 @@ end
     y1 within a unit circle
 """
 function schur_parameter(x::AbstractVector, y::AbstractVector)
-    M = length(y) ; dtype = eltype(x)
+    M = length(y) ; dtype = eltype(y)
     ϕ = zeros(dtype, M); ϕ[1] = y[1]
     abcd = fill(eye(dtype,2), M)
     abcd_out = fill(zeros(dtype,2,2), M-1, M)
