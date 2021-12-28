@@ -3,15 +3,17 @@
 """
 function readGF(path::String; rev::Bool=true, num::Integer = 100)
     d = readdlm(path)
-    x = d[:,1]
-    y = d[:,2] + 1.0im * d[:,3]
+    I
+    x = Ftype.(d[:,1]) 
+    y = Ftype.(d[:,2]) + 1.0im * d[:,3]
     num = min(length(x), num)
     x1, y1 = x[1:num], y[1:num]
     if rev == true
         x1 = reverse(x1); y1=reverse(y1)
     end
-    return x1, y1
+    return Ctype.(x1), Ctype.(y1)
 end
+
 
 """
     Convert Masubara frequency Green's data to Nevanlinna data
@@ -23,7 +25,7 @@ end
               -iiωn*G(iωn) for bosons
 """
 function toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::Symbol)
-    x = 1.0im * x
+    x = one(Ctype)im * x
     if type == :f
         y = -y
     elseif type == :b

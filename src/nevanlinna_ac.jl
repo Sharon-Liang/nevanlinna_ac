@@ -1,12 +1,10 @@
 module nevanlinna_ac
 __precompile__()
 
-#setprecision(BigFloat, 128)
-#BigFloat defalt precision 256
-
 using LinearAlgebra
 using DelimitedFiles
 using Printf
+using DoubleFloats
 
 export eye, ispossemidef
 export linear_fractional_transform, lft,
@@ -22,9 +20,14 @@ export coefficient,
        recursion, inv_recursion
 export readGF, toNevanlinnadata,
        spectrum
+export Ftype, Ctype
 
-Ftype = BigFloat
-Ctype = Complex{Ftype}
+#setprecision(BigFloat, 128)
+#BigFloat defalt precision 256
+
+#const Ftype = BigFloat
+const Ftype = Double64
+const Ctype = Complex{Ftype}
 
 include("utilities.jl")
 include("optim.jl")
