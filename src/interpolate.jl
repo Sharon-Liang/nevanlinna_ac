@@ -101,7 +101,7 @@ end
 
 """
     core: evaluate 'Schur parameters' for contractive functions
-    {y} within a unit circle
+    y1 within a unit circle
 """
 function schur_parameter(x::AbstractVector, y::AbstractVector)
     M = length(y) 
@@ -113,6 +113,10 @@ function schur_parameter(x::AbstractVector, y::AbstractVector)
             abcd[k] *= prod
         end
         ϕ[j+1] = inv_recursion(abcd[j+1], y[j+1])
+        if abs(ϕ[j+1]) ≥ 1.0 
+            msg = @sprintf "%i-th Schur parameter ≥ 1 with absolute value: %.5f" j+1 abs(ϕ[j+1])
+            @warn msg
+        end
     end
     return ϕ
 end

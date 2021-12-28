@@ -6,6 +6,7 @@ __precompile__()
 
 using LinearAlgebra
 using DelimitedFiles
+using Printf
 
 export eye, ispossemidef
 export linear_fractional_transform, lft,
@@ -17,6 +18,8 @@ export pick_matrix,
        schur_parameter,
        generalized_schur,
        nevanlinna 
+export coefficient,
+       recursion, inv_recursion
 export readGF, toNevanlinnadata,
        spectrum
 

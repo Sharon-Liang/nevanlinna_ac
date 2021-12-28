@@ -5,11 +5,12 @@ function readGF(path::String; rev::Bool=true, num::Integer = 100)
     d = readdlm(path)
     x = d[:,1]
     y = d[:,2] + 1.0im * d[:,3]
-    if rev == true
-        x = reverse(x); y=reverse(y)
-    end
     num = min(length(x), num)
-    return x[1:num], y[1:num]
+    x1, y1 = x[1:num], y[1:num]
+    if rev == true
+        x1 = reverse(x1); y1=reverse(y1)
+    end
+    return x1, y1
 end
 
 """
