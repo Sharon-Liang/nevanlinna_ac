@@ -18,7 +18,7 @@ export pick_matrix,
        nevanlinna 
 export coefficient,
        recursion, inv_recursion
-export readGF, toNevanlinnadata,
+export readGF, toNevanlinnadata, toGeneralizedSchurdata,
        spectrum
 export Ftype, Ctype
 

@@ -3,15 +3,18 @@
 """
 function readGF(path::String; rev::Bool=true, num::Integer = 100)
     d = readdlm(path)
-    I
     x = Ftype.(d[:,1]) 
-    y = Ftype.(d[:,2]) + 1.0im * d[:,3]
+    y = Ftype.(d[:,2]) + one(Ftype)im * Ftype.(d[:,3])
+    if eltype(y) != Ctype 
+        msg = @sprintf "Date type is %s, should be %s" string(eltype(y)) string(Ctype)
+        @warn msg
+    end
     num = min(length(x), num)
     x1, y1 = x[1:num], y[1:num]
     if rev == true
         x1 = reverse(x1); y1=reverse(y1)
     end
-    return Ctype.(x1), Ctype.(y1)
+    return x1, y1
 end
 
 
@@ -25,7 +28,7 @@ end
               -iiωn*G(iωn) for bosons
 """
 function toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::Symbol)
-    x = one(Ctype)im * x
+    x = one(eltype(x))im * x
     if type == :f
         y = -y
     elseif type == :b
@@ -35,6 +38,21 @@ function toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::Symbol)
     end
     return x, y
 end
+
+"""
+    Convert Masubara frequency Green's data to Generalized Schur data
+    input x: ωn
+    input y: G(iωn), complex
+    
+    output x: iωn
+    output y: mt(-G(iωn), 1im) for fermions
+              mt(-iiωn*G(iωn, 1im)) for bosons
+"""
+function toGeneralizedSchurdata(x::AbstractVector, y::AbstractVector, type::Symbol)
+    x, y = toNevanlinnadata(x, y, type)
+    return x, mti.(y)
+end
+
 
 """
     Spectrum of Nevanlinna function G(z)

@@ -1,48 +1,40 @@
 using nevanlinna_ac
 using DelimitedFiles
 using Printf
-using Plots; pyplot(xtickfontsize=12, ytickfontsize=12, xguidefontsize=14, yguidefontsize=14, legendfontsize=10)
+using Plots; gr(xtickfontsize=12, ytickfontsize=12, xguidefontsize=14, yguidefontsize=14, legendfontsize=10)
 default(palette = palette(:okabe_ito))
 
-setprecision(128)
+#setprecision(256)
+# n in [5, 21, 40]
+function ploss(preci::Number, n::Integer)
+    setprecision(preci)
+    path = "./data/gaussian/giwn_gaussian_1.txt"
+    spath = @sprintf "./data/gaussian/sparam_gaussian_1_N_%i.txt" n
+    sp = readdlm(spath)
+    x1, y1 = readGF(path, num=n)
+    x1n, y1n = toGeneralizedSchurdata(x1, y1, :f)
 
-function mti(z::Number) 
-    return mt(z, 1.0im)
+    # to generalized schur data
+    println(eltype(x1n), " , ", eltype(y1n))
+    ϕ = schur_parameter(x1n, y1n)
+
+    dimg = ϕ .- (sp[:,2] .+ one(Complex{BigFloat})im .* sp[:,3]) 
+    return sp[:,1], abs.(dimg)
 end
 
-function imti(z::Number)
-    return imt(z, 1.0im)
-end
 
-# n2 in [5, 21, 40]
-n2 = 40
-path = "./data/gaussian/giwn_gaussian_1.txt"
-spath = @sprintf "./data/gaussian/sparam_gaussian_1_N_%i.txt" n2
-sp = readdlm(spath)
-x1, y1 = readGF(path, num=n2)
-x1n, y1n = toNevanlinnadata(x1, y1, :f)
+x1, y1 = ploss(128, 21)
+x2, y2 = ploss(2000, 21)
+ 
+plot(x1, y1, lw = 2, label="128")
+plot!(x2, y2, line=(:dash,2), label="2000")
+plot!(yaxis=:log)
 
-# to generalized schur data
-y1n = mti.(y1n)
-ϕ = schur_parameter(x1n, y1n)
+d1 = readdlm("./data/gaussian/sparam_gaussian_1_N_21.txt")
+d2 = readdlm("./data/gaussian/sparam_gaussian_1_N_21_np.txt")
 
-plot(sp[:,1], sp[:,2], 
-    line=(:dash, 1), marker=(:circle, 5, stroke(0.3)),
-    label="c++")
-plot!(imag.(x1n), real.(ϕ), 
-    line=(:dash, 1), marker=(:star, 5, stroke(0.3)),
-    label="julia")
-plot!(xlabel="ωn", ylabel="imag Schur parameter")
-f1 = @sprintf "./imag_sp_N_%i.pdf" n2
-savefig(f1)
+y = d1[:,2] .- d2[:,2] + 1im*(d1[:,3] - d2[:,3])
+y = abs.(y)
 
+plot(d1[3:end,1], y[3:end], yaxis=:log)
 
-plot(sp[:,1], sp[:,3], 
-    line=(:dash, 1), marker=(:circle, 5, stroke(0.3)),
-    label="c++")
-plot!(imag.(x1n), imag.(ϕ), 
-    line=(:dash, 1), marker=(:star,5, stroke(0.3)),
-    label="julia")
-plot!(xlabel="ωn", ylabel="real Schur parameter")
-f2 = @sprintf "./real_sp_N_%i.pdf" n2
-savefig(f2)
