@@ -109,19 +109,25 @@ end
 function schur_parameter(x::AbstractVector, y::AbstractVector)
     M = length(y) ; dtype = eltype(x)
     ϕ = zeros(dtype, M); ϕ[1] = y[1]
-    abcd = [eye(dtype,2) for i=1:M]
+    abcd = fill(eye(dtype,2), M)
+    abcd_out = fill(zeros(dtype,2,3), M-1, M)
+    factor = fill(zeros(dtype,2,2), M-1)
     for j = 1:(M-1)
         for k=j:M
             prod = coefficient(x[k], x[j], ϕ[j])
             abcd[k] *= prod
+            abcd_out[j,k] = prod
         end
         ϕ[j+1] = inv_recursion(abcd[j+1], y[j+1])
+        factor[j] = abcd[j+1]
         #if abs(ϕ[j+1]) ≥ 1.0 
         #    msg = @sprintf "%i-th Schur parameter ≥ 1 with absolute value: %.5f" j+1 abs(ϕ[j+1])
         #    @warn msg
         #end
     end
-    return ϕ
+    
+    #return ϕ
+    return ϕ, factor, abcd_out
 end
 
 """

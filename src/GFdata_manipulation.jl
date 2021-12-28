@@ -1,14 +1,11 @@
 """
     Read Masubara Green's function data
 """
-function readGF(path::String; rev::Bool=true, num::Integer = 100)
+function readGF(path::String; rev::Bool=true, num::Integer = 100,
+        dtype::DataType = Ctype)
     d = readdlm(path)
-    x = Ftype.(d[:,1]) 
-    y = Ftype.(d[:,2]) + one(Ftype)im * Ftype.(d[:,3])
-    if eltype(y) != Ctype 
-        msg = @sprintf "Date type is %s, should be %s" string(eltype(y)) string(Ctype)
-        @warn msg
-    end
+    x = dtype.(d[:,1]) 
+    y = dtype.(d[:,2]) + one(dtype)im * dtype.(d[:,3])
     num = min(length(x), num)
     x1, y1 = x[1:num], y[1:num]
     if rev == true
