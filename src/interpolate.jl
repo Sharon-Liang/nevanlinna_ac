@@ -96,7 +96,7 @@ function coefficient(z::T, xj::T, ϕj::T) where T<:Ctype
     A = zeros(dtype,2,2)
     A[1,1] = mt(z, xj)
     A[1,2] = ϕj
-    A[2,1] = ϕj'* mt(z, xj)
+    A[2,1] = ϕj' * mt(z, xj)
     A[2,2] = one(dtype)
     return A
 end
@@ -110,7 +110,7 @@ function schur_parameter(x::AbstractVector, y::AbstractVector)
     M = length(y) ; dtype = eltype(x)
     ϕ = zeros(dtype, M); ϕ[1] = y[1]
     abcd = fill(eye(dtype,2), M)
-    abcd_out = fill(zeros(dtype,2,3), M-1, M)
+    abcd_out = fill(zeros(dtype,2,2), M-1, M)
     factor = fill(zeros(dtype,2,2), M-1)
     for j = 1:(M-1)
         for k=j:M
