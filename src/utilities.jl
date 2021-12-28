@@ -22,8 +22,9 @@ end
 function linear_fractional_transform(z::T, Y::T) where T<:Number
     if abs(z) ≥ 1 @warn "|z|<1 is required." end
     if abs(Y) ≥ 1 @warn "New center |Y|<1 is required." end
+    dtype = eltype(z)
     num = z - Y
-    den = 1 - z*Y'
+    den = one(dtype) - z*Y'
     return num/den
 end
 lft = linear_fractional_transform
@@ -50,10 +51,11 @@ mt = mobius_transform
 """
 function inverse_mobius_transform(z::T, Y::T) where T<: Number
     if abs(z) ≥ 1 @warn "|z|<1 is required." end
-    if abs(Y) == 0 @warn "Y=0.0 maps all points to 0.0!" end
+    if abs(Y) == 0 @warn "Y=0.0 maps all points to 0!" end
     if imag(Y) < 0 @warn "Im(Y) ≥ 0 is required." end
+    dtype = eltype(z)
     num = Y - z*Y'
-    den = 1 - z
+    den = one(dtype) - z
     return num/den
 end
 imt = inverse_mobius_transform
