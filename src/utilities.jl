@@ -1,6 +1,11 @@
+
 """
     Identity matrix
 """
+function eye(n::Int64)
+    return Matrix{Float64}(I,n,n)
+end
+
 function eye(dtype::DataType, n::Int64)
     return Matrix{dtype}(I,n,n)
 end

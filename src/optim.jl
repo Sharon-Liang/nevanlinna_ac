@@ -11,9 +11,6 @@ function hardy_expand(z::Number, H::Int64, param::Matrix)
     return res
 end
 
-function loss(Aω::Vector)
-    
-end
 
 
 # 2nd order derivative

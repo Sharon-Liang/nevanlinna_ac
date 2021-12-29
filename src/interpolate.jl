@@ -1,15 +1,26 @@
-
 """
-    Conformal transforms used
+    (inv-)mobius_transform(z, 1im)
 """
-function mti(z::Ctype) 
-    dtype = typeof(z)
-    return mt(z, one(dtype)im)
+function mti(z::T) where T 
+    I = one(T)im
+    return mt(z, I)
 end
 
-function imti(z::Ctype)
-    dtype = typeof(z)
-    return imt(z, one(dtype)im)
+function mti(ftype::DataType, z::T) where T
+    I = one(ftype)im
+    z = Complex{ftype}(z)
+    return mt(z, I)
+end
+
+function imti(z::T) where T
+    I = one(T)im
+    return imt(z, I)
+end
+
+function imti(ftype::DataType, z::T) where T
+    I = one(ftype)im
+    z = Complex{ftype}(z)
+    return imt(z, I)
 end
 
 
@@ -91,13 +102,12 @@ end
 """
     coefficient of the recursion relation in generalized_schur algorithm
 """
-function coefficient(z::T, xj::T, ϕj::T) where T<:Ctype
-    dtype = typeof(z)
-    A = zeros(dtype,2,2)
+function coefficient(z::T, xj::T, ϕj::T) where T
+    A = zeros(T,2,2)
     A[1,1] = mt(z, xj)
     A[1,2] = ϕj
     A[2,1] = ϕj' * mt(z, xj)
-    A[2,2] = one(dtype)
+    A[2,2] = one(T)
     return A
 end
 
@@ -106,12 +116,12 @@ end
     core: evaluate 'Schur parameters' for contractive functions
     y1 within a unit circle
 """
-function schur_parameter(x::AbstractVector, y::AbstractVector)
-    M = length(y) ; dtype = eltype(y)
-    ϕ = zeros(dtype, M); ϕ[1] = y[1]
-    abcd = fill(eye(dtype,2), M)
-    abcd_out = fill(zeros(dtype,2,2), M-1, M)
-    factor = fill(zeros(dtype,2,2), M-1)
+function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
+    M = length(y)
+    ϕ = zeros(T, M); ϕ[1] = y[1]
+    abcd = fill(eye(T,2), M)
+    abcd_out = fill(zeros(T,2,2), M-1, M)
+    factor = fill(zeros(T,2,2), M-1)
     for j = 1:(M-1)
         for k=j:M
             prod = coefficient(x[k], x[j], ϕ[j])
@@ -125,50 +135,76 @@ function schur_parameter(x::AbstractVector, y::AbstractVector)
         #    @warn msg
         #end
     end
-    
     #return ϕ
     return ϕ, factor, abcd_out
 end
 
+
+function schur_parameter(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}) where T
+    ctype = Complex{ftype}
+    x = ctype.(x)
+    y = ctype.(y)
+    return schur_parameter(x,y)
+end
+
+
 """
     Generalized Schur algorithm
 """
-function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector;
-    optim::Symbol = :none)
+function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
     if all(imag.(x) .≥ 0) == false 
-        @warn "Initial data should be in the upper half complex plane"
+        @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
-        M = length(y); dtype = eltype(y)
-        z = dtype(z)
+        M = length(y)
         ϕ = schur_parameter(x,y)
-        abcd = eye(dtype,2)
+        abcd = eye(T,2)
         for j = 1:M
             abcd *= coefficient(z,x[j],ϕ[j])
         end
 
         if optim == :none 
-            θm(z::Number) = zero(dtype)
+            θm(z::Number) = zero(T)
         end
         return recursion(abcd, θm(z))
     end
 end
 
-function generalized_schur(z::AbstractArray, x::AbstractVector, y::AbstractVector;
-    optim::Symbol = :none)
-    res = similar(z, Ctype)
+function generalized_schur(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return generalized_schur(z, x, y, optim=optim)
+end
+
+function generalized_schur(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    res = similar(z, T)
     for i=1:length(z)
         res[i] = generalized_schur(z[i], x, y, optim=optim)
     end
     return res
 end
 
+function generalized_schur(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype.(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return generalized_schur(z, x, y, optim=optim)
+end
+
+
 """
     Nevanlinna Interpolation algorithm
 """
-function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector;
-    optim::Symbol = :none)
+function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
     if all(imag.(x) .≥ 0) == false 
         @warn "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
@@ -179,11 +215,29 @@ function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector;
     return imti(res)
 end
 
-function nevanlinna(z::AbstractArray, x::AbstractVector, y::AbstractVector;
-    optim::Symbol = :none)
-    res = similar(z, Ctype)
+function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return nevanlinna(z, x, y, optim = optim)
+end
+
+function nevanlinna(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    res = similar(z, T)
     for i=1:length(z)
         res[i] = nevanlinna(z[i], x, y, optim=optim)
     end
     return res
+end
+
+function nevanlinna(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype.(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return nevanlinna(z, x, y, optim=optim)
 end

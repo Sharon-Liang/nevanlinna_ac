@@ -1,17 +1,21 @@
 """
     Read Masubara Green's function data
 """
-function readGF(path::String; rev::Bool=true, num::Integer = 100,
-        dtype::DataType = Ctype)
+function readGF(ftype::DataType, path::String; rev::Bool=true, num::Integer = 100)
+    I = one(ftype)im    #define imaginary unit
     d = readdlm(path)
-    x = dtype.(d[:,1]) 
-    y = dtype.(d[:,2]) + one(dtype)im * dtype.(d[:,3])
+    x = ftype.(d[:,1]) 
+    y = ftype.(d[:,2]) + I * ftype.(d[:,3])
     num = min(length(x), num)
     x1, y1 = x[1:num], y[1:num]
     if rev == true
         x1 = reverse(x1); y1=reverse(y1)
     end
     return x1, y1
+end
+
+function readGF(path::String; rev::Bool=true, num::Integer = 100)
+    readGF(Float64, path; rev = rev, num = num)
 end
 
 
@@ -24,8 +28,11 @@ end
     output y: -G(iωn) for fermions
               -iiωn*G(iωn) for bosons
 """
-function toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::Symbol)
-    x = one(eltype(x))im * x
+function toNevanlinnadata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+    ctype = Complex{ftype}
+    I = one(ftype)im
+    x = ctype.(x); y = ctype.(y)
+    x = I * x
     if type == :f
         y = -y
     elseif type == :b
@@ -36,6 +43,20 @@ function toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::Symbol)
     return x, y
 end
 
+function toNevanlinnadata(x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+    I = one(T)im
+    x = I * x
+    if type == :f
+        y = -y
+    elseif type == :b
+        y = -x .* y
+    else
+        @error "type should be :f for fermions and :b for bosons"
+    end
+    return x, y
+end
+
+
 """
     Convert Masubara frequency Green's data to Generalized Schur data
     input x: ωn
@@ -45,7 +66,12 @@ end
     output y: mt(-G(iωn), 1im) for fermions
               mt(-iiωn*G(iωn, 1im)) for bosons
 """
-function toGeneralizedSchurdata(x::AbstractVector, y::AbstractVector, type::Symbol)
+function toGeneralizedSchurdata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+    x, y = toNevanlinnadata(ftype, x, y, type)
+    return x, mti.(ftype, y)
+end
+
+function toGeneralizedSchurdata(x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
     x, y = toNevanlinnadata(x, y, type)
     return x, mti.(y)
 end
