@@ -4,6 +4,7 @@ authors = ["Shuang Liang"]
 version = "0.1.0"
 
 [deps]
+Debugger = "31a5f54b-26ea-5ae9-a837-f05ce5417438"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 DoubleFloats = "497a8b3b-efae-58df-a0af-a86822472b78"
 HCubature = "19dc6840-f33b-545b-b366-655c7e3ffd49"

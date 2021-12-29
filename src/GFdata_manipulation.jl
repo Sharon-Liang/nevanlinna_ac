@@ -2,9 +2,10 @@
     Read Masubara Green's function data
 """
 function readGF(ftype::DataType, path::String; rev::Bool=true, num::Integer = 100)
-    I = one(ftype)im    #define imaginary unit
+    I = one(ftype)im  #define imaginary unit
+    ctype =  Complex{ftype} 
     d = readdlm(path)
-    x = ftype.(d[:,1]) 
+    x = ctype.(d[:,1]) 
     y = ftype.(d[:,2]) + I * ftype.(d[:,3])
     num = min(length(x), num)
     x1, y1 = x[1:num], y[1:num]
