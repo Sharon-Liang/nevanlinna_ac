@@ -24,6 +24,7 @@ n = 21
 #    setprecision(preci)
     giwn_path = "./data/gaussian/giwn_gaussian_1.txt"
     sparam_path = @sprintf "./data/gaussian/sparam_gaussian_1_N_%i.txt" n
+    sparam_path_np = @sprintf "./data/gaussian/sparam_gaussian_1_N_%i_np.txt" n
     abcd_path = @sprintf "./data/gaussian/abcd_gaussian_1_N_%i.txt" n
     theta_path = Vector{String}(undef, n-1)
     for i = 1:n-1
@@ -31,6 +32,8 @@ n = 21
     end
     s = readdlm(sparam_path)
     cs = (s[:,2] .+ one(Ctype)im .* s[:,3]) 
+    s1 = readdlm(sparam_path_np)
+    cs1 = (s1[:,2] .+ one(Ctype)im .* s1[:,3]) 
     abcd = readdlm(abcd_path)
     theta = [readdlm(theta_path[i]) for i=1:n-1]
     
@@ -58,6 +61,7 @@ n = 21
     max_dd = [maximum(abs.(dθ[i][:,8:9])) for i=1:n-1]
 #    return sp[:,1], abs.(dimg), abs.(fac_out .- abcd)
 #end
+
 
 x1, y1, dfac1 = ploss(128, 21)
 x2, y2fac = ploss(2000, 21)

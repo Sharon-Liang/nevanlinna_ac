@@ -1,15 +1,15 @@
 # Fdb version 3
-["bibtex nevanlinna"] 1640657150 "nevanlinna.aux" "nevanlinna.bbl" "nevanlinna" 1640657180
+["bibtex nevanlinna"] 1640657150 "nevanlinna.aux" "nevanlinna.bbl" "nevanlinna" 1640740546
   "/usr/local/texlive/2021/texmf-dist/bibtex/bst/base/unsrt.bst" 1292289607 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "nevanlinna.aux" 1640657151 10298 e3cca77ce772c44e3899bde4622c844b "pdflatex"
+  "nevanlinna.aux" 1640740545 10298 e3cca77ce772c44e3899bde4622c844b "pdflatex"
   "nevanlinna.bib" 1640314854 6878 4910fb3e5b6d3993e6a4e2256e9c9371 ""
-  "nevanlinnaNotes.bib" 1640657151 316 47d84a6dc0d48c25c42c142142565be6 "pdflatex"
+  "nevanlinnaNotes.bib" 1640740545 316 47d84a6dc0d48c25c42c142142565be6 "pdflatex"
   (generated)
   "nevanlinna.bbl"
   "nevanlinna.blg"
-["pdflatex"] 1640657150 "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.tex" "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.pdf" "nevanlinna" 1640657180
-  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.aux" 1640657151 10298 e3cca77ce772c44e3899bde4622c844b ""
-  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.tex" 1640657180 23144 e5001f37706d6160c8470127b0cb038f ""
+["pdflatex"] 1640740544 "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.tex" "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.pdf" "nevanlinna" 1640740546
+  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.aux" 1640740545 10298 e3cca77ce772c44e3899bde4622c844b ""
+  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.tex" 1640740543 23144 9881bbc395f711af4b8af1c3d682e380 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -201,17 +201,17 @@
   "/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1616695603 5169178 a2ce6e2d73f603b690db6777d06dbccb ""
   "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1621301529 2724738 2374bd9e266fdc02e83bdc637881ac13 ""
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
-  "nevanlinna.aux" 1640657151 10298 e3cca77ce772c44e3899bde4622c844b "pdflatex"
+  "nevanlinna.aux" 1640740545 10298 e3cca77ce772c44e3899bde4622c844b "pdflatex"
   "nevanlinna.bbl" 1640657150 2740 de2b81de2f108986b7714ec7bb67e18f "bibtex nevanlinna"
-  "nevanlinna.out" 1640657151 2734 ab063332c84f2594ee8facd5787b7e27 "pdflatex"
-  "nevanlinna.tex" 1640657180 23144 e5001f37706d6160c8470127b0cb038f ""
-  "nevanlinna.toc" 1640657151 1322 39a8152c5e73d768dd1d86aaf3179964 "pdflatex"
+  "nevanlinna.out" 1640740545 2734 ab063332c84f2594ee8facd5787b7e27 "pdflatex"
+  "nevanlinna.tex" 1640740543 23144 9881bbc395f711af4b8af1c3d682e380 ""
+  "nevanlinna.toc" 1640740545 1322 39a8152c5e73d768dd1d86aaf3179964 "pdflatex"
   (generated)
-  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.log"
+  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.pdf"
+  "nevanlinna.out"
   "nevanlinna.log"
+  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.log"
+  "nevanlinna.aux"
   "nevanlinna.toc"
   "nevanlinnaNotes.bib"
-  "nevanlinna.out"
-  "nevanlinna.aux"
-  "/Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.pdf"
   "nevanlinna.pdf"
