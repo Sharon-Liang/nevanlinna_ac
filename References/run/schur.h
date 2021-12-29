@@ -56,7 +56,7 @@ void Schur<T>::core() {
     abcds.resize(M);
     
     //LS: creat data files
-    int pc=64;
+    int pc=128;
     char filename[128], sparamfile[128], abcdfile[128], hiwnfile[128];
     std::ofstream lsfile;
     lsfile.precision(pc);
