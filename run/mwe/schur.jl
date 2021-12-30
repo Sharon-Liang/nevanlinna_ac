@@ -109,10 +109,9 @@ end
 #load input data: Data type : Float64
 #c++ result with the same input: 
 #    path = "./scpp_F64.txt", "./scpp_F128.txt"
-d = readdlm("./input.txt")
-I = one(eltype(d))im
-x = I * d[:,1]
-y = d[:,2] .+ I .* d[:,3]
+d = readdlm("./run/mwe/input.txt")
+x = one(eltype(d))im * d[:,1]
+y = d[:,2] .+ one(eltype(d))im .* d[:,3]
 
 
 # float64
@@ -123,8 +122,17 @@ y = d[:,2] .+ I .* d[:,3]
 ϕ1 = schur_parameter(Double64, x, y)
 
 # compare with c++
-dc64 = readdlm("./scpp_F64.txt")
+dc64 = readdlm("./run/mwe/scpp_F64.txt")
 ϕc = dc64[:,2] .+ one(eltype(dc64))im .* dc64[:,3]
 for i=1:length(ϕ)
     @test isapprox(ϕc[i], ϕ[i], rtol=sqrt(eps(eltype(dc64))))
 end
+
+
+#compare different inputs
+dj = readdlm("./input_julia.txt")
+Ij = one(eltype(dj))im
+xj = Ij * d[:,1]
+yj = d[:,2] .+ Ij .* d[:,3]
+
+ϕj = schur_parameter(xj, yj)
