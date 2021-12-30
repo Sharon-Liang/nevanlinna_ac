@@ -40,7 +40,7 @@ prec = 64
     end
 
     hiwn_cpp = readdlm(hiwn_path)
-    hcpp = tocomplex(hiwn_data[:,2], hiwn_data[:,3])
+    hcpp = tocomplex(hiwn_cpp[:,2], hiwn_cpp[:,3])
 
     sparam_data = readdlm(sparam_path)
     scpp = tocomplex(sparam_data[:,2], sparam_data[:,3])
@@ -55,7 +55,47 @@ prec = 64
     #confirm x1n = hiwn_data[:,1]
     #maximum(abs.(y1n .- hc)) 2.220462989844635e-16 = eps(Float64)
     
-    s, abcd, theta = schur_parameter(x1n, y1n)
+    xcpp = one(eltype(hiwn_cpp))im * hiwn_cpp[:,1]
+
+
+    #compare spectrum
+    A0 = readdlm("./data/gaussian/A_gaussian_1.txt")
+    A1 = readdlm("./data/gaussian/cpp/spectrum/A_gaussian_1_N_21_F64.txt")
+    A2 = readdlm("./data/gaussian/cpp/spectrum/A_gaussian_1_N_21_rand_1_F64.txt")
+    A3 = readdlm("./data/gaussian/cpp/spectrum/A_gaussian_1_N_21_rand_2_F64.txt")
+
+    A11 = readdlm("./data/gaussian/cpp/spectrum/A_gaussian_1_N_21_F64.txt")
+    A21 = readdlm("./data/gaussian/cpp/spectrum/A_gaussian_1_N_21_rand_1_F64.txt")
+    A31 = readdlm("./data/gaussian/cpp/spectrum/A_gaussian_1_N_21_rand_2_F64.txt")
+
+    plot(A0[:,1], A0[:,2], label="theory", line=(:black,2))
+    plot!(A1[:,1], A1[:,2],label="c++", line=(:dash,2))
+    plot!(A2[:,1], A2[:,2],label="c++ rand 1", line=(:dash,2))
+    plot!(A3[:,1], A3[:,2],label="c++ rand 2", line=(:dash,2))
+
+    plot!(A1[:,1], A1[:,2],label="c++", line=(:dot,2))
+    plot!(A2[:,1], A2[:,2],label="c++ rand 1", line=(:dot,2))
+    plot!(A3[:,1], A3[:,2],label="c++ rand 2", line=(:dot,2))
+
+    plot!(xlim=(-5,5))
+    savefig("./compare_A_F128.pdf")
+
+    h1 = d1[:,2] .+ d1[:,3] .* 1.0im
+    hj = mt.(-y1, one(ComplexF64))
+
+
+    setprecision(BigFloat, 1024)
+    plot()
+    for ftype in [Float64]
+        tname = @sprintf "%s" ftype
+        s, abcd, theta = schur_parameter(ftype, x1n, y1n)
+        sc, abcdc, thetac = schur_parameter(ftype, xcpp, hcpp)
+        plot!(imag.(xcpp), abs.(s .- sc), line=(:dash,1), 
+            marker=(:circle,5,stroke(0.3)), 
+            label = tname)
+    end
+    plot!(xlable="ωn", ylabel="|s(x:julia) - sc(x:c++)|", yaxis = :log)
+    savefig("./schur_parameter_loss.pdf")
 
     abcd = tomatrix(abcd)
     theta = [tomatrix(theta[i,:]) for i=1:n-1]
