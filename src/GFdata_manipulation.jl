@@ -2,11 +2,11 @@
     Read Masubara Green's function data
 """
 function readGF(ftype::DataType, path::String; rev::Bool=true, num::Integer = 100)
-    I = one(ftype)im  #define imaginary unit
+    Im = one(ftype)im  #define imaginary unit
     ctype =  Complex{ftype} 
     d = readdlm(path)
     x = ctype.(d[:,1]) 
-    y = ftype.(d[:,2]) + I * ftype.(d[:,3])
+    y = ftype.(d[:,2]) + Im * ftype.(d[:,3])
     num = min(length(x), num)
     x1, y1 = x[1:num], y[1:num]
     if rev == true
@@ -31,9 +31,9 @@ end
 """
 function toNevanlinnadata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
     ctype = Complex{ftype}
-    I = one(ftype)im
+    Im = one(ftype)im
     x = ctype.(x); y = ctype.(y)
-    x = I * x
+    x = Im * x
     if type == :f
         y = -y
     elseif type == :b
@@ -45,8 +45,8 @@ function toNevanlinnadata(ftype::DataType, x::AbstractVector{T}, y::AbstractVect
 end
 
 function toNevanlinnadata(x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
-    I = one(T)im
-    x = I * x
+    Im = one(T)im
+    x = Im * x
     if type == :f
         y = -y
     elseif type == :b
