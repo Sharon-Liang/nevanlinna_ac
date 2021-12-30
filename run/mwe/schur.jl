@@ -2,6 +2,7 @@ using LinearAlgebra
 using DelimitedFiles
 using Printf
 using DoubleFloats
+using Test
 
 """
     Identity matrix
@@ -88,10 +89,6 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
         end
         ϕ[j+1] = inv_recursion(abcd[j+1], y[j+1])
         factor[j] = abcd[j+1]
-        #if abs(ϕ[j+1]) ≥ 1.0 
-        #    msg = @sprintf "%i-th Schur parameter ≥ 1 with absolute value: %.5f" j+1 abs(ϕ[j+1])
-        #    @warn msg
-        #end
     end
     return ϕ
     #return ϕ, factor, abcd_out
@@ -112,10 +109,10 @@ end
 #load input data: Data type : Float64
 #c++ result with the same input: 
 #    path = "./scpp_F64.txt", "./scpp_F128.txt"
-
 d = readdlm("./input.txt")
-x = 1.0im * d[:,1]
-y = d[:,2] .+ 1.0im .* d[:,3]
+I = one(eltype(d))im
+x = I * d[:,1]
+y = d[:,2] .+ I .* d[:,3]
 
 
 # float64
@@ -125,3 +122,9 @@ y = d[:,2] .+ 1.0im .* d[:,3]
 # Double64
 ϕ1 = schur_parameter(Double64, x, y)
 
+# compare with c++
+dc64 = readdlm("./scpp_F64.txt")
+ϕc = dc64[:,2] .+ one(eltype(dc64))im .* dc64[:,3]
+for i=1:length(ϕ)
+    @test isapprox(ϕc[i], ϕ[i], rtol=sqrt(eps(eltype(dc64))))
+end
