@@ -145,7 +145,22 @@ $\{s_j(z) \in \mathcal{S}\}_{0\leq j <\infty}$ starting from $s_0(z)$ by the rec
 	zs_{j+1}(z) = \frac{s_j(z) - \gamma_j}{1 - \gamma_j^* s_j(z)}
 \end{equation}
 where $s_j \in \mathcal{S}$ and $\gamma_j \equiv s_j(0)$ are called Schur 
-parameters and $|\gamma_j| \leq 1$. 
+parameters and $|\gamma_j| \leq 1$. This gives a continued fraction 
+expansion of the schur function $s(z)$ by repeatedly using the fact 
+that:
+\begin{equation}\label{eq:inv-schur-function-recursion-frac}
+	s_{j}(z) = \gamma_j + \frac{1 - |\gamma_j|^2}
+		{\gamma_j^* + \frac{1}{zs_{j+1}(z)}}
+\end{equation}
+which gives:
+\begin{equation}\label{eq:schur-fraction-expansion}
+	s(z) \equiv s_0(z) = \gamma_0 + \frac{1 - |\gamma_0|^2}
+		{\gamma_0^* + \frac{1}
+		{z\gamma_1 + \frac{z(1 - |\gamma_1|^2)}
+		{\gamma_1^* + \frac{1}{z\gamma_2 + \cdots}}
+		}
+		}
+\end{equation}
 
 On the other hand, given an arbitrary strictly contractive sequence 
 of Schur parameters $\{\gamma_0, \gamma_1, \dots, \gamma_j, \dots\} \subset \D$, 
@@ -299,6 +314,23 @@ Then $\gamma_{j+1}$ reads:
 \end{split}
 \end{align}
 
+Similar to \cref{eq:inv-schur-function-recursion-frac},
+We can also constract a continued fraction 
+expansion form of $s(z)$ by repeatedly using the fact 
+that:
+\begin{equation}\label{eq:inv-s-s-recursion-frac}
+	s_{j}(z) = \gamma_j + \frac{1 - |\gamma_j|^2}
+		{\gamma_j^* + \frac{1}{\xi(z,\Y_j) s_{j+1}(z)}}
+\end{equation}
+which gives:
+\begin{equation}\label{eq:s-s-fraction-expansion-fit}
+	s(z) \equiv s_0(z) = \gamma_0 + \frac{1 - |\gamma_0|^2}
+		{\gamma_0^* + \frac{1}
+		{\xi(z,\Y_0)\gamma_1 + \frac{\xi(z,\Y_0) (1 - |\gamma_1|^2)}
+		{\gamma_1^* + \frac{1}{\xi(z,\Y_1) \gamma_2 + \cdots}}
+		}
+		}
+\end{equation}
 
 G. Pick and R. Nevanlinna studied the interpolation problem 
 independently in 1917\cite{Pick1917} and 1919\cite{nevanlinna1919uber} 
@@ -415,6 +447,22 @@ there is a alse freedom to choose $\theta_N(z)$. And we have:
 		, \ j>1
 \end{align}
 
+The continued fraction 
+expansion form of $\theta(z)$ can be constracted by 
+repeatedly using the fact that:
+\begin{equation}\label{eq:inv-theta-recursion-frac}
+	\theta_{j}(z) = \gamma_j + \frac{1 - |\gamma_j|^2}
+		{\gamma_j^* + \frac{1}{h(z,\Y_j) \theta_{j+1}(z)}}
+\end{equation}
+which gives:
+\begin{equation}\label{eq:theta-fraction-expansion-fit}
+	\theta(z) \equiv \theta_1(z) = \gamma_1 + \frac{1 - |\gamma_1|^2}
+		{\gamma_1^* + \frac{1}
+		{h(z,\Y_1)\gamma_2 + \frac{h(z,\Y_1) (1 - |\gamma_2|^2)}
+		{\gamma_2^* + \frac{1}{h(z,\Y_2) \gamma_3 + \cdots}}
+		}
+		}
+\end{equation}
 
 %=====================================================================
 \subsection{Interpolation of Green's functions}
