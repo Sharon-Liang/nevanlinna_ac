@@ -183,6 +183,9 @@ $s_0(z; \gamma_0,\gamma_1, \dots, \gamma_n)$. Namely, we write:
 \end{align}
 where $j = n-1, n-2, \dots, 1, 0$.
 
+
+\subsubsection{Schur interploation algorithm}
+\label{subsubsec:schur-interpolation-problem}
 Given the initial data consisting of $N$ points 
 $\{\Y_0, \Y_1, \dots ,\Y_{N-1}\} \subset \D$ and target data
 $\{\C_0, \C_1, \dots ,\C_{N-1}\} \subset \D$, 
@@ -250,12 +253,16 @@ where
 \end{equation}
 with $j$ increasing from left to right. 
 There is a freedom to choose $s_{N+1}(z)$. 
-The inverse relation of \label{eq:recursive-s} is
+The inverse relation of \cref{eq:recursive-s} is
 \begin{equation}\label{eq:inv-recursive-s}
 	s_N(z) 
 	= \frac{-d_N(z) s_1(z) + b_N(z)}{c_N(z) s_1(z) - a_N(z)}
 \end{equation}
 where we define $s(z) \equiv s_1(z)$.
+
+
+\subsubsection{The determination of Schur parameters}
+\label{subsubsec:determination-of-schur-parameters}
 
 Now we disscuss a little more about the calculation of $\gamma_j$.
 The first step of the recursion gives:
@@ -270,11 +277,16 @@ $\therefore  \gamma_1 = s_1(\Y_1) = \C_1$. and
 	= \frac{-s_1(z) + \gamma_1}
 		{\gamma_1^* \xi(z, \Y_1) s_1(z) - \xi(z, \Y_1) }
 \end{equation}
-$\therefore \gamma_2 = s_2(\Y_2) 
-= \frac{-s_1(\Y_2) + \gamma_1} 
-	{\gamma_1^* \xi(\Y_2, \Y_1) s_1(\Y_2) - \xi(\Y_2, \Y_1) }
-= \frac{-C_2 + \C_1}
-	{\C_1^* \xi(\Y_2, \Y_1) \C_2 - \xi(\Y_2, \Y_1) }$.
+\begin{align}\label{eq:explicit-gamma-2}
+\begin{split}
+\therefore \gamma_2 &= s_2(\Y_2) 
+	= \frac{-s_1(\Y_2) + \gamma_1} 
+	{\gamma_1^* \xi(\Y_2, \Y_1) s_1(\Y_2) - \xi(\Y_2, \Y_1) } 
+	\\
+	& = \frac{-C_2 + \C_1}
+	{\C_1^* \xi(\Y_2, \Y_1) \C_2 - \xi(\Y_2, \Y_1) }
+\end{split}
+\end{align}
 
 For the $j$-th ($j \geq 3$) step of the recursion:
 \begin{equation}
@@ -304,7 +316,7 @@ and $\gamma_k$ as well as $	\left(
 	\end{matrix}
 \right)$ are calculated in previous steps. 
 Then $\gamma_{j+1}$ reads:
-\begin{align}
+\begin{align}\label{eq:explicit-gamma-jp1}
 \begin{split}
 	\gamma_{j+1} &= s_{j+1}(\Y_{j+1}) 
 	= \frac{-d_j(\Y_{j+1}) s_1(\Y_{j+1}) + b_j(\Y_{j+1})} 
@@ -332,6 +344,80 @@ which gives:
 		}
 \end{equation}
 
+
+\subsubsection{Interpolate site by site}
+\label{subsubsec:interpolate-site-by-site}
+
+Here we review the interpolation problem in a more explicit 
+way, that is to interpolate site by site. Here we use the 
+recursion relation \cref{eq:inv-schur-function-recursion-another-s}, 
+and our target function is $s(z) \equiv s_1(z)$.
+
+If we have only one site $(\Y_1, \C_1)$, according to 
+\cref{eq:inv-schur-function-recursion-another-s}, $s_1(z)$ 
+has the following form:
+\begin{equation}
+	s_1(z; Y_1, \C_1)
+	= \frac{\gamma_1 + \xi(z, \Y_1) s_{2}(z) }
+		{1 + \gamma_1^* \xi(z, \Y_1) s_{2}(z)}
+\end{equation}
+where $\gamma_0 = s_0(\Y_0) = \C_0$, and $s_2(z)$ is an 
+arbitrary schur function.
+
+When another site $(\Y_2, \C_3)$ is added. $s_2(z)$ is 
+required to have the following form:
+\begin{equation}
+	s_2(z)
+	= \frac{\gamma_2 + \xi(z, \Y_2) s_{3}(z) }
+		{1 + \gamma_2^* \xi(z, \Y_3) s_{3}(z)}
+\end{equation}
+where $s_3(z)$ is an arbitrary schur function. 
+The Schur parameter $\gamma_2$ can be determined as 
+shown in \cref{subsubsec:determination-of-schur-parameters}, 
+whose explicit form is \cref{eq:explicit-gamma-2}. 
+We can see that $s_2(z) = s_2(z; \Y_1, \C_1, \Y_2, \C_2)$ 
+and $s_1(z) = \frac{a_2(z) s_3(z) + b_2(z)}{c_2(z) s_3(z) + d_2(z)}$, 
+with:
+\begin{equation}\label{eq:explicit-ancd2}
+	\left(
+		\begin{matrix}
+			a_2(z) & b_2(z) \\
+			c_2(z) & d_2(z)
+		\end{matrix}
+	\right)
+	= 
+	\left(
+		\begin{matrix}
+			\xi(z, \Y_1)            & \gamma_1 \\
+			\gamma_1^* \xi(z, \Y_1) & 1
+		\end{matrix}
+	\right)
+	\left(
+		\begin{matrix}
+			\xi(z, \Y_2)            & \gamma_2 \\
+			\gamma_2^* \xi(z, \Y_2) & 1
+		\end{matrix}
+	\right)
+\end{equation}
+
+Suppose we already has the $n$-th order of interpolation:
+\begin{equation}
+	s_1(z) = \frac{a_n(z) s_{n+1}(z) + b_n(z)}
+		{c_n(z) s_{n+1}(z) + d_n(z)}
+\end{equation}
+Adding another point $(\Y_{n+1}, \C_{n+1})$ would make the 
+arbitrary Schur function $s_{n+1}(z)$ to aquire a structure 
+\begin{equation}
+	s_{n+1}(z)
+	= \frac{\gamma_{n+1} + \xi(z, \Y_{n+1}) s_{n+2}(z) }
+		{1 + \gamma_{n+2}^* \xi(z, \Y_{n+2}) s_{n+2}(z)}
+\end{equation}
+and $\gamma_{n+1}$ is calculated by \cref{eq:explicit-gamma-jp1} 
+and $s_{n+2}(z)$ is an arbitrary Schur function.
+ 
+
+\subsubsection{Pick matrix}
+\label{subsubsec:pick-matrix}
 G. Pick and R. Nevanlinna studied the interpolation problem 
 independently in 1917\cite{Pick1917} and 1919\cite{nevanlinna1919uber} 
 respectively, showing that an 

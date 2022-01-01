@@ -909,6 +909,7 @@ INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/n
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.toc
 OUTPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.toc
 INPUT /usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
@@ -916,7 +917,6 @@ INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam1
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
 INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
-INPUT /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
 INPUT /Users/liangshuang/Desktop/CAS-code/nevanlinna_ac/notes/nevanlinna notes/nevanlinna.bbl
