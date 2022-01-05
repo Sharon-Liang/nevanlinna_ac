@@ -1,107 +1,243 @@
-struct Giωn
-    ωn::Real
-    val::Complex
+"""
+    (inv-)mobius_transform(z, 1im)
+"""
+function mti(z::T) where T 
+    I = one(T)im
+    return mt(z, I)
 end
 
-struct MasubaraGF
-    number::Int64
-    GF::Vector{Giωn}
+function mti(ftype::DataType, z::T) where T
+    I = one(ftype)im
+    z = Complex{ftype}(z)
+    return mt(z, I)
 end
 
-function make_input(path::String, num::Int64)
-    data = readdlm(path)
-    fnum = min(num, length(data[:,1])) # number of frenquencies used
-    res = [Giωn(data[i,1],data[i,2]+1.0im*data[i,3]) for i = 1:fnum]
-    return MasubaraGF(fnum, res |> reverse)
+function imti(z::T) where T
+    I = one(T)im
+    return imt(z, I)
 end
 
-function make_input(path::String)
-    data = readdlm(path)
-    fnum = length(data[:,1]) # number of frenquencies used
-    res = [Giωn(data[i,1],data[i,2]+1.0im*data[i,3]) for i = 1:fnum]
-    return MasubaraGF(fnum, res |> reverse)
+function imti(ftype::DataType, z::T) where T
+    I = one(ftype)im
+    z = Complex{ftype}(z)
+    return imt(z, I)
 end
 
-function pick_matrix(G::MasubaraGF)
-    # input :freq: Masubara frenquencies; val: G
-    N = G.number; g = G.GF
-    pick = zeros(ComplexF64,N, N)
-    for i = 1:N, j = 1:N
-        up = 1 - λ(g[i])*λ(g[j])'
-        down = 1 - h(1.0im*g[i].ωn)*h(1.0im*g[j].ωn)'
-        pick[i,j] = up/down
+
+"""
+    Pick matrix of initial data {z, f(z)} with in a unit cell
+"""
+function pick_matrix(x::AbstractVector, y::AbstractVector)
+    if (all(abs.(x) .> 0) && all(abs.(y) .> 0)) == false
+        @error "pick_matrix: initial data and target data should be in a unit cell"
+    elseif length(x) != length(y)
+        @error DimensionMismatch
+    else
+        N = length(y)
+        pick = similar(y, N, N)
+        for i = 1: N, j = 1: N
+            num = 1 - y[i] * y[j]'
+            den = 1 - x[i] * x[j]'
+            pick[i,j] = num/den
+        end
+        return pick
     end
-    return pick
 end
 
-function isNevanlinnasolvable(G::MasubaraGF; err::Float64 = 1.e-6)
-    # check if the pick_matrix is semi positive semidefinite
-    pick = pick_matrix(G)
-    evals = eigvals(pick) 
-    return all((evals .+ err) .>= 0), minimum(evals)
+
+"""
+    Check if the Pick matrix is positive semidefinite
+"""
+function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; 
+    tolerance::AbstractFloat = 1.e-10)
+    if all(imag.(x) .≥ 0) == false 
+        @error "Initial data should be in the upper half complex plane"
+    elseif all(abs.(y) .≤ 1) == false 
+        @error "Target data should be in the unit circle"
+    else
+        x = mti.(x)
+        pick = pick_matrix(x, y)
+        evals = eigvals(pick) 
+        return all((evals .+ tolerance) .>= 0), minimum(evals)
+    end
 end
 
-function λ(G::Giωn)
-    return h(-G.val)
+function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector; 
+    tolerance::AbstractFloat = 1.e-10)
+    if all(imag.(x) .≥ 0) == false 
+        @error "Initial data should be in the upper half complex plane"
+    elseif all(imag.(y) .≥ 0) == false
+        @error "Target data should be in the upper half complex plane"
+    else
+        x = mti.(x)
+        y = mti.(y)
+        pick = pick_matrix(x, y)
+        evals = eigvals(pick) 
+        return all((evals .+ tolerance) .>= 0), minimum(evals)
+    end
 end
 
-function θk(fac::Matrix, θp::Number)
-    # θp = θ(k-1)
-    up = -fac[2,2] * θp + fac[1,2]
-    down = fac[2,1] * θp - fac[1,1]
-    return up/down
+
+"""
+    Recursion relation of contractive functions θp and θn
+    θp : previous θ(z)
+    θn : next θ(z)
+    recursion: θp = (a*θn + b)/(c*θn+d)
+    inv_recursion: θn = (-d*θp + b)/(c*θp - a)
+    The target function is θ_0 
+"""
+function recursion(A::Matrix{T}, θn::T) where T
+    num = A[1,1] * θn + A[1,2]
+    den = A[2,1] * θn + A[2,2]
+    return num/den
 end
 
-function core(G::MasubaraGF; etype::DataType=Float64)
-    dtype = Complex{etype}
-    M = G.number; g = G.GF
-    phis = zeros(dtype, M) #store λk(iω_(k+1))
-    phis[1] = λ(g[1])
-    abcds = Vector{Matrix{dtype}}(undef,M)
-    for i = 1:M abcds[i] = eye(dtype,2) end
+function inv_recursion(A::Matrix{T}, θp::T) where T
+    num = -A[2,2] * θp + A[1,2]
+    den = A[2,1] * θp - A[1,1]
+    return num/den
+end
+
+
+"""
+    coefficient of the recursion relation in generalized_schur algorithm
+"""
+function coefficient(z::T, xj::T, ϕj::T) where T
+    A = zeros(T,2,2)
+    A[1,1] = mt(z, xj)
+    A[1,2] = ϕj
+    A[2,1] = ϕj' * mt(z, xj)
+    A[2,2] = one(T)
+    return A
+end
+
+
+"""
+    core: evaluate 'Schur parameters' for contractive functions
+    y1 within a unit circle
+"""
+function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
+    M = length(y)
+    ϕ = zeros(T, M); ϕ[1] = y[1]
+    abcd = fill(eye(T,2), M)
+    abcd_out = fill(zeros(T,2,2), M-1, M)
+    factor = fill(zeros(T,2,2), M-1)
     for j = 1:(M-1)
         for k=j:M
-            prod = zeros(dtype,2,2)
-            prod[1,1] = h1(1.0im*g[k].ωn,1.0im*g[j].ωn)
-            prod[1,2] = phis[j]
-            prod[2,1] = phis[j]' * h1(1.0im*g[k].ωn,1.0im*g[j].ωn)
-            prod[2,2] = 1. + 0.0im
-            abcds[k] *= prod
+            prod = coefficient(x[k], x[j], ϕ[j])
+            abcd[k] *= prod
+            abcd_out[j,k] = prod
         end
-        phis[j+1] = θk(abcds[j+1], λ(g[j+1]))
+        ϕ[j+1] = inv_recursion(abcd[j+1], y[j+1])
+        factor[j] = abcd[j+1]
+        #if abs(ϕ[j+1]) ≥ 1.0 
+        #    msg = @sprintf "%i-th Schur parameter ≥ 1 with absolute value: %.5f" j+1 abs(ϕ[j+1])
+        #    @warn msg
+        #end
     end
-    return phis
+    #return ϕ
+    return ϕ, factor, abcd_out
 end
 
-function evaluation(z::Number, G::MasubaraGF; 
-    optim::Symbol = :none, etype::DataType=Float64)
-    dtype = Complex{etype}
-    M = G.number
-    g = G.GF
-    phis = core(G, etype=etype)
-    abcd = eye(dtype, 2)
-    for j = 1:M
-        prod = zeros(dtype, 2,2)
-        prod[1,1] = h1(z,1.0im*g[j].ωn)
-        prod[1,2]= phis[j]
-        prod[2,1] = phis[j]' * h1(z,1.0im*g[j].ωn)
-        prod[2,2] = 1. + 0.0im
-        abcd *= prod
-    end
-    
-    if optim == :none
-        θm(z::Number) = 0.0 + 0.0im
-    end
-    
-    up = abcd[1,1] * θm(z) + abcd[1,2]
-    down = abcd[2,1] * θm(z) + abcd[2,2]
-    θ = up/down
-    return invh(θ)
+
+function schur_parameter(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}) where T
+    ctype = Complex{ftype}
+    x = ctype.(x)
+    y = ctype.(y)
+    return schur_parameter(x,y)
 end
 
-function spectrum_density(ω::Real, η::Real, G::MasubaraGF;
-    etype::DataType=Float64)
-    z = ω + 1.0im * η
-    return 2*(evaluation(z, G, etype=etype) |> imag)
+
+"""
+    Generalized Schur algorithm
+"""
+function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    if all(imag.(x) .≥ 0) == false 
+        @error "Initial data should be in the upper half complex plane"
+    elseif all(abs.(y) .≤ 1) == false 
+        @error "Target data should be in the unit circle"
+    else
+        M = length(y)
+        ϕ = schur_parameter(x,y)
+        abcd = eye(T,2)
+        for j = 1:M
+            abcd *= coefficient(z,x[j],ϕ[j])
+        end
+
+        if optim == :none 
+            θm(z::Number) = zero(T)
+        end
+        return recursion(abcd, θm(z))
+    end
 end
 
+function generalized_schur(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return generalized_schur(z, x, y, optim=optim)
+end
+
+function generalized_schur(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    res = similar(z, T)
+    for i=1:length(z)
+        res[i] = generalized_schur(z[i], x, y, optim=optim)
+    end
+    return res
+end
+
+function generalized_schur(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype.(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return generalized_schur(z, x, y, optim=optim)
+end
+
+
+"""
+    Nevanlinna Interpolation algorithm
+"""
+function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    if all(imag.(x) .≥ 0) == false 
+        @warn "Initial data should be in the upper half complex plane"
+    elseif all(imag.(y) .≥ 0) == false
+        @warn "Target data should be in the upper half complex plane"
+    end
+    y = mti.(y)
+    res = generalized_schur(z, x, y, optim=optim)
+    return imti(res)
+end
+
+function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return nevanlinna(z, x, y, optim = optim)
+end
+
+function nevanlinna(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    res = similar(z, T)
+    for i=1:length(z)
+        res[i] = nevanlinna(z[i], x, y, optim=optim)
+    end
+    return res
+end
+
+function nevanlinna(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+    optim::Symbol = :none) where T
+    ctype = Complex{ftype}
+    z = ctype.(z)
+    x = ctype.(x)
+    y = ctype.(y)
+    return nevanlinna(z, x, y, optim=optim)
+end
