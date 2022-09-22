@@ -2,25 +2,25 @@
     (inv-)mobius_transform(z, 1im)
 """
 function mti(z::T) where T 
-    I = one(T)im
-    return mt(z, I)
+    Im = one(T)im
+    return mt(z, Im)
 end
 
 function mti(ftype::DataType, z::T) where T
-    I = one(ftype)im
+    Im = one(ftype)im
     z = Complex{ftype}(z)
-    return mt(z, I)
+    return mt(z, Im)
 end
 
 function imti(z::T) where T
-    I = one(T)im
-    return imt(z, I)
+    Im = one(T)im
+    return imt(z, Im)
 end
 
 function imti(ftype::DataType, z::T) where T
-    I = one(ftype)im
+    Im = one(ftype)im
     z = Complex{ftype}(z)
-    return imt(z, I)
+    return imt(z, Im)
 end
 
 
@@ -115,6 +115,9 @@ end
 """
     core: evaluate 'Schur parameters' for contractive functions
     y1 within a unit circle
+    outpus: ϕ: Schur_parameters
+    factor[i]: abcd of i-the contractive function
+    abcd_out[i,j]: abcd of i-th contractive function at point x[j]
 """
 function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
     M = length(y)
@@ -135,8 +138,8 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
         #    @warn msg
         #end
     end
-    #return ϕ
-    return ϕ, factor, abcd_out
+    return ϕ
+    #return ϕ, factor, abcd_out
 end
 
 
