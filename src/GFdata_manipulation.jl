@@ -81,14 +81,14 @@ end
 """
 function spectrum(ω::Vector{T} where T<:Real, η::Real, 
     x::AbstractVector, y::AbstractVector, operator_type::OperatorType;
-    optim = :none)
-    x, y = toNevanlinnadata(x,y,operator_type )
+    init_func::Function= z -> zero(eltype(y)))
+    x, y = toNevanlinnadata(x,y, operator_type)
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     operator_type == Fermi ? name = "A(ω)" : name = "ωA(ω)"
     z = ω .+ 1.0im * η
     res = zeros(eltype(y), length(ω))
     for i = 1:length(ω)
-        res[i] = nevanlinna(z[i], x, y, optim=optim) 
+        res[i] = nevanlinna(z[i], x, y; init_func) 
     end
     res = imag.(2*res)
     return res, name
@@ -96,7 +96,7 @@ end
 
 function spectrum(ω::Real, η::Real, 
     x::AbstractVector, y::AbstractVector, operator_type::OperatorType;
-    optim = :none)
-    return spectrum([ω], η, x, y, operator_type, optim = optim)
+    init_func::Function= z-> zero(eltype(y)))
+    return spectrum([ω], η, x, y, operator_type; init_func)
 end
 

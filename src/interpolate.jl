@@ -155,7 +155,7 @@ end
     Generalized Schur algorithm
 """
 function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
@@ -167,39 +167,35 @@ function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
         for j = 1:M
             abcd *= coefficient(z,x[j],ϕ[j])
         end
-
-        if optim == :none 
-            θm(z::Number) = zero(T)
-        end
-        return recursion(abcd, θm(z))
+        return recursion(abcd, init_func(z))
     end
 end
 
 function generalized_schur(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     ctype = Complex{ftype}
     z = ctype(z)
     x = ctype.(x)
     y = ctype.(y)
-    return generalized_schur(z, x, y, optim=optim)
+    return generalized_schur(z, x, y; init_func)
 end
 
 function generalized_schur(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     res = similar(z, T)
     for i=1:length(z)
-        res[i] = generalized_schur(z[i], x, y, optim=optim)
+        res[i] = generalized_schur(z[i], x, y; init_func)
     end
     return res
 end
 
 function generalized_schur(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     ctype = Complex{ftype}
     z = ctype.(z)
     x = ctype.(x)
     y = ctype.(y)
-    return generalized_schur(z, x, y, optim=optim)
+    return generalized_schur(z, x, y; init_func)
 end
 
 
@@ -207,40 +203,40 @@ end
     Nevanlinna Interpolation algorithm
 """
 function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     if all(imag.(x) .≥ 0) == false 
         @warn "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
         @warn "Target data should be in the upper half complex plane"
     end
     y = mti.(y)
-    res = generalized_schur(z, x, y, optim=optim)
+    res = generalized_schur(z, x, y; init_func)
     return imti(res)
 end
 
 function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     ctype = Complex{ftype}
     z = ctype(z)
     x = ctype.(x)
     y = ctype.(y)
-    return nevanlinna(z, x, y, optim = optim)
+    return nevanlinna(z, x, y; init_func)
 end
 
 function nevanlinna(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     res = similar(z, T)
     for i=1:length(z)
-        res[i] = nevanlinna(z[i], x, y, optim=optim)
+        res[i] = nevanlinna(z[i], x, y; init_func)
     end
     return res
 end
 
 function nevanlinna(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    optim::Symbol = :none) where T
+    init_func::Function = z -> zero(T)) where T
     ctype = Complex{ftype}
     z = ctype.(z)
     x = ctype.(x)
     y = ctype.(y)
-    return nevanlinna(z, x, y, optim=optim)
+    return nevanlinna(z, x, y; init_func)
 end
