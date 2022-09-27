@@ -90,7 +90,7 @@ function spectrum(ω::Vector{T} where T<:Real, η::Real,
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     type == :f ? name = "A(ω)" : name = "ωA(ω)"
     z = ω .+ 1.0im * η
-    res = zeros(Ctype, length(ω))
+    res = zeros(eltype(y), length(ω))
     for i = 1:length(ω)
         res[i] = nevanlinna(z[i], x, y, optim=optim) 
     end
