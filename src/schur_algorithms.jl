@@ -18,7 +18,7 @@ _imti(z) = imt(z, oneunit(z)im)
 
 Check if a matrix `A` is positive semidefinite.
 """
-function ispossemidef(A::Matrix{T} where T<:Number)
+function ispossemidef(A::AbstractMatrix)
     evals = eigvals(A)
     return all(evals .>= 0)
 end
@@ -48,7 +48,9 @@ end
 
 
 """
-    Check if the Pick matrix is positive semidefinite
+    isGeneralizedSchursovable(x, y[;tolerance=1.e-10])
+    
+Check if the initial data `{z, f(z)}` can be interpolated by generalized schur algorithm.
 """
 function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; 
     tolerance::AbstractFloat = 1.e-10)
@@ -64,6 +66,12 @@ function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector;
     end
 end
 
+
+"""
+    isNevanlinnasolvable(x, y[;tolerance=1.e-10])
+    
+Check if the initial data `{z, f(z)}` can be interpolated by generalized schur algorithm for Nevanlinna functions.
+"""
 function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector; 
     tolerance::AbstractFloat = 1.e-10)
     if all(imag.(x) .≥ 0) == false 
@@ -81,20 +89,29 @@ end
 
 
 """
-    Recursion relation of contractive functions θp and θn
-    θp : previous θ(z)
-    θn : next θ(z)
-    recursion: θp = (a*θn + b)/(c*θn+d)
-    inv_recursion: θn = (-d*θp + b)/(c*θp - a)
-    The target function is θ_0 
+    _recursion(A::AbstractMatrix, θn::Number) 
+
+Recursion relation of contractive functions `θ(n)` and `θ(n-1)`,the relation is:
+```math
+θ(n-1) = [A[1,1]*θ(n) + A[1,2]]/[A[2,1]*θ(n)+A[2,2]]
+'''
 """
-function recursion(A::Matrix{T}, θn::T) where T
+function _recursion(A::AbstractMatrix, θn::Number)
     num = A[1,1] * θn + A[1,2]
     den = A[2,1] * θn + A[2,2]
     return num/den
 end
 
-function inv_recursion(A::Matrix{T}, θp::T) where T
+
+"""
+    _inv_recursion(A::AbstractMatrix, θn::Number) 
+
+Recursion relation of contractive functions `θ(n)` and `θ(n+1)`,the relation is:
+```math
+θ(n+1) = [-A[2,2]*θ(n) + A[1,2]]/[A[2,1]*θ(n)-A[1,1]]
+'''
+"""
+function _inv_recursion(A::AbstractMatrix, θp::Number)
     num = -A[2,2] * θp + A[1,2]
     den = A[2,1] * θp - A[1,1]
     return num/den
@@ -102,24 +119,24 @@ end
 
 
 """
-    coefficient of the recursion relation in generalized_schur algorithm
+    _coefficient(z, xj, ϕj) 
+
+Calculate the coefficient of the recursion relation in generalized_schur algorithm.
 """
-function coefficient(z::T, xj::T, ϕj::T) where T
-    A = zeros(T,2,2)
+function coefficient(z::Number, xj::Number, ϕj::Number) 
+    A = zeros(typeof(z),2,2)
     A[1,1] = mt(z, xj)
     A[1,2] = ϕj
     A[2,1] = ϕj' * mt(z, xj)
-    A[2,2] = one(T)
+    A[2,2] = one(typeof(z))
     return A
 end
 
 
 """
-    core: evaluate 'Schur parameters' for contractive functions
-    y1 within a unit circle
-    outpus: ϕ: Schur_parameters
-    factor[i]: abcd of i-the contractive function
-    abcd_out[i,j]: abcd of i-th contractive function at point x[j]
+    schur_parameter([ftype::DataType = T,] x::AbstractVector{T}, y::AbstractVector{T}) where T
+    
+Evaluate Schur parameters for contractive functions `y(x)` within a unit circle, return a list of Schur parameters
 """
 function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
     M = length(y)
@@ -133,7 +150,7 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
             abcd[k] *= prod
             abcd_out[j,k] = prod
         end
-        ϕ[j+1] = inv_recursion(abcd[j+1], y[j+1])
+        ϕ[j+1] = _inv_recursion(abcd[j+1], y[j+1])
         factor[j] = abcd[j+1]
         #if abs(ϕ[j+1]) ≥ 1.0 
         #    msg = @sprintf "%i-th Schur parameter ≥ 1 with absolute value: %.5f" j+1 abs(ϕ[j+1])
@@ -154,7 +171,9 @@ end
 
 
 """
-    Generalized Schur algorithm
+    generalized_schur([ftype::DataType = T,] x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
+
+The generalized Schur algorithm that extrapolates beween `{x,y}` and return a contractive function `f(z)`
 """
 function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
     init_func::Function = z -> zero(T)) where T
@@ -169,7 +188,7 @@ function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
         for j = 1:M
             abcd *= coefficient(z,x[j],ϕ[j])
         end
-        return recursion(abcd, init_func(z))
+        return _recursion(abcd, init_func(z))
     end
 end
 
@@ -202,7 +221,10 @@ end
 
 
 """
-    Nevanlinna Interpolation algorithm
+    nevanlinna([ftype::DataType = T,] x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
+
+The Nevanlinna Interpolation algorithm that extrapolates beween `{x,y}` and return a nevanlinna function `f(z)`.
+    
 """
 function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
     init_func::Function = z -> zero(T)) where T
