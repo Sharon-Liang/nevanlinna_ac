@@ -29,30 +29,26 @@ end
     output y: -G(iωn) for fermions
               -iiωn*G(iωn) for bosons
 """
-function toNevanlinnadata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+function toNevanlinnadata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, operator_type::OperatorType) where T
     ctype = Complex{ftype}
     Im = one(ftype)im
     x = ctype.(x); y = ctype.(y)
     x = Im * x
-    if type == :f
+    if operator_type == Fermi
         y = -y
-    elseif type == :b
-        y = -x .* y
     else
-        @error "type should be :f for fermions and :b for bosons"
+        y = -x .* y
     end
     return x, y
 end
 
-function toNevanlinnadata(x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+function toNevanlinnadata(x::AbstractVector{T}, y::AbstractVector{T}, operator_type::OperatorType) where T
     Im = one(T)im
     x = Im * x
-    if type == :f
+    if operator_type == Fermi
         y = -y
-    elseif type == :b
-        y = -x .* y
     else
-        @error "type should be :f for fermions and :b for bosons"
+        y = -x .* y
     end
     return x, y
 end
@@ -67,12 +63,12 @@ end
     output y: mt(-G(iωn), 1im) for fermions
               mt(-iiωn*G(iωn, 1im)) for bosons
 """
-function toGeneralizedSchurdata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+function toGeneralizedSchurdata(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}, operator_type::OperatorType) where T
     x, y = toNevanlinnadata(ftype, x, y, type)
     return x, mti.(ftype, y)
 end
 
-function toGeneralizedSchurdata(x::AbstractVector{T}, y::AbstractVector{T}, type::Symbol) where T
+function toGeneralizedSchurdata(x::AbstractVector{T}, y::AbstractVector{T}, operator_type::OperatorType) where T
     x, y = toNevanlinnadata(x, y, type)
     return x, mti.(y)
 end
@@ -84,11 +80,11 @@ end
     for bosons, it is ωA(ω)
 """
 function spectrum(ω::Vector{T} where T<:Real, η::Real, 
-    x::AbstractVector, y::AbstractVector, type::Symbol;
+    x::AbstractVector, y::AbstractVector, operator_type::OperatorType;
     optim = :none)
-    x, y = toNevanlinnadata(x,y,type)
+    x, y = toNevanlinnadata(x,y,operator_type )
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
-    type == :f ? name = "A(ω)" : name = "ωA(ω)"
+    operator_type == Fermi ? name = "A(ω)" : name = "ωA(ω)"
     z = ω .+ 1.0im * η
     res = zeros(eltype(y), length(ω))
     for i = 1:length(ω)
@@ -99,8 +95,8 @@ function spectrum(ω::Vector{T} where T<:Real, η::Real,
 end
 
 function spectrum(ω::Real, η::Real, 
-    x::AbstractVector, y::AbstractVector, type::Symbol;
+    x::AbstractVector, y::AbstractVector, operator_type::OperatorType;
     optim = :none)
-    return spectrum([ω], η, x, y, type, optim = optim)
+    return spectrum([ω], η, x, y, operator_type, optim = optim)
 end
 

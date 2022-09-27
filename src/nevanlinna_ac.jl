@@ -5,7 +5,7 @@ using LinearAlgebra
 using DelimitedFiles
 using Printf
 
-
+export OperatorType, Bose, Fermi
 export eye, ispossemidef
 export linear_fractional_transform, lft,
        mobius_transform, mt, 
