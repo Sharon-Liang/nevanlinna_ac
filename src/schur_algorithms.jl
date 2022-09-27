@@ -62,7 +62,7 @@ function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector;
         x = _mti.(x)
         pick = pick_matrix(x, y)
         evals = eigvals(pick) 
-        return all((evals .+ tolerance) .>= 0), minimum(evals)
+        return all((real.(evals) .+ tolerance) .>= 0), minimum(real.(evals))
     end
 end
 
@@ -83,7 +83,7 @@ function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector;
         y = _mti.(y)
         pick = pick_matrix(x, y)
         evals = eigvals(pick) 
-        return all((evals .+ tolerance) .>= 0), minimum(evals)
+        return all((real.(evals) .+ tolerance) .>= 0.), minimum(real.(evals))
     end
 end
 
@@ -162,14 +162,6 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
 end
 
 
-#function schur_parameter(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}) where T
-#    ctype = Complex{ftype}
-#    x = ctype.(x)
-#    y = ctype.(y)
-#    return schur_parameter(x,y)
-#end
-
-
 """
     generalized_schur(z::Number, x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
 
@@ -191,33 +183,6 @@ function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector; init
     end
 end
 
-#function generalized_schur(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
-#    init_func::Function = z -> zero(T)) where T
-#    ctype = Complex{ftype}
-#    z = ctype(z)
-#    x = ctype.(x)
-#    y = ctype.(y)
-#    return generalized_schur(z, x, y; init_func)
-#end
-
-#function generalized_schur(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-#    init_func::Function = z -> zero(T)) where T
-#    res = similar(z, T)
-#    for i=1:length(z)
-#        res[i] = generalized_schur(z[i], x, y; init_func)
-#    end
-#    return res
-#end
-
-#function generalized_schur(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-#    init_func::Function = z -> zero(T)) where T
-#    ctype = Complex{ftype}
-#    z = ctype.(z)
-#    x = ctype.(x)
-#    y = ctype.(y)
-#    return generalized_schur(z, x, y; init_func)
-#end
-
 
 """
     nevanlinna(z::Number, x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
@@ -235,30 +200,3 @@ function nevanlinna(z::Number, x::AbstractVector{T}, y::AbstractVector{T}; init_
     res = generalized_schur(z, x, y; init_func)
     return _imti(res)
 end
-
-#function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
-#    init_func::Function = z -> zero(T)) where T
-#    ctype = Complex{ftype}
-#    z = ctype(z)
-#    x = ctype.(x)
-#    y = ctype.(y)
-#    return nevanlinna(z, x, y; init_func)
-#end
-
-#function nevanlinna(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-#    init_func::Function = z -> zero(T)) where T
-#    res = similar(z, T)
-#    for i=1:length(z)
-#        res[i] = nevanlinna(z[i], x, y; init_func)
-#    end
-#    return res
-#end
-
-#function nevanlinna(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-#    init_func::Function = z -> zero(T)) where T
-#    ctype = Complex{ftype}
-#    z = ctype.(z)
-#    x = ctype.(x)
-#    y = ctype.(y)
-#    return nevanlinna(z, x, y; init_func)
-#end

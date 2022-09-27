@@ -1,9 +1,8 @@
 module nevanlinna_ac
 __precompile__()
 
-using LinearAlgebra
-using DelimitedFiles
-using Printf
+using LinearAlgebra, DoubleFloats
+using DelimitedFiles, Printf
 
 export OperatorType, Bose, Fermi
 
@@ -20,12 +19,13 @@ export pick_matrix,
 export coefficient,
        recursion, inv_recursion
 export readGF, toNevanlinnadata, toGeneralizedSchurdata,
-       spectrum
+       spectral_function_value, spectral_function
 
 include("utilities.jl")
 include("conformal_transforms.jl")
 include("schur_algorithms.jl")
+include("interpolate_GFs.jl")
 include("optim.jl")
-include("GFdata_manipulation.jl")
+
 
 end
