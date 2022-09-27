@@ -162,21 +162,20 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
 end
 
 
-function schur_parameter(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}) where T
-    ctype = Complex{ftype}
-    x = ctype.(x)
-    y = ctype.(y)
-    return schur_parameter(x,y)
-end
+#function schur_parameter(ftype::DataType, x::AbstractVector{T}, y::AbstractVector{T}) where T
+#    ctype = Complex{ftype}
+#    x = ctype.(x)
+#    y = ctype.(y)
+#    return schur_parameter(x,y)
+#end
 
 
 """
-    generalized_schur([ftype::DataType = T,] x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
+    generalized_schur(z::Number, x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
 
-The generalized Schur algorithm that extrapolates beween `{x,y}` and return a contractive function `f(z)`
+The generalized Schur algorithm that extrapolates beween `{x,y}` and generate a contractive function `f(z)`, return its value at `z`.
 """
-function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
+function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector; init_func::Function = z -> zero(eltype(y))) 
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
@@ -184,7 +183,7 @@ function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
     else
         M = length(y)
         ϕ = schur_parameter(x,y)
-        abcd = eye(T,2)
+        abcd = eye(eltype(y),2)
         for j = 1:M
             abcd *= coefficient(z,x[j],ϕ[j])
         end
@@ -192,42 +191,41 @@ function generalized_schur(z::T, x::AbstractVector{T}, y::AbstractVector{T};
     end
 end
 
-function generalized_schur(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
-    ctype = Complex{ftype}
-    z = ctype(z)
-    x = ctype.(x)
-    y = ctype.(y)
-    return generalized_schur(z, x, y; init_func)
-end
+#function generalized_schur(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
+#    init_func::Function = z -> zero(T)) where T
+#    ctype = Complex{ftype}
+#    z = ctype(z)
+#    x = ctype.(x)
+#    y = ctype.(y)
+#    return generalized_schur(z, x, y; init_func)
+#end
 
-function generalized_schur(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
-    res = similar(z, T)
-    for i=1:length(z)
-        res[i] = generalized_schur(z[i], x, y; init_func)
-    end
-    return res
-end
+#function generalized_schur(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+#    init_func::Function = z -> zero(T)) where T
+#    res = similar(z, T)
+#    for i=1:length(z)
+#        res[i] = generalized_schur(z[i], x, y; init_func)
+#    end
+#    return res
+#end
 
-function generalized_schur(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
-    ctype = Complex{ftype}
-    z = ctype.(z)
-    x = ctype.(x)
-    y = ctype.(y)
-    return generalized_schur(z, x, y; init_func)
-end
+#function generalized_schur(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+#    init_func::Function = z -> zero(T)) where T
+#    ctype = Complex{ftype}
+#    z = ctype.(z)
+#    x = ctype.(x)
+#    y = ctype.(y)
+#    return generalized_schur(z, x, y; init_func)
+#end
 
 
 """
-    nevanlinna([ftype::DataType = T,] x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
+    nevanlinna(z::Number, x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
 
-The Nevanlinna Interpolation algorithm that extrapolates beween `{x,y}` and return a nevanlinna function `f(z)`.
+The Nevanlinna Interpolation algorithm that extrapolates beween `{x,y}` and generate a nevanlinna function `f(z)`, return its value at `z`.
     
 """
-function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
+function nevanlinna(z::Number, x::AbstractVector{T}, y::AbstractVector{T}; init_func::Function = z -> zero(T)) where T
     if all(imag.(x) .≥ 0) == false 
         @warn "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
@@ -238,29 +236,29 @@ function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
     return _imti(res)
 end
 
-function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
-    ctype = Complex{ftype}
-    z = ctype(z)
-    x = ctype.(x)
-    y = ctype.(y)
-    return nevanlinna(z, x, y; init_func)
-end
+#function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
+#    init_func::Function = z -> zero(T)) where T
+#    ctype = Complex{ftype}
+#    z = ctype(z)
+#    x = ctype.(x)
+#    y = ctype.(y)
+#    return nevanlinna(z, x, y; init_func)
+#end
 
-function nevanlinna(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
-    res = similar(z, T)
-    for i=1:length(z)
-        res[i] = nevanlinna(z[i], x, y; init_func)
-    end
-    return res
-end
+#function nevanlinna(z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+#    init_func::Function = z -> zero(T)) where T
+#    res = similar(z, T)
+#    for i=1:length(z)
+#        res[i] = nevanlinna(z[i], x, y; init_func)
+#    end
+#    return res
+#end
 
-function nevanlinna(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
-    init_func::Function = z -> zero(T)) where T
-    ctype = Complex{ftype}
-    z = ctype.(z)
-    x = ctype.(x)
-    y = ctype.(y)
-    return nevanlinna(z, x, y; init_func)
-end
+#function nevanlinna(ftype::DataType, z::AbstractArray{T}, x::AbstractVector{T}, y::AbstractVector{T};
+#    init_func::Function = z -> zero(T)) where T
+#    ctype = Complex{ftype}
+#    z = ctype.(z)
+#    x = ctype.(x)
+#    y = ctype.(y)
+#    return nevanlinna(z, x, y; init_func)
+#end

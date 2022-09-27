@@ -94,9 +94,9 @@ function spectrum(ω::Vector{T} where T<:Real, η::Real,
     return res, name
 end
 
-function spectrum(ω::Real, η::Real, 
-    x::AbstractVector, y::AbstractVector, operator_type::OperatorType;
-    init_func::Function= z-> zero(eltype(y)))
-    return spectrum([ω], η, x, y, operator_type; init_func)
-end
+#function spectrum(ω::Real, η::Real, 
+#    x::AbstractVector, y::AbstractVector, operator_type::OperatorType;
+#    init_func::Function= z-> zero(eltype(y)))
+#    return spectrum([ω], η, x, y, operator_type; init_func)
+#end
 
