@@ -1,31 +1,33 @@
 """
-    (inv-)mobius_transform(z, 1im)
+    _mti(z)
+
+mobius_transform(z, 1im)
 """
-function mti(z::T) where T 
-    Im = one(T)im
-    return mt(z, Im)
-end
+_mti(z) = mt(z, oneunit(z)im)
 
-function mti(ftype::DataType, z::T) where T
-    Im = one(ftype)im
-    z = Complex{ftype}(z)
-    return mt(z, Im)
-end
+"""
+    _imti(z)
 
-function imti(z::T) where T
-    Im = one(T)im
-    return imt(z, Im)
-end
-
-function imti(ftype::DataType, z::T) where T
-    Im = one(ftype)im
-    z = Complex{ftype}(z)
-    return imt(z, Im)
-end
+inverse_mobius_transform(z, 1im)
+"""
+_imti(z) = imt(z, oneunit(z)im)
 
 
 """
-    Pick matrix of initial data {z, f(z)} with in a unit cell
+    ispossemidef(A::AbstractMatrix)
+
+Check if a matrix `A` is positive semidefinite.
+"""
+function ispossemidef(A::Matrix{T} where T<:Number)
+    evals = eigvals(A)
+    return all(evals .>= 0)
+end
+
+
+"""
+    pick_matrix(x, y)
+
+Pick matrix of initial data `{z, f(z)}` with in a unit cell.
 """
 function pick_matrix(x::AbstractVector, y::AbstractVector)
     if (all(abs.(x) .> 0) && all(abs.(y) .> 0)) == false
@@ -55,7 +57,7 @@ function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector;
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
-        x = mti.(x)
+        x = _mti.(x)
         pick = pick_matrix(x, y)
         evals = eigvals(pick) 
         return all((evals .+ tolerance) .>= 0), minimum(evals)
@@ -69,8 +71,8 @@ function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector;
     elseif all(imag.(y) .≥ 0) == false
         @error "Target data should be in the upper half complex plane"
     else
-        x = mti.(x)
-        y = mti.(y)
+        x = _mti.(x)
+        y = _mti.(y)
         pick = pick_matrix(x, y)
         evals = eigvals(pick) 
         return all((evals .+ tolerance) .>= 0), minimum(evals)
@@ -209,9 +211,9 @@ function nevanlinna(z::T, x::AbstractVector{T}, y::AbstractVector{T};
     elseif all(imag.(y) .≥ 0) == false
         @warn "Target data should be in the upper half complex plane"
     end
-    y = mti.(y)
+    y = _mti.(y)
     res = generalized_schur(z, x, y; init_func)
-    return imti(res)
+    return _imti(res)
 end
 
 function nevanlinna(ftype::DataType, z::T, x::AbstractVector{T}, y::AbstractVector{T};
