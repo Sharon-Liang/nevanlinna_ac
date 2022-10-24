@@ -56,10 +56,15 @@ function spectral_function_value(ω::Number, operator_type::OperatorType, x::Abs
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     
     ω = convert(float_type, ω)
-    z = ω + one(float_type)im * η 
-    res = 2*imag(nevanlinna(z, x, y; init_func))
-    
-    operator_type == Fermi ? (return res) : (return res/ω)
+    z = ω + one(float_type)im * η
+    Gω =  nevanlinna(z, x, y; init_func)
+    if operator_type == Fermi
+        return 2*imag(Gω)
+    else
+        num = ω*imag(Gω) - η*real(Gω)
+        den = ω^2 + η^2
+        return 2*num/den
+    end
 end
 
 
