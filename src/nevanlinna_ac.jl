@@ -7,18 +7,22 @@ using DelimitedFiles, Printf
 export OperatorType, Bose, Fermi
 
 export eye, ispossemidef
+
 export linear_fractional_transform, lft,
        mobius_transform, mt, 
        inverse_mobius_transform, imt
+
 export pick_matrix, 
        isGeneralizedSchursovable,
        isNevanlinnasolvable,
        schur_parameter,
        generalized_schur,
        nevanlinna 
+
 export coefficient,
        recursion, inv_recursion
-export readGF, toNevanlinnadata, toGeneralizedSchurdata,
+       
+export toNevanlinnadata, toGeneralizedSchurdata,
        spectral_function_value, spectral_function
 
 include("utilities.jl")

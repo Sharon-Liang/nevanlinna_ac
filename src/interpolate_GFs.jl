@@ -1,26 +1,4 @@
 """
-    Read Masubara Green's function data
-"""
-function readGF(float_type::DataType, path::String; rev::Bool=true, num::Integer = 100)
-    Im = one(float_type)im  #define imaginary unit
-    ctype =  Complex{float_type} 
-    d = readdlm(path)
-    x = ctype.(d[:,1]) 
-    y = float_type.(d[:,2]) + Im * float_type.(d[:,3])
-    num = min(length(x), num)
-    x1, y1 = x[1:num], y[1:num]
-    if rev == true
-        x1 = reverse(x1); y1=reverse(y1)
-    end
-    return x1, y1
-end
-
-function readGF(path::String; rev::Bool=true, num::Integer = 100)
-    readGF(Float64, path; rev = rev, num = num)
-end
-
-
-"""
     toNevanlinnadata(x::AbstractVector, y::AbstractVector, type::OperatorType[, float_type::DataType = Double64] )
 
 Convert Masubara frequency correlation function data to Nevanlinna data
