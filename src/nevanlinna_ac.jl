@@ -23,6 +23,7 @@ export coefficient,
        recursion, inv_recursion
        
 export toNevanlinnadata, toGeneralizedSchurdata,
+       spectral_function_value_bose, spectral_function_value_fermi, 
        spectral_function_value, spectral_function
 
 include("utilities.jl")
