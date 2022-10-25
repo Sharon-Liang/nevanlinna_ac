@@ -55,7 +55,7 @@ function spectral_function_value(ω::Number, operator_type::OperatorType, x::Abs
     end
     C0 = convert(float_type, C0)
     append!(x, one(float_type)im * η)
-    append!(y, η*(one(float_type) - η)*C0)
+    append!(y, one(float_type)im * η * (one(float_type) - η) * C0)
 
     if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     
