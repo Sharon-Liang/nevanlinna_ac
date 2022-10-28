@@ -206,9 +206,9 @@ The Nevanlinna Interpolation algorithm that extrapolates beween `{x,y}` and gene
 """
 function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector, args...)
     if all(imag.(x) .≥ 0) == false 
-        @warn "Initial data should be in the upper half complex plane"
+        @error "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
-        @warn "Target data should be in the upper half complex plane"
+        @error "Target data should be in the upper half complex plane"
     end
     y = _mti.(y)
     res = generalized_schur(z, x, y, args...)
