@@ -3,7 +3,8 @@ __precompile__()
 
 using LinearAlgebra, DoubleFloats
 using DelimitedFiles, Printf
-using Zygote#, ChainRulesCore
+using Zygote#, Optim
+using FFTW
 
 export OperatorType, Bose, Fermi
 

@@ -25,3 +25,17 @@ function ngradient(f, xs::AbstractArray...)
     end
     return grads
 end
+
+
+"""
+    gradient_function(loss, pars::AbstractArray)
+
+Generate the gradient function of `loss`
+"""
+function gradient_function(loss, pars::AbstractArray)
+    g! = function (g, pars)
+        grads = Zygote.gradient(loss, pars)[1]
+        copy!(g, grads)
+    end
+    return g!
+end

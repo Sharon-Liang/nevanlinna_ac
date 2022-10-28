@@ -1,8 +1,9 @@
 using NevanlinnaAC
 using NevanlinnaAC: ngradient
 using NevanlinnaAC: hardy_expand
+using NevanlinnaAC: loss_fermi
 
-using Test, Zygote
+using Test, Zygote, Optim
 using DelimitedFiles
 
 @testset "hardy_expand" begin
@@ -25,7 +26,7 @@ ydata = data[1:N,2] + 1.0im * data[1:N,3];
     p0 = rand(6)
     gn = ngradient(f, p0)[1]
     gz = gradient(f, p0)[1]
-    @test ≈(gn, gz)
+    @test ≈(gn, gz; rtol=1.e-7)
 end
 
 @testset "nevanlinna" begin
@@ -57,3 +58,20 @@ end
     @test ≈(gn, gz)
 end
 
+@testset "loss_fermi gradient" begin
+    p0 = rand(6)
+    loss = params -> loss_fermi(params, xdata, ydata)
+    gn = ngradient(loss, p0)[1]
+    gz = gradient(loss, p0)[1]
+    @test ≈(gn, gz; rtol=1.e-6)
+end
+
+@testset "loss_fermi " begin
+    @show p0 = rand(6)
+    loss = params -> loss_fermi(params, xdata, ydata; Nω = 2000)
+    g! = function (g, p0)
+        grads = Zygote.gradient(loss, p0)[1]
+        copy!(g, grads)
+    end
+    @show res = Optim.optimize(loss, g!, p0, LBFGS(), Optim.Options(show_trace=true))
+end
