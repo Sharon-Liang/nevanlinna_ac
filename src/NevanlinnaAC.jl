@@ -1,8 +1,9 @@
-module nevanlinna_ac
+module NevanlinnaAC
 __precompile__()
 
 using LinearAlgebra, DoubleFloats
 using DelimitedFiles, Printf
+using Zygote#, ChainRulesCore
 
 export OperatorType, Bose, Fermi
 
@@ -26,11 +27,13 @@ export toNevanlinnadata, toGeneralizedSchurdata,
        spectral_function_value_bose, spectral_function_value_fermi, 
        spectral_function_value, spectral_function
 
+
 include("utilities.jl")
 include("conformal_transforms.jl")
+include("hardy_basis.jl")
+
 include("schur_algorithms.jl")
 include("interpolate_GFs.jl")
-#include("optim.jl")
 
-
+include("optimization.jl")
 end

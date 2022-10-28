@@ -52,7 +52,8 @@ end
     
 Check if the initial data `{z, f(z)}` can be interpolated by generalized schur algorithm.
 """
-function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; tolerance::AbstractFloat = 1.e-10)
+function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; 
+    tolerance::AbstractFloat = 1.e-10)
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
@@ -64,6 +65,7 @@ function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; toleran
         return all((real.(evals) .+ tolerance) .>= 0), minimum(real.(evals))
     end
 end
+
 
 """
     isNevanlinnasolvable(x, y[;tolerance=1.e-10])
@@ -84,7 +86,6 @@ function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector;
         return all((real.(evals) .+ tolerance) .>= 0.), minimum(real.(evals))
     end
 end
-
 
 
 """
@@ -118,7 +119,7 @@ end
 
 
 """
-    coefficient(z, xj, ϕj) 
+    _coefficient(z, xj, ϕj) 
 
 Calculate the coefficient of the recursion relation in generalized_schur algorithm.
 """
@@ -160,12 +161,13 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
     #return ϕ, factor, abcd_out
 end
 
+
 """
     generalized_schur(z::Number, x::AbstractVector{T}, y::AbstractVector{T}[; init_func::Function = x->zero(T)]) where T
 
 The generalized Schur algorithm that extrapolates beween `{x,y}` and generate a contractive function `f(z)`, return its value at `z`.
 """
-function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector) 
+function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector; init_func::Function = z -> zero(eltype(y))) 
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
@@ -177,23 +179,7 @@ function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector)
         for j = 1:M
             abcd *= coefficient(z,x[j],ϕ[j])
         end
-        return _recursion(abcd, zero(eltype(y)))
-    end
-end
-
-function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector, params::AbstractArray) 
-    if all(imag.(x) .≥ 0) == false 
-        @error "Initial data should be in the upper half complex plane"
-    elseif all(abs.(y) .≤ 1) == false 
-        @error "Target data should be in the unit circle"
-    else
-        M = length(y)
-        ϕ = schur_parameter(x,y)
-        abcd = eye(eltype(y),2)
-        for j = 1:M
-            abcd *= coefficient(z,x[j],ϕ[j])
-        end
-        return _recursion(abcd, hardy_expand(z, params))
+        return _recursion(abcd, init_func(z))
     end
 end
 
@@ -204,13 +190,13 @@ end
 The Nevanlinna Interpolation algorithm that extrapolates beween `{x,y}` and generate a nevanlinna function `f(z)`, return its value at `z`.
     
 """
-function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector, args...)
+function nevanlinna(z::Number, x::AbstractVector{T}, y::AbstractVector{T}; init_func::Function = z -> zero(T)) where T
     if all(imag.(x) .≥ 0) == false 
         @warn "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
         @warn "Target data should be in the upper half complex plane"
     end
     y = _mti.(y)
-    res = generalized_schur(z, x, y, args...)
+    res = generalized_schur(z, x, y; init_func)
     return _imti(res)
 end
