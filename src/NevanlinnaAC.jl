@@ -8,11 +8,11 @@ using FFTW
 
 export OperatorType, Bose, Fermi
 
-export eye, ispossemidef
+#export eye, ispossemidef
 
-export linear_fractional_transform, lft,
-       mobius_transform, mt, 
-       inverse_mobius_transform, imt
+#export linear_fractional_transform, lft,
+#       mobius_transform, mt, 
+#       inverse_mobius_transform, imt
 
 export pick_matrix, 
        isGeneralizedSchursovable,
@@ -20,9 +20,6 @@ export pick_matrix,
        schur_parameter,
        generalized_schur,
        nevanlinna 
-
-export coefficient,
-       recursion, inv_recursion
        
 export toNevanlinnadata, toGeneralizedSchurdata,
        spectral_function_value_bose, spectral_function_value_fermi, 
