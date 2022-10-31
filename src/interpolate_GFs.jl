@@ -69,19 +69,21 @@ end
 
 Calculate the spectral function `A(ω)` for given dataset `{x=ωn, y=G(iωn)}` at `ω` if `G(iωn)` is bosonic.
 """
-function spectral_function_value_bose(ω::Number, x::AbstractVector, y::AbstractVector, g0::Real, args...; float_type::DataType=Double64, η::Real = 0.05, toreverse::Bool=true)
+function spectral_function_value_bose(ω::Number, x::AbstractVector, y::AbstractVector, g0::Real, args...; float_type::DataType=Double64, η::Real = 0.05, toreverse::Bool=true, alpha::Real=1.0)
     x, y = toNevanlinnadata(x, y, Bose, float_type)
     if toreverse == true
         x = reverse(x)
         y = reverse(y)
     end
     
-    g0 = convert(float_type, g0)
-    x_new = vcat(x, [one(float_type)im * η])
-    y_new = vcat(y, [-one(float_type)im * η * (one(float_type) - η^2) * g0])
-    #append!(x, one(float_type)im * η)
-    #append!(y, -one(float_type)im * η * (one(float_type) - η^2) * g0)
-
+    if g0 != 0.
+        g0 = convert(float_type, g0)
+        x_new = vcat(x, [one(float_type)im * η])
+        y_new = vcat(y, [-one(float_type)im * η * (one(float_type) - alpha * η^2) * g0])
+    else
+        x_new = x
+        y_new = y
+    end
     #if isNevanlinnasolvable(x,y)[1] == false @warn "Nevanlinna unsolvable!" end
     
     ω = convert(float_type, ω)
