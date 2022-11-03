@@ -29,3 +29,5 @@ References/run/*.cpp
 
 .DS_Store
 .vscode/settings.json
+
+*.ipynb
