@@ -3,12 +3,10 @@ using Random; Random.seed!()
 using HCubature
 using DelimitedFiles, Printf
 using Plots
+using NevanlinnaAC: OperatorType, Bose, Fermi
 
-function Masubara_freq(n::Int64, β::Real; type::Symbol= :f)
-    if type == :b  N = 2n
-    elseif type == :f  N = 2n + 1
-    else @error "type should be :b for bosons and :f for fermions" 
-    end
+function Masubara_freq(n::Int64, β::Real, type::OperatorType)
+    type == Bose ? N = 2n : N = 2n + 1
     return N*π/β
 end
 
@@ -16,11 +14,10 @@ end
 """
 G(iωn) = 1/2π ∫dΩ A(Ω)/(iωn - Ω)
 """
-function Masubara_GF(n::Int64, A::Function, β::Real;
-    type::Symbol = :f, Λ::Float64=100., err::Float64=1.e-15)
-    ωn = Masubara_freq(n, β, type=type)
-    res = hquadrature(ω -> A(ω)/(1.0im*ωn-ω), -Λ, Λ,rtol=err)
-    return res[1]/(2π)
+function Masubara_GF(n::Int64, A::Function, β::Real, type::OperatorType; Λ::Float64=100., err::Float64=1.e-15)
+    ωn = Masubara_freq(n, β, type)
+    res = hquadrature(ω -> A(ω)/(1.0im*ωn-ω), -Λ,  Λ, rtol=err)
+    return res[1]/2π
 end
 
 
@@ -55,7 +52,7 @@ function multi_gaussian(N::Int64; μrange::Vector=[-3.,3.], s2max::Real=3.)
     function sum_gaussian(x::Real)
         res = 0.
         for i = 1: N
-            res += gaussian(x, μs[i], s2[i])
+            res += gaussian(x, μs[i], s2[i]) * 2π
         end
         res/N
     end
@@ -69,7 +66,17 @@ end
 omega = [i for i in range(-4π, 4π, length=500)]
 Fn = 40
 β = 20
-ωn = [Masubara_freq(n,β) for n=1:Fn]
+ωn = [Masubara_freq(n, β, Bose) for n=1:Fn]
+
+
+
+
+f, _, _ = multi_gaussian(3, μrange=[1,3])
+
+
+
+
+
 
 p1 = "./data/gaussian/giwn_delta_eta_0.05.txt"
 op1 = "./data/gaussian/A_delta_eta_0.05.txt"

@@ -1,5 +1,5 @@
 using NevanlinnaAC
-using NevanlinnaAC: ngradient
+using NevanlinnaAC: ngradient, gradient_function
 using NevanlinnaAC: hardy_expand
 using NevanlinnaAC: loss_fermi, loss_bose
 
@@ -72,5 +72,5 @@ end
     loss = params -> loss_bose(params, xdata, ydata, g0; Nω = 500)
     gn = ngradient(loss, p0)[1]
     gz = gradient(loss, p0)[1]
-    @test ≈(gn, gz; rtol=1.e-5)
+    @test ≈(gn, gz, rtol=1.e-6)
 end
