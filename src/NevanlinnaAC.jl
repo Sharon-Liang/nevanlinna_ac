@@ -4,7 +4,7 @@ __precompile__()
 using LinearAlgebra, DoubleFloats
 using DelimitedFiles, Printf
 using Zygote#, Optim
-using FFTW
+using FFTW, FiniteDifferences
 
 export OperatorType, Bose, Fermi
 

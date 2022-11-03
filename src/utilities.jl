@@ -10,11 +10,11 @@ Operator type of physical observables
 
 Calculate the gradient of `f(xs...)` by finite differences.
 """
-function ngradient(f, xs::AbstractArray...)
+function ngradient(f, xs::AbstractArray...; step::Real=sqrt(eps()))
     #https://github.com/FluxML/Zygote.jl/blob/master/test/gradcheck.jl
     grads = zero.(xs)
     for (x, Δ) in zip(xs, grads), i in 1:length(x)
-      δ = sqrt(eps())
+      δ = step
       tmp = x[i]
       x[i] = tmp - δ/2
       y1 = f(xs...)
