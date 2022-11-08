@@ -26,6 +26,29 @@ function ngradient(f, xs::AbstractArray...; step::Real=sqrt(eps()))
     return grads
 end
 
+function ngradient(f, xs::Number; step::Real=sqrt(eps()))
+    #https://github.com/FluxML/Zygote.jl/blob/master/test/gradcheck.jl
+    δ = step
+    y1 = f(xs - δ/2)
+    y2 = f(xs + δ/2)
+    return (y2-y1)/δ
+end
+
+
+"""
+    ngradient2(f, xs::AbstractArray...)
+
+Calculate the second order derivative of `f(xs...)` by finite differences.
+"""
+function ngradient2(f, xs::Number; step::Real=sqrt(eps()))
+    δ = step
+    df = x -> ngradient(f, x; step)
+    y1 = df(xs - δ/2)
+    y2 = df(xs + δ/2)
+    return (y2-y1)/δ
+end
+
+
 
 """
     gradient_function(loss, pars::AbstractArray)
