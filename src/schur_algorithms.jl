@@ -3,14 +3,14 @@
 
 mobius_transform(z, 1im)
 """
-_mti(z) = mt(z, oneunit(z)im)
+_mti(z; show_warning::Bool=false) = mt(z, oneunit(z)im; show_warning)
 
 """
     _imti(z)
 
 inverse_mobius_transform(z, 1im)
 """
-_imti(z) = imt(z, oneunit(z)im)
+_imti(z; show_warning::Bool=false) = imt(z, oneunit(z)im; show_warning)
 
 
 """
@@ -52,13 +52,13 @@ end
     
 Check if the initial data `{z, f(z)}` can be interpolated by generalized schur algorithm.
 """
-function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; tolerance::AbstractFloat = 1.e-10)
+function isGeneralizedSchursovable(x::AbstractVector, y::AbstractVector; tolerance::AbstractFloat = 1.e-10, show_warning::Bool=false)
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
-        x = _mti.(x)
+        x = _mti.(x; show_warning)
         pick = pick_matrix(x, y)
         evals = eigvals(pick) 
         return all((real.(evals) .+ tolerance) .>= 0), minimum(real.(evals))
@@ -70,15 +70,14 @@ end
     
 Check if the initial data `{z, f(z)}` can be interpolated by generalized schur algorithm for Nevanlinna functions.
 """
-function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector; 
-    tolerance::AbstractFloat = 1.e-10)
+function isNevanlinnasolvable(x::AbstractVector, y::AbstractVector; tolerance::AbstractFloat = 1.e-10, show_warning::Bool=false)
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
         @error "Target data should be in the upper half complex plane"
     else
-        x = _mti.(x)
-        y = _mti.(y)
+        x = _mti.(x; show_warning)
+        y = _mti.(y; show_warning)
         pick = pick_matrix(x, y)
         evals = eigvals(pick) 
         return all((real.(evals) .+ tolerance) .>= 0.), minimum(real.(evals))
@@ -122,9 +121,9 @@ end
 
 Calculate the coefficient of the recursion relation in generalized_schur algorithm.
 """
-function coefficient(z::Number, xj::Number, ϕj::Number) 
+function coefficient(z::Number, xj::Number, ϕj::Number, show_warning::Bool=false) 
     A = zeros(typeof(xj),2,2)
-    A[1,1] = mt(z, xj)
+    A[1,1] = mt(z, xj; show_warning)
     A[1,2] = ϕj
     A[2,1] = ϕj' * mt(z, xj)
     A[2,2] = one(typeof(xj))
@@ -137,7 +136,7 @@ end
     
 Evaluate Schur parameters for contractive functions `y(x)` within a unit circle, return a list of Schur parameters
 """
-function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
+function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}, show_warning::Bool=false) where T
     M = length(y)
     ϕ = zeros(T, M); ϕ[1] = y[1]
     abcd = fill(eye(T,2), M)
@@ -145,7 +144,7 @@ function schur_parameter(x::AbstractVector{T}, y::AbstractVector{T}) where T
     factor = fill(zeros(T,2,2), M-1)
     for j = 1:(M-1)
         for k=j:M
-            prod = coefficient(x[k], x[j], ϕ[j])
+            prod = coefficient(x[k], x[j], ϕ[j], show_warning)
             abcd[k] *= prod
             abcd_out[j,k] = prod
         end
@@ -165,33 +164,33 @@ end
 
 The generalized Schur algorithm that extrapolates beween `{x,y}` and generate a contractive function `f(z)`, return its value at `z`.
 """
-function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector) 
+function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector; show_warning::Bool=false) 
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
         M = length(y)
-        ϕ = schur_parameter(x,y)
+        ϕ = schur_parameter(x, y, show_warning)
         abcd = eye(eltype(y),2)
         for j = 1:M
-            abcd *= coefficient(z,x[j],ϕ[j])
+            abcd *= coefficient(z, x[j], ϕ[j], show_warning)
         end
         return _recursion(abcd, zero(eltype(y)))
     end
 end
 
-function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector, params::AbstractArray) 
+function generalized_schur(z::Number, x::AbstractVector, y::AbstractVector, params::AbstractArray; show_warning::Bool=false) 
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(abs.(y) .≤ 1) == false 
         @error "Target data should be in the unit circle"
     else
         M = length(y)
-        ϕ = schur_parameter(x,y)
+        ϕ = schur_parameter(x, y, show_warning)
         abcd = eye(eltype(y),2)
         for j = 1:M
-            abcd *= coefficient(z,x[j],ϕ[j])
+            abcd *= coefficient(z, x[j], ϕ[j], show_warning)
         end
         return _recursion(abcd, hardy_expand(z, params))
     end
@@ -204,13 +203,13 @@ end
 The Nevanlinna Interpolation algorithm that extrapolates beween `{x,y}` and generate a nevanlinna function `f(z)`, return its value at `z`.
     
 """
-function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector, args...)
+function nevanlinna(z::Number, x::AbstractVector, y::AbstractVector, args...; show_warning::Bool = false)
     if all(imag.(x) .≥ 0) == false 
         @error "Initial data should be in the upper half complex plane"
     elseif all(imag.(y) .≥ 0) == false
         @error "Target data should be in the upper half complex plane"
     end
     y = _mti.(y)
-    res = generalized_schur(z, x, y, args...)
+    res = generalized_schur(z, x, y, args...; show_warning)
     return _imti(res)
 end

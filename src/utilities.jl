@@ -49,7 +49,6 @@ function ngradient2(f, xs::Number; step::Real=sqrt(eps()))
 end
 
 
-
 """
     gradient_function(loss, pars::AbstractArray)
 
@@ -61,4 +60,22 @@ function gradient_function(loss, pars::AbstractArray)
         copy!(g, grads)
     end
     return g!
+end
+
+
+"""
+    fft_derivative(datalist::AbstractVector{<:Real}, L::Real, n::Real=1)
+
+    calculate the `n`-th order derivative of given ``datalist``. ``L`` is the lenth of definition range `x ∈ [xmin, xmin+L]`
+"""
+
+function fft_derivative(datalist::AbstractVector{<:Real}, L::Real, n::Real=1)
+    Nω = length(datalist)
+    klist = fftfreq(Nω) * Nω
+    if eltype(datalist) <: FFTW.fftwNumber
+        fft_datalist = fft(dataliat)
+    else
+        fft_datalist = fft(convert(Vector{Float64}, datalist))
+    end
+    return real.(ifft((2π*im/L .* klist).^n .* fft_datalist))
 end

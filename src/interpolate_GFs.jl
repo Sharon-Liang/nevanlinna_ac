@@ -47,7 +47,7 @@ end
 
 Calculate the spectral function `A(ω)` for given dataset `{x=ωn, y=G(iωn)}` at `ω` if `G(iωn)` is fermionic.
 """
-function spectral_function_value_fermi(ω::Number, x::AbstractVector, y::AbstractVector, args...; float_type::DataType=Double64, η::Real = 0.05, toreverse::Bool=true)
+function spectral_function_value_fermi(ω::Number, x::AbstractVector, y::AbstractVector, args...; float_type::DataType=Double64, η::Real = 0.05, toreverse::Bool=true, show_warning::Bool = false)
     x, y = toNevanlinnadata(x, y, Fermi, float_type)
     if toreverse == true
         x = reverse(x)
@@ -58,7 +58,7 @@ function spectral_function_value_fermi(ω::Number, x::AbstractVector, y::Abstrac
     
     ω = convert(float_type, ω)
     z = ω + one(float_type)im * η
-    Gω =  nevanlinna(z, x, y, args...)
+    Gω =  nevanlinna(z, x, y, args...; show_warning)
 
     return 2*imag(Gω)
 end
@@ -69,14 +69,14 @@ end
 
 Calculate the spectral function `A(ω)` for given dataset `{x=ωn, y=G(iωn)}` at `ω` if `G(iωn)` is bosonic.
 """
-function spectral_function_value_bose(ω::Number, x::AbstractVector, y::AbstractVector, g0::Real, args...; float_type::DataType=Double64, η::Real = 0.05, toreverse::Bool=true, alpha::Real=1.0)
+function spectral_function_value_bose(ω::Number, x::AbstractVector, y::AbstractVector, g0::Real, args...; float_type::DataType=Double64, η::Real = 0.05, toreverse::Bool=true, alpha::Real=1.0, use_g0::Bool=false, show_warning::Bool=false)
     x, y = toNevanlinnadata(x, y, Bose, float_type)
     if toreverse == true
         x = reverse(x)
         y = reverse(y)
     end
     
-    if g0 != 0.
+    if use_g0
         g0 = convert(float_type, g0)
         x_new = vcat(x, [one(float_type)im * η])
         y_new = vcat(y, [-one(float_type)im * η * (one(float_type) - alpha * η^2) * g0])
@@ -88,7 +88,7 @@ function spectral_function_value_bose(ω::Number, x::AbstractVector, y::Abstract
     
     ω = convert(float_type, ω)
     z = ω + one(float_type)im * η
-    Gω =  nevanlinna(z, x_new, y_new, args...)
+    Gω =  nevanlinna(z, x_new, y_new, args...; show_warning)
     
     num = ω*imag(Gω) - η*real(Gω)
     den = ω^2 + η^2
