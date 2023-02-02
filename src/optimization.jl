@@ -1,52 +1,84 @@
-Zygote.@nograd ispossemidef
 Zygote.@nograd pick_matrix
-Zygote.@nograd isGeneralizedSchursovable
-Zygote.@nograd isNevanlinnasolvable
+Zygote.@nograd issolvable
 Zygote.@nograd schur_parameter
 Zygote.@nograd coefficient
 
-Zygote.@nograd toNevanlinnadata
-Zygote.@nograd toGeneralizedSchurdata
+Zygote.@nograd toNevData
+Zygote.@nograd toGenSchurData
 Zygote.@nograd fftfreq
 
-
 """
-loss_fermi(params::AbstractArray, x::AbstractArray, y::AbstractVector; ωmax::Real=4π, Nω::Int=500, λ::Real=1.e-4, kwargs...)
+    ngradient(f, xs::AbstractArray...)
 
-    loss function for fermionic case
+Calculate the gradient of `f(xs...)` by finite differences.
 """
-function loss_fermi(params::AbstractArray, x::AbstractArray, y::AbstractVector; ωmax::Real=4π, Nω::Int=500, λ::Real=1.e-4, kwargs...)
-    _, Alist = spectral_function(Fermi, x, y, params; ωmax, Nω, kwargs...)
-    
-    L = 2*ωmax; Δω = L/Nω
-    dA2_dω2 = fft_derivative(Alist, L, 2)
-
-    sum_rule = abs(1.0 - sum(Alist) * Δω)^2
-    smooth_condition = λ * norm(dA2_dω2)^2 * Δω
- 
-    return sum_rule + smooth_condition
-end
-
-
-"""
-loss_bose(params::AbstractArray, x::AbstractArray, y::AbstractVector, g0::Real; ωmax::Real=4π, Nω::Int=500, λ::Real=1.e-4, kwargs...)
-
-"""
-function loss_bose(params::AbstractArray, x::AbstractArray, y::AbstractVector, g0::Real; ωmax::Real=4π, Nω::Int=500, λ::Real=1.e-4, isodd::Bool=false, kwargs...)
-    if rem(Nω, 2)==0 Nω = Nω + 1 end
-    ωlist, Alist = spectral_function(Bose, x, y, g0, params; ωmax, Nω, kwargs...)
-    
-    L = 2*ωmax; Δω = L/Nω
-    Ãlist = Alist ./ ωlist
-    sum_rule = abs(-g0 - sum(Ãlist) * Δω/2π)^2
-
-    dA2_dω2 = fft_derivative(Alist, L, 2)
-    smooth_condition = λ * norm(dA2_dω2)^2 * Δω
-
-    if isodd
-        odd_condition = norm((Alist[2:end] .+ reverse(Alist[2:end]))./2)^2 * Δω
-        return sum_rule + smooth_condition + odd_condition
-    else
-        return sum_rule + smooth_condition
+function ngradient(f, xs::AbstractArray...; step::Real=sqrt(eps()))
+    #https://github.com/FluxML/Zygote.jl/blob/master/test/gradcheck.jl
+    grads = zero.(xs)
+    for (x, Δ) in zip(xs, grads), i in eachindex(x)
+      δ = step
+      tmp = x[i]
+      x[i] = tmp - δ/2
+      y1 = f(xs...)
+      x[i] = tmp + δ/2
+      y2 = f(xs...)
+      x[i] = tmp
+      Δ[i] = (y2-y1)/δ
     end
+    return grads
 end
+
+
+"""
+    gradient_function(loss, pars::AbstractArray)
+
+Generate the gradient function of `loss`
+"""
+function gradient_function(loss, pars::AbstractArray)
+    g! = function (g, pars)
+        grads = Zygote.gradient(loss, pars)[1]
+        copy!(g, grads)
+    end
+    return g!
+end
+
+
+"""
+    fft_derivative(datalist::AbstractVector{<:Real}, L::Real, n::Real=1)
+
+    calculate the `n`-th order derivative of given ``datalist``. ``L`` is the lenth of definition range `x ∈ [xmin, xmin+L]`
+"""
+
+function fft_derivative(datalist::AbstractVector{<:Real}, L::Real, n::Real=1)
+    Nω = length(datalist)
+    klist = fftfreq(Nω) * Nω
+    if eltype(datalist) <: FFTW.fftwNumber
+        fft_datalist = fft(datalist)
+    else
+        fft_datalist = fft(convert(Vector{Float64}, datalist))
+    end
+    return real.(ifft((2π*im/L .* klist).^n .* fft_datalist))
+end
+
+
+function loss(params::AbstractArray, d::RawData, option::Options; λ::Real=1.e-4)
+    @unpack wmax, wmin, nmesh, otype = option
+
+    wmesh, Aw = spectral_function(option, d, params)
+    L = wmax - wmin
+    Δω = L/nmesh
+
+    ∂²Aw = fft_derivative(Aw, L, 2)
+    smooth_condition = λ * norm(∂²Aw)^2 * Δω 
+    
+    if otype == Fermi
+        sum_rule = abs(1.0 - sum(Aw) * Δω)^2
+    else
+        ind = findall(x -> x==0.0, grid)
+        Ãw = @. Aw / wmesh
+        sum_rule = abs(-d.value[ind] - sum(Ãw) * Δω)^2
+    end
+
+    return smooth_condition + sum_rule
+end
+

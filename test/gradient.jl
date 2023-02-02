@@ -9,14 +9,15 @@ using Random; Random.seed!()
 using FiniteDifferences
 
 fermi_clean_data = readdlm("./data/gaussian/giwn_gaussian_3.txt")
-bose_clean_data = readdlm("./data/giwn_hubbard_M_point_beta_1.00.txt", skipstart = 2)
+bose_clean_data = readdlm("./data/giwn_bandgap_M_point_beta_10.00.txt", skipstart = 2)
 
-Nf = 10
+Nf = 20
 fermiX = convert(Vector{ComplexF64}, fermi_clean_data[1:Nf,1])
 fermiY = fermi_clean_data[1:Nf,2] + 1.0im * fermi_clean_data[1:Nf,3]
 
 boseX = convert(Vector{ComplexF64}, bose_clean_data[2:Nf+1,1])
 boseY = bose_clean_data[2:Nf+1,2] + 1.0im * bose_clean_data[2:Nf+1,3]
+g0 = bose_clean_data[1,2]
 
 @testset "hardy_expand" begin
     z = rand() + 0.01im
@@ -58,7 +59,6 @@ end
 
 @testset "spectral_function_value_bose" begin
     ω = rand()
-    g0 = 0.0
     f(params) = spectral_function_value_bose(ω, boseX, boseY, g0, params)
     p0 = rand(6)
     gn = ngradient(f, p0)[1]
@@ -75,8 +75,7 @@ end
 end
 
 @testset "loss_bose " begin
-    p0 = rand(6)
-    g0 = 0.0
+    p0 = rand(10)
     setprecision(BigFloat, 128)
     for isodd in [true, false], use_g0 in [true, false]
         loss = params -> loss_bose(params, boseX, boseY, g0; isodd, float_type = BigFloat, use_g0)
