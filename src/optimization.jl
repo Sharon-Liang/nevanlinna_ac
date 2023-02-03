@@ -6,6 +6,7 @@ Zygote.@nograd coefficient
 Zygote.@nograd toNevData
 Zygote.@nograd toGenSchurData
 Zygote.@nograd fftfreq
+Zygote.@nograd make_mesh
 
 """
     gradient_function(loss, pars::AbstractArray)
@@ -29,14 +30,16 @@ end
 #TODO:Fail, read FFT and rewrite this part
 #TODO: modify make_mesh function accordingly
 function fft_derivative(d::AbstractVector{<:Real}, L::Real, order::Real=1)
-    nmesh = lastindex(d)
-    klist = fftfreq(nmesh) * nmesh
-    if eltype(datalist) <: FFTW.fftwNumber
-        fft_datalist = fft(datalist)
+    N = lastindex(d)
+    k = fftfreq(N) * N * (2π*im/L)
+    if eltype(d) <: FFTW.fftwNumber
+        fft_d = fft(d)
     else
-        fft_datalist = fft(convert(Vector{Float64}, datalist))
+        fft_d = fft(convert(Vector{Float64}, d))
     end
-    return real.(ifft((2π*im/L .* klist).^n .* fft_datalist))
+
+    res = ifft(k.^order .* fft_d)
+    return real.(res)
 end
 
 
@@ -49,11 +52,13 @@ function loss(params::AbstractArray, d::RawData, option::Options; λ::Real=1.e-4
 
     ∂²Aw = fft_derivative(Aw, L, 2)
     smooth_condition = λ * norm(∂²Aw)^2 * Δω 
+
+    #smooth_condition = λ * norm(Aw)
     
     if otype == Fermi
         sum_rule = abs(1.0 - sum(Aw) * Δω)^2
     else
-        ind = findall(x -> x==0.0, grid)
+        ind = findall(x -> x==0.0, grid)[1]
         Ãw = @. Aw / wmesh
         sum_rule = abs(-d.value[ind] - sum(Ãw) * Δω)^2
     end

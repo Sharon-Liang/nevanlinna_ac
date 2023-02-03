@@ -214,7 +214,7 @@ function generalized_schur(zmesh::AbstractVector{T}, d::GenSchurData{T}; show_wa
 end
 
 
-function generalized_schur(zmesh::AbstractVector{T}, d::GenSchurData{T}, params::AbstractArray{T}; show_warning::Bool=false) where T
+function generalized_schur(zmesh::AbstractVector{T}, d::GenSchurData{T}, params::AbstractArray; show_warning::Bool=false) where T
     @assert isvalid(d) "Invalid data"
 
     sparam = schur_parameter(d, show_warning)
@@ -223,7 +223,7 @@ function generalized_schur(zmesh::AbstractVector{T}, d::GenSchurData{T}, params:
     func = z -> begin
         Cmat = eye(T, 2)
         for j = 1 : length(d.grid)
-            Cmat *= coefficient(z, x[j], sparam[j], show_warning)
+            Cmat *= coefficient(z, d.grid[j], sparam[j], show_warning)
         end
         return _recursion(Cmat, hardy_expand(z, params))
     end
@@ -269,11 +269,6 @@ function spectral_function(option::Options, d::RawData, args...)
         den = @. (wmesh^2 + η^2)*π
         Aw = @. num/den
     end
-
-    open("./spectral_function.txt", "w") do io
-        write(io, "              ω                     A(ω)             \n")
-        write(io, "------------------------     ------------------------\n")
-        writedlm(io, [wmesh Aw])
-    end
+    
     return wmesh, Aw   
 end

@@ -111,9 +111,8 @@ function make_mesh(option::Options)
         nmesh = div(nmesh, 2) + 1
     end
 
-    #L = 2 * wmax |> Ctype
-    #mesh = (-nmesh/2:nmesh/2-1)*L/nmesh |> Vector
-    mesh = [i for i in range(-Ctype(wmax), Ctype(wmax), length = nmesh)]
+    wmax = Ctype(wmax)
+    mesh = [i for i in range(-wmax, wmax- 2*wmax/nmesh, length = nmesh)]
 
     @. mesh += Ctype(1.0im*η)
     return mesh
