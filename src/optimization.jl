@@ -8,28 +8,6 @@ Zygote.@nograd toGenSchurData
 Zygote.@nograd fftfreq
 
 """
-    ngradient(f, xs::AbstractArray...)
-
-Calculate the gradient of `f(xs...)` by finite differences.
-"""
-function ngradient(f, xs::AbstractArray...; step::Real=sqrt(eps()))
-    #https://github.com/FluxML/Zygote.jl/blob/master/test/gradcheck.jl
-    grads = zero.(xs)
-    for (x, Δ) in zip(xs, grads), i in eachindex(x)
-      δ = step
-      tmp = x[i]
-      x[i] = tmp - δ/2
-      y1 = f(xs...)
-      x[i] = tmp + δ/2
-      y2 = f(xs...)
-      x[i] = tmp
-      Δ[i] = (y2-y1)/δ
-    end
-    return grads
-end
-
-
-"""
     gradient_function(loss, pars::AbstractArray)
 
 Generate the gradient function of `loss`
@@ -44,14 +22,15 @@ end
 
 
 """
-    fft_derivative(datalist::AbstractVector{<:Real}, L::Real, n::Real=1)
+    fft_derivative(d::AbstractVector{<:Real}, L::Real, order::Real=1)
 
-    calculate the `n`-th order derivative of given ``datalist``. ``L`` is the lenth of definition range `x ∈ [xmin, xmin+L]`
+    calculate the `n`-th order derivative of given data ``d``. ``L`` is the lenth of definition range `x ∈ [xmin, xmin+L)`
 """
-
-function fft_derivative(datalist::AbstractVector{<:Real}, L::Real, n::Real=1)
-    Nω = length(datalist)
-    klist = fftfreq(Nω) * Nω
+#TODO:Fail, read FFT and rewrite this part
+#TODO: modify make_mesh function accordingly
+function fft_derivative(d::AbstractVector{<:Real}, L::Real, order::Real=1)
+    nmesh = lastindex(d)
+    klist = fftfreq(nmesh) * nmesh
     if eltype(datalist) <: FFTW.fftwNumber
         fft_datalist = fft(datalist)
     else
@@ -62,10 +41,10 @@ end
 
 
 function loss(params::AbstractArray, d::RawData, option::Options; λ::Real=1.e-4)
-    @unpack wmax, wmin, otype = option
+    @unpack wmax, otype = option
 
     wmesh, Aw = spectral_function(option, d, params)
-    L = wmax - wmin
+    L = 2*wmax
     Δω = L / lastindex(wmesh)
 
     ∂²Aw = fft_derivative(Aw, L, 2)

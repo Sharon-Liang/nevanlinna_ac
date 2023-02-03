@@ -192,5 +192,8 @@ export spectral_function
 
 #
 include("optimization.jl")
-
+#
+export loss
+export fft_derivative
+#
 end

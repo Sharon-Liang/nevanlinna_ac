@@ -156,11 +156,12 @@ end
     
 Evaluate Schur parameters for contractive functions `y(x)` within a unit circle, return a list of Schur parameters.
 """
-function schur_parameter(d::GenSchurData{T}, show_warning::Bool=false) where T
+function schur_parameter(d::GenSchurData, show_warning::Bool=false) 
     x = d.grid
     y = d.value
+    T = eltype(x)
 
-    L = length(x)
+    L = lastindex(x)
 
     # sparam: a verctor to store Schur parameters
     sparam = zeros(T, L)
@@ -173,7 +174,7 @@ function schur_parameter(d::GenSchurData{T}, show_warning::Bool=false) where T
     Macc = fill(eye(T,2), L)
 
     #factor: a vector of 2×2×(L-1) arrays to store the final coefficient matrix in each step
-    factor = fill(T, 2, 2, L-1)
+    factor = zeros(T, 2, 2, L-1)
 
     for j = 1 : (L-1)
         for k = j : L
@@ -182,7 +183,7 @@ function schur_parameter(d::GenSchurData{T}, show_warning::Bool=false) where T
             Mout[:, :, j, k] = prod
         end
         sparam[j+1] = _inv_recursion(Macc[j+1], y[j+1])
-        factor[:,:, j] = Macc[j+1]
+        factor[:, :, j] = Macc[j+1]
     end
 
     @save "./schur_parameter.jld" sparam factor Mout
@@ -202,8 +203,8 @@ function generalized_schur(z::T, d::GenSchurData{T}; show_warning::Bool=false) w
 
     #Cmat: coefficient matrix
     Cmat = eye(T, 2)
-    for j = 1 : length(d.grid)
-        Cmat *= coefficient(z, x[j], sparam[j], show_warning)
+    for j in eachindex(d.grid)
+        Cmat *= coefficient(z, d.grid[j], sparam[j], show_warning)
     end
         
     return _recursion(Cmat, zero(T))
@@ -267,9 +268,7 @@ function spectral_function(option::Options, d::RawData, args...)
     open("./spectral_function.txt", "w") do io
         write(io, "              ω                     A(ω)             \n")
         write(io, "------------------------     ------------------------\n")
-        for i in eachindex()
-            write(io, @sprintf "%20.16f   %20.16f" wmesh[i] Aw[i])
-        end
+        writedlm(io, [wmesh Aw])
     end
     return wmesh, Aw   
 end
