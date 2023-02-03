@@ -12,15 +12,15 @@ Convert RawData to NevData.
 * For Bosonic Green's function: G(iωₙ) -> -iωₙ*G(iωₙ)
 """
 function toNevData(d::RawData, option::Options)
-    @unpack otype = option
+    @unpack otype, η = option
     
-    grid = d.grid
+    grid = copy(d.grid)
 
     if otype == Fermi
         value = -d.value
     else
         #When n=0, replace iωₙ by iη
-        ind = findall(x -> x==0.0, grid)
+        ind = findall(x -> x==0.0, grid)[1]
         grid[ind] = one(Ctype)im * Ctype(η) 
         value = - grid .* d.value
     end
