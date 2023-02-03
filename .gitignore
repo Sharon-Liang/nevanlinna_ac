@@ -28,3 +28,5 @@ References/run/*.h
 References/run/*.cpp
 
 .DS_Store
+
+*.ipynb
