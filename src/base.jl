@@ -94,25 +94,21 @@ See also: [`NevData`](@ref).
 """
 function read_to_NevData(path::String, option::Options; kwargs...)
     d = read_to_RawData(path, option; kwargs...)
-    grid = d.grid
     
-    #When n=0, replace iωₙ by iη
-    if option.otype == Bose
-        ind = findall(x -> x==0.0, grid)
-        grid[ind] = one(Ctype)im * Ctype(η) 
-    end
-    
-    return toNevData(RawData(grid, d.value), option)
+    return toNevData(d, option)
 end
 
 
 """
     make_mesh(option::Options)
 
-Make mesh of real frequencies, return ω+iη.
+Make mesh of real frequencies, return ω+iη. For Bosonic spectral, ``nmesh`` is rest to be the nearst odd number.
 """
 function make_mesh(option::Options)
-    @unpack nmesh, wmax, wmin, η = option
+    @unpack nmesh, wmax, wmin, η, otype = option
+    if otype == Bose
+        nmesh = div(nmesh,2) + 1
+    end
 
     L = wmax - wmin |> Ftype
     mesh = (-nmesh/2:nmesh/2-1)*L/nmesh

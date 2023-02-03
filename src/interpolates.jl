@@ -246,7 +246,7 @@ end
 Calculate spectral functions
 """
 function spectral_function(option::Options, d::RawData, args...)
-    @unpack otype, η, nmesh = option
+    @unpack otype, η = option
 
     nd = toNevData(d, option)
     mesh = make_mesh(option)
@@ -256,7 +256,6 @@ function spectral_function(option::Options, d::RawData, args...)
     Nz = map(z -> nevanlinna(z, nd, args...), mesh)
 
     #convert to spectral function A(ω) = -ImGz/π
-    
     if otype == Fermi
         Aw = imag(Nz)/π 
     else
@@ -268,7 +267,7 @@ function spectral_function(option::Options, d::RawData, args...)
     open("./spectral_function.txt", "w") do io
         write(io, "              ω                     A(ω)             \n")
         write(io, "------------------------     ------------------------\n")
-        for i in 1:nmesh
+        for i in eachindex()
             write(io, @sprintf "%20.16f   %20.16f" wmesh[i] Aw[i])
         end
     end

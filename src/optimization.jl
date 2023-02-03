@@ -62,11 +62,11 @@ end
 
 
 function loss(params::AbstractArray, d::RawData, option::Options; λ::Real=1.e-4)
-    @unpack wmax, wmin, nmesh, otype = option
+    @unpack wmax, wmin, otype = option
 
     wmesh, Aw = spectral_function(option, d, params)
     L = wmax - wmin
-    Δω = L/nmesh
+    Δω = L / lastindex(wmesh)
 
     ∂²Aw = fft_derivative(Aw, L, 2)
     smooth_condition = λ * norm(∂²Aw)^2 * Δω 
