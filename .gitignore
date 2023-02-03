@@ -28,5 +28,10 @@ References/run/*.h
 References/run/*.cpp
 
 .DS_Store
+.vscode/settings.json
+
+*.ipynb
+make_data.jl
+jobs/test_bose copy.jl
 
 *.ipynb
