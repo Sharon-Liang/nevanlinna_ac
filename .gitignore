@@ -31,3 +31,5 @@ References/run/*.cpp
 .vscode/settings.json
 
 *.ipynb
+make_data.jl
+jobs/test_bose copy.jl
