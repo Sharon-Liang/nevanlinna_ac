@@ -1,5 +1,5 @@
 using NevanlinnaAC
-path = "/home/sliang/JuliaCode/NevanlinnaAC/test/F02"
+path = "/home/sliang/JuliaCode/NevanlinnaAC/test/F03"
 cd(path)
 
 ngrid = 20

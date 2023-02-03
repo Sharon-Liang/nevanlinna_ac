@@ -196,33 +196,38 @@ end
 
 The generalized Schur algorithm that interpolates beween `{x,y}` and generate a contractive function `f(z)`, return its value at `z`.
 """
-function generalized_schur(z::T, d::GenSchurData{T}; show_warning::Bool=false) where T
+function generalized_schur(zmesh::AbstractVector{T}, d::GenSchurData{T}; show_warning::Bool=false) where T
     @assert isvalid(d) "Invalid data"
 
     sparam = schur_parameter(d, show_warning)
 
     #Cmat: coefficient matrix
-    Cmat = eye(T, 2)
-    for j in eachindex(d.grid)
-        Cmat *= coefficient(z, d.grid[j], sparam[j], show_warning)
+    func = z -> begin
+        Cmat = eye(T, 2)
+        for j in eachindex(d.grid)
+            Cmat *= coefficient(z, d.grid[j], sparam[j], show_warning)
+        end
+        return _recursion(Cmat, zero(T))
     end
-        
-    return _recursion(Cmat, zero(T))
+
+    return map(func, zmesh)
 end
 
 
-function generalized_schur(z::T, d::GenSchurData{T}, params::AbstractArray{T}; show_warning::Bool=false) where T
+function generalized_schur(zmesh::AbstractVector{T}, d::GenSchurData{T}, params::AbstractArray{T}; show_warning::Bool=false) where T
     @assert isvalid(d) "Invalid data"
 
     sparam = schur_parameter(d, show_warning)
 
     #Cmat: coefficient matrix
-    Cmat = eye(T, 2)
-    for j = 1 : length(d.grid)
-        Cmat *= coefficient(z, x[j], sparam[j], show_warning)
+    func = z -> begin
+        Cmat = eye(T, 2)
+        for j = 1 : length(d.grid)
+            Cmat *= coefficient(z, x[j], sparam[j], show_warning)
+        end
+        return _recursion(Cmat, hardy_expand(z, params))
     end
-    
-    return _recursion(Cmat, hardy_expand(z, params))
+    return map(func, zmesh)
 end
 
 
@@ -232,12 +237,12 @@ end
 The Nevanlinna Interpolation algorithm that interpolates beween `{x,y}` and generate a nevanlinna function `f(z)`, return its value at `z`.
     
 """
-function nevanlinna(z::T, d::NevData{T}, args...; show_warning::Bool = false) where T
+function nevanlinna(zmesh::AbstractVector{T}, d::NevData{T}, args...; show_warning::Bool = false) where T
     @assert isvalid(d) "Invalid data"
 
-    res = generalized_schur(z, toGenSchurData(d), args...; show_warning)
+    res = generalized_schur(zmesh, toGenSchurData(d), args...; show_warning)
 
-    return _imti(res)
+    return _imti.(res)
 end
 
 
@@ -254,7 +259,7 @@ function spectral_function(option::Options, d::RawData, args...)
     wmesh = real.(mesh)
 
     #Construt the Nevanlinna function
-    Nz = map(z -> nevanlinna(z, nd, args...), mesh)
+    Nz = nevanlinna(mesh, nd, args...)
 
     #convert to spectral function A(ω) = -ImGz/π
     if otype == Fermi

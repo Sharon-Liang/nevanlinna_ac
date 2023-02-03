@@ -27,7 +27,7 @@ end
 
 Calculate Masubara Green's function ``G(iωₙ) = ∫dΩ A(Ω)/(iωₙ - Ω)`` for given ``A(Ω)``.
 """
-function Masubara_GF(ngrid::Int64, A::Function, β::Real, type::OperatorType; Λ::Float64=100., err::Float64=1.e-15)
+function Masubara_GF(ngrid::Int64, A::Function, β::Real, type::OperatorType; Λ::Float64=100., err::Float64=√eps())
     grid = make_grid(ngrid, β, type)
     func = ωₙ -> hquadrature(Ω -> A(Ω)/(1.0im*ωₙ-Ω), -Λ,  Λ, rtol=err)[1]
     
@@ -36,7 +36,7 @@ end
 
 
 """
-    gaussian(x::Real, μ::Real, s2::Real)
+    gaussian(x::Real, μ::Real, σ²::Real)
 
 Gaussian function: 
     f(x) = 1/(σ√(2π)) exp(-((x-μ)/σ)^2 /2 )
@@ -52,25 +52,38 @@ function gaussian(x::Real, μ::Real, σ²::Real)
 end
 
 
+function multi_gaussian(N::Int64; μrange::Vector=[-3.,3.], σ²max::Real=3.)
+    μs, σ² = rand(Float64, N), rand(Float64, N)
+    μs = μs .* (μrange[2] - μrange[1]) .+ μrange[1]
+    σ² = σ² .* σ²max
+    function sum_gaussian(x::Real)
+        res = 0.
+        for i = 1: N
+            res += gaussian(x, μs[i], σ²[i])
+        end
+        res/N
+    end
+    return sum_gaussian, μs, σ²
+end
+
+
 #Generate spectrum
 β = 10
-wmax = π
+wmax = 2π
 nmesh = 200
 wmesh = [i for i in range(-wmax, wmax, length = nmesh)]
 
-μ = rand()
-σ² = rand()
-
-A = x->gaussian(x, μ, σ²)
+N = rand([3,4,5])
+A, _, _ = multi_gaussian(N)
 
 Aw = map(A, wmesh)
-open("/home/sliang/JuliaCode/NevanlinnaAC/test/F02/Aw.txt", "w") do io
+open("/home/sliang/JuliaCode/NevanlinnaAC/test/F03/Aw.txt", "w") do io
     writedlm(io, [wmesh Aw])
 end
 
 ngrid = 20
 wn, giwn = Masubara_GF(ngrid, A, β, Fermi)
-open("/home/sliang/JuliaCode/NevanlinnaAC/test/F02/giwn.txt", "w") do io
+open("/home/sliang/JuliaCode/NevanlinnaAC/test/F03/giwn.txt", "w") do io
     writedlm(io, [wn real.(giwn) imag.(giwn)])
 end
 

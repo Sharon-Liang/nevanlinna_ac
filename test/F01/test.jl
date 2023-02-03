@@ -1,6 +1,8 @@
 using NevanlinnaAC
-cd("/home/sliang/JuliaCode/NevanlinnaAC/test/F01")
-pwd()
+
+path = "/home/sliang/JuliaCode/NevanlinnaAC/test/F01"
+cd(path)
+
 
 ngrid = 20
 β = 10
@@ -9,7 +11,7 @@ otype = Fermi
 option = Options(; ngrid, otype)
 setprecision(option.precision)
 
-rd = read_to_RawData("/home/sliang/JuliaCode/NevanlinnaAC/test/F01/giwn.txt", option)
+rd = read_to_RawData(path*"/giwn.txt", option)
 nd = toNevData(rd, option)
 
 isvalid(nd)
