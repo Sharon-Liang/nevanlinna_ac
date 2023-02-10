@@ -25,8 +25,8 @@ Options of NevanlinnaAC.
     precision :: Int = 128
     otype :: OperatorType
     ngrid :: Int = 20
-    nmesh :: Int = 500
-    wmax :: Float64 = 2π
+    nmesh :: Int = 10000
+    wmax :: Float64 = 4π
     torev :: Bool = true
     η :: Float64 = 0.05
 end
