@@ -104,16 +104,10 @@ end
 
 Make mesh of real frequencies, return ω+iη. For Bosonic spectral, ``nmesh`` is rest to be the nearst odd number.
 """
-#TODO: modify mesh function according to fft_derivative
 function make_mesh(option::Options)
-    @unpack nmesh, wmax, η, otype = option
-    if otype == Bose
-        nmesh = div(nmesh, 2) + 1
-    end
-
-    #L = 2 * wmax |> Ctype
-    #mesh = (-nmesh/2:nmesh/2-1)*L/nmesh |> Vector
-    mesh = [i for i in range(-Ctype(wmax), Ctype(wmax), length = nmesh)]
+    @unpack nmesh, wmax, η = option
+    wmax = Ctype(wmax)
+    mesh = [i for i in range(-wmax, wmax, length = nmesh)]
 
     @. mesh += Ctype(1.0im*η)
     return mesh

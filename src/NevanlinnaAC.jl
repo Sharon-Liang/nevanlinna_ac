@@ -12,6 +12,8 @@ using Zygote#, Optim
 using FFTW, HCubature
 
 import Base.isvalid
+
+
 #=
 ### *Includes And Exports* : *global.jl*
 =#
@@ -193,6 +195,7 @@ export spectral_function
 #
 include("optimization.jl")
 #
+export gradient_function
 export loss
 export fft_derivative
 #

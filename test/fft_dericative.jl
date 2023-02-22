@@ -10,11 +10,12 @@ d²y(x) = -sech(x)^3 + tanh(x)^2 * sech(x)
 d³y(x) = 5*sech(x)^3 * tanh(x) - tanh(x)^3 * sech(x)
 
 #mesh
-xmax = 2π
+xmax = 10
 L = 2*xmax
-nmesh = 500
+nmesh = 100000
 
-xmesh = (-nmesh/2:nmesh/2-1)*L/nmesh
+xmesh = [i for i in range(-xmax, xmax -L/nmesh, length=nmesh)]
+
 ymesh = @. y(xmesh)
 
 #derivatives
@@ -34,9 +35,20 @@ d²y_ngrad = map(x -> central_fdm(5,2)(y, x), xmesh)
 d³y_exact = @. d³y(xmesh)
 d³y_fft = fft_derivative(ymesh, L, 3)
 d³y_ngrad = map(x -> central_fdm(5, 3)(y, x), xmesh)
-@show(norm(@. d³y_fft - d³y_exact))
+@show(norm(@. d³y_fft[1+50: 501-50] - d³y_exact[1+50: 501-50]))
 @show(norm(@. d³y_ngrad - d³y_exact))
 
 #plot
 using Plots
 plot(xmesh, ymesh)
+
+
+plot(xmesh, dy_exact)
+plot!(xmesh, dy_fft, line=(:dash))
+
+plot(xmesh, d²y_exact)
+plot!(xmesh, d²y_fft, line=(:dash))
+
+
+plot(xmesh, d³y_exact)
+plot!(xmesh, d³y_fft, line=(:dash))
