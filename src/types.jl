@@ -18,7 +18,7 @@ Options of NevanlinnaAC.
 * ngrid    -> Number of Masubara frequencies used
 * nmesh    -> Number of mesh points
 * wmax     -> Right boundary (maximum value), The left boundary is -wmax
-* ifrev    -> If to reverse the exrtrapolation order
+* torev    -> If to reverse the exrtrapolation order
 * η        -> infinitesimal imaginary part 
 """
 @with_kw struct Options
